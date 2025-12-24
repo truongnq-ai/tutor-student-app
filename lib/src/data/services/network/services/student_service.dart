@@ -33,6 +33,7 @@ abstract class StudentService {
   /// Set credential after OAuth login
   @POST(Endpoints.studentSetCredential)
   Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> setCredential(
+    @Query('studentId') String studentId,
     @Body() Map<String, dynamic> request,
   );
 

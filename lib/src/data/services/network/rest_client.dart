@@ -1,9 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:retrofit/retrofit.dart';
-
-import 'endpoints.dart';
-
-part 'rest_client.g.dart';
 
 /// Base REST client (kept for backward compatibility)
 /// 
@@ -15,8 +10,9 @@ part 'rest_client.g.dart';
 /// - MiniTestService
 /// - LinkingService
 /// - AuthService
-@RestApi(baseUrl: Endpoints.base)
-abstract class RestClient {
-  factory RestClient(Dio dio, {String? baseUrl, ParseErrorLogger? errorLogger}) =
-      _RestClient;
+class RestClient {
+  final Dio dio;
+  final String? baseUrl;
+
+  RestClient(this.dio, {this.baseUrl});
 }

@@ -16,6 +16,16 @@ List<GoRoute> _authenticationRoutes(Ref ref) {
               const MaterialPage(child: RegistrationPage()),
         ),
         GoRoute(
+          path: Routes.setCredential,
+          name: Routes.setCredential,
+          pageBuilder: (context, state) {
+            final studentId = state.uri.queryParameters['studentId'] ?? '';
+            return MaterialPage(
+              child: SetCredentialPage(studentId: studentId),
+            );
+          },
+        ),
+        GoRoute(
           path: Routes.resetPassword,
           name: Routes.resetPassword,
           pageBuilder: (context, state) =>

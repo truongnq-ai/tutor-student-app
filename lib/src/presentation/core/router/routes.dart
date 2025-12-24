@@ -9,6 +9,7 @@ class Routes {
   static const String createNewPassword = 'create-new-password';
   static const String resetPasswordSuccess = 'reset-password-success';
   static const String registration = 'registration';
+  static const String setCredential = 'set-credential';
 
   static const String home = '/home';
   static const String profile = '/profile';

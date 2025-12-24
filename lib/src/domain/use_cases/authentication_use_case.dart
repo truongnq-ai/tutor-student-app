@@ -44,3 +44,31 @@ final class LogoutUseCase {
     return repository.logout();
   }
 }
+
+final class OAuthLoginUseCase {
+  OAuthLoginUseCase(this.repository);
+
+  final AuthenticationRepository repository;
+
+  Future<ResponseObject<Map<String, dynamic>>> call({
+    required String provider,
+    required String idToken,
+  }) async {
+    return repository.oauthLogin(provider, idToken);
+  }
+}
+
+final class SetCredentialUseCase {
+  SetCredentialUseCase(this.repository);
+
+  final AuthenticationRepository repository;
+
+  Future<ResponseObject<SignUpResponseEntity>> call({
+    required String studentId,
+    required String username,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    return repository.setCredential(studentId, username, password, confirmPassword);
+  }
+}

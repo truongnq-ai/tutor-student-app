@@ -13,7 +13,17 @@ class LoginRequestEntity extends LoginEntity {
 }
 
 class LoginResponseEntity extends LoginEntity {
-  LoginResponseEntity({required this.accessToken});
+  LoginResponseEntity({
+    required this.accessToken,
+    required this.refreshToken,
+    this.tokenType,
+    this.expiresIn,
+    this.refreshTokenExpiresIn,
+  });
 
   final String accessToken;
+  final String refreshToken;
+  final String? tokenType;
+  final int? expiresIn;
+  final int? refreshTokenExpiresIn;
 }

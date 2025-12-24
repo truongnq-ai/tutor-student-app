@@ -1,14 +1,5 @@
 part of '../dependency_injection.dart';
 
-import '../../data/services/network/endpoints.dart';
-import '../../data/services/network/services/auth_service.dart';
-import '../../data/services/network/services/learning_service.dart';
-import '../../data/services/network/services/linking_service.dart';
-import '../../data/services/network/services/mini_test_service.dart';
-import '../../data/services/network/services/practice_service.dart';
-import '../../data/services/network/services/student_service.dart';
-import '../../data/services/network/services/tutor_service.dart';
-
 @Riverpod(keepAlive: true)
 CacheService cacheService(Ref ref) {
   return SharedPreferencesService(
@@ -54,4 +45,28 @@ LinkingService linkingService(Ref ref) {
 @riverpod
 AuthService authService(Ref ref) {
   return AuthService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
+OAuthService oauthService(Ref ref) {
+  // Use mock in development, real services in production
+  // Note: In production, you may want to use a factory that returns
+  // the appropriate service based on platform or configuration
+  if (Env.isDevelopment) {
+    return MockOAuthService();
+  } else {
+    // In production, return GoogleOAuthService as default
+    // You can inject AppleOAuthService separately if needed
+    return GoogleOAuthService();
+  }
+}
+
+@riverpod
+GoogleOAuthService googleOAuthService(Ref ref) {
+  return GoogleOAuthService();
+}
+
+@riverpod
+AppleOAuthService appleOAuthService(Ref ref) {
+  return AppleOAuthService();
 }

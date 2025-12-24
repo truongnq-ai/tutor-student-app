@@ -8,25 +8,12 @@ part 'login_model.mapper.dart';
 class LoginResponseModel extends LoginResponseEntity
     with LoginResponseModelMappable {
   LoginResponseModel({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.image,
     required super.accessToken,
-    required this.gender,
-    required this.refreshToken,
+    required super.refreshToken,
+    super.tokenType,
+    super.expiresIn,
+    super.refreshTokenExpiresIn,
   });
-
-  final int id;
-  final String username;
-  final String email;
-  final String firstName;
-  final String lastName;
-  final String gender;
-  final String image;
-  final String refreshToken;
 
   static const fromJson = LoginResponseModelMapper.fromJson;
 }

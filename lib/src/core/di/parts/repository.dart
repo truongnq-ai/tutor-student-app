@@ -4,6 +4,7 @@ part of '../dependency_injection.dart';
 AuthenticationRepository authenticationRepository(Ref ref) {
   return AuthenticationRepositoryImpl(
     studentService: ref.read(studentServiceProvider),
+    authService: ref.read(authServiceProvider),
     local: ref.read(cacheServiceProvider),
   );
 }

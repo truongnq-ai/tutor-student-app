@@ -3,85 +3,105 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/base/response_object.dart';
+import '../../../../../core/di/dependency_injection.dart';
 import '../../../../../core/extensions/app_localization.dart';
-import '../../../../../core/extensions/go_router_extension.dart';
 import '../../../../../core/extensions/riverpod_extensions.dart';
+import '../../../../../domain/entities/sign_up_entity.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/link_text.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../../core/widgets/text/typography.dart';
-import '../riverpod/registration_provider.dart';
 
-class RegistrationPage extends ConsumerStatefulWidget {
-  const RegistrationPage({super.key});
+class SetCredentialPage extends ConsumerStatefulWidget {
+  const SetCredentialPage({
+    super.key,
+    required this.studentId,
+  });
+
+  final String studentId;
 
   @override
-  ConsumerState<RegistrationPage> createState() => _RegistrationPageState();
+  ConsumerState<SetCredentialPage> createState() => _SetCredentialPageState();
 }
 
-class _RegistrationPageState extends ConsumerState<RegistrationPage> {
+class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    ref.listenManual(registrationProvider, (previous, next) {
-      switch (next) {
-        case AsyncData(:final value) when value != null:
-          // Registration successful, navigate to login
-          context.pushReplacementNamed(Routes.login);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Đăng ký thành công. Vui lòng đăng nhập.'),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-          );
-        case AsyncError(:final error, :final stackTrace):
-          final errorMessage = error.toString().replaceFirst('Exception: ', '');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMessage),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-      }
-    });
   }
 
   @override
   void dispose() {
-    nameController.dispose();
     usernameController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _onRegister() {
+  Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
-      ref.read(registrationProvider.notifier).register(
-            name: nameController.text.trim(),
-            username: usernameController.text.trim(),
-            password: passwordController.text,
-            confirmPassword: confirmPasswordController.text,
+      setState(() => _isLoading = true);
+      try {
+        final response = await ref.read(setCredentialUseCaseProvider).call(
+              studentId: widget.studentId,
+              username: usernameController.text.trim(),
+              password: passwordController.text,
+              confirmPassword: confirmPasswordController.text,
+            );
+
+        if (response.isSuccess && response.data != null) {
+          // Credential set successfully, navigate to login
+          if (mounted) {
+            setState(() => _isLoading = false);
+            context.pushReplacementNamed(Routes.login);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Đặt thông tin đăng nhập thành công. Vui lòng đăng nhập.'),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          }
+        } else {
+          // Show error
+          if (mounted) {
+            setState(() => _isLoading = false);
+            final errorMessage = response.getErrorMessage();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() => _isLoading = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Có lỗi xảy ra: ${e.toString()}'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
           );
+        }
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(registrationProvider);
-
     return Scaffold(
-      appBar: AppBar(title: HeadingSmallText(context.locale.signUp)),
+      appBar: AppBar(title: const HeadingSmallText('Đặt thông tin đăng nhập')),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: context.padding.p16),
         child: Form(
@@ -91,21 +111,16 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
             children: [
               Gap(context.spacing.s80),
               FlutterLogo(size: context.spacing.s100),
-              Gap(context.spacing.s80),
-              TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(hintText: 'Họ và tên'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập họ và tên';
-                  }
-                  return null;
-                },
+              Gap(context.spacing.s32),
+              Text(
+                'Vui lòng đặt tên đăng nhập và mật khẩu để hoàn tất đăng ký',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              Gap(context.spacing.s16),
+              Gap(context.spacing.s32),
               TextFormField(
                 controller: usernameController,
-                decoration: InputDecoration(hintText: 'Tên đăng nhập'),
+                decoration: const InputDecoration(hintText: 'Tên đăng nhập'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập tên đăng nhập';
@@ -172,17 +187,10 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
               ),
               Gap(context.spacing.s32),
               FilledButton(
-                onPressed: state.isLoading ? null : _onRegister,
-                child: state.isLoading
+                onPressed: _isLoading ? null : _onSubmit,
+                child: _isLoading
                     ? const LoadingIndicator()
                     : Text(context.locale.continueAction),
-              ),
-              LinkText(
-                text: context.locale.alreadyHaveAccount,
-                linkText: context.locale.signIn,
-                onTap: () {
-                  context.pushNamedAndRemoveUntil(Routes.login);
-                },
               ),
             ],
           ),
@@ -191,3 +199,4 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
     );
   }
 }
+

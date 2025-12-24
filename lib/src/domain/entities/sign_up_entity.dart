@@ -2,20 +2,24 @@ interface class SignUpEntity {}
 
 class SignUpRequestEntity extends SignUpEntity {
   SignUpRequestEntity({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
+    required this.name,
+    required this.username,
     required this.password,
+    required this.confirmPassword,
   });
 
-  final String firstName;
-  final String lastName;
-  final String email;
+  final String name;
+  final String username;
   final String password;
+  final String confirmPassword;
 }
 
 class SignUpResponseEntity extends SignUpEntity {
-  SignUpResponseEntity({required this.accessToken});
+  SignUpResponseEntity({
+    required this.studentId,
+    required this.username,
+  });
 
-  final String accessToken;
+  final String studentId;
+  final String username;
 }

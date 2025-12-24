@@ -7,10 +7,10 @@ class Endpoints {
   // ==================== Authentication ====================
   
   /// Student Authentication
-  static const String studentRegister = '/api/student/register';
-  static const String studentLogin = '/api/student/login';
-  static const String studentOAuthLogin = '/api/student/oauth/login';
-  static const String studentSetCredential = '/api/student/set-credential';
+  static const String studentRegister = '/api/v1/student/register';
+  static const String studentLogin = '/api/v1/student/login';
+  static const String studentOAuthLogin = '/api/v1/student/oauth/login';
+  static const String studentSetCredential = '/api/v1/student/set-credential';
 
   /// Parent Authentication
   static const String parentRegister = '/api/parent/register';

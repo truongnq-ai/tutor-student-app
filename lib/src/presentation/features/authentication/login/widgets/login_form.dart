@@ -2,12 +2,12 @@ part of '../view/login_page.dart';
 
 class _LoginForm extends StatefulWidget {
   const _LoginForm({
-    required this.emailController,
+    required this.usernameController,
     required this.passwordController,
     required this.shouldRemember,
   });
 
-  final TextEditingController emailController;
+  final TextEditingController usernameController;
   final TextEditingController passwordController;
   final ValueNotifier<bool> shouldRemember;
 
@@ -27,8 +27,8 @@ class _LoginFormState extends State<_LoginForm> {
     return Column(
       children: [
         TextFormField(
-          controller: widget.emailController,
-          decoration: InputDecoration(hintText: context.locale.email),
+          controller: widget.usernameController,
+          decoration: InputDecoration(hintText: 'Tên đăng nhập'),
           validator: context.validator.apply([RequiredValidation()]),
         ),
         Gap(context.spacing.s16),

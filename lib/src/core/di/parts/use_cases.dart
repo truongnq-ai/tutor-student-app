@@ -6,6 +6,21 @@ LoginUseCase loginUseCase(Ref ref) {
 }
 
 @riverpod
+RegisterUseCase registerUseCase(Ref ref) {
+  return RegisterUseCase(ref.read(authenticationRepositoryProvider));
+}
+
+@riverpod
+OAuthLoginUseCase oauthLoginUseCase(Ref ref) {
+  return OAuthLoginUseCase(ref.read(authenticationRepositoryProvider));
+}
+
+@riverpod
+SetCredentialUseCase setCredentialUseCase(Ref ref) {
+  return SetCredentialUseCase(ref.read(authenticationRepositoryProvider));
+}
+
+@riverpod
 LogoutUseCase logoutUseCase(Ref ref) {
   return LogoutUseCase(ref.read(authenticationRepositoryProvider));
 }

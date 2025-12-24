@@ -8,6 +8,10 @@ abstract base class AuthenticationRepository extends Repository {
 
   Future<ResponseObject<LoginResponseEntity>> login(LoginRequestEntity data);
 
+  Future<ResponseObject<Map<String, dynamic>>> oauthLogin(String provider, String idToken);
+
+  Future<ResponseObject<SignUpResponseEntity>> setCredential(String studentId, String username, String password, String confirmPassword);
+
   Future<bool> rememberMe({bool? rememberMe});
 
   Future<ResponseObject<String>> forgotPassword(Map<String, dynamic> data);
