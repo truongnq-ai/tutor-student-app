@@ -51,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     });
 
-    ref.listenManual(oauthLoginProvider, (previous, next) {
+    ref.listenManual(oAuthLoginProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
           // Check if requiresSetCredential
@@ -169,7 +169,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _buildOAuthSection() {
-    final oauthState = ref.watch(oauthLoginProvider);
+    final oauthState = ref.watch(oAuthLoginProvider);
     final isLoading = oauthState.isLoading;
 
     return Column(
@@ -192,7 +192,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           provider: 'google',
           onPressed: isLoading
               ? () {}
-              : () => ref.read(oauthLoginProvider.notifier).loginWithOAuth('google'),
+              : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('google'),
           isLoading: isLoading,
         ),
         Gap(context.spacing.s8),
@@ -200,7 +200,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           provider: 'apple',
           onPressed: isLoading
               ? () {}
-              : () => ref.read(oauthLoginProvider.notifier).loginWithOAuth('apple'),
+              : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('apple'),
           isLoading: isLoading,
         ),
       ],

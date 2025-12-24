@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../../core/base/response_object.dart';
 import '../../../../../core/di/dependency_injection.dart';
 import '../../../../../domain/entities/sign_up_entity.dart';
 

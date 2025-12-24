@@ -3,14 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../core/base/response_object.dart';
 import '../../../../../core/di/dependency_injection.dart';
 import '../../../../../core/extensions/app_localization.dart';
-import '../../../../../core/extensions/riverpod_extensions.dart';
-import '../../../../../domain/entities/sign_up_entity.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../../core/widgets/link_text.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../../core/widgets/text/typography.dart';
 

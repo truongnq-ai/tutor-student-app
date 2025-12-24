@@ -96,16 +96,16 @@ extension BuildContextExtension on BuildContext {
   }
 
   /// Gets the spacing dimensions from the current theme.
-  get spacing => dimensions.spacing;
+  Spacing get spacing => dimensions.spacing;
 
   /// Gets the padding dimensions from the current theme.
-  get padding => dimensions.padding;
+  Padding get padding => dimensions.padding;
 
   /// Gets the margin dimensions from the current theme.
-  get margin => dimensions.margin;
+  Margin get margin => dimensions.margin;
 
   /// Gets the border radius dimensions from the current theme.
-  get radius => dimensions.radius;
+  ThemeRadius get radius => dimensions.radius;
 
   /// Gets the light theme data configuration.
   ///

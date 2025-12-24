@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class Dimensions extends ThemeExtension<Dimensions> {
   const Dimensions();
 
-  final spacing = const _Spacing();
-  final padding = const _Padding();
-  final margin = const _Margin();
-  final radius = const _Radius();
+  final Spacing spacing = const Spacing();
+  final Padding padding = const Padding();
+  final Margin margin = const Margin();
+  final Radius radius = const Radius();
 
   /// Source of truth
   static const double _v1 = 1;
@@ -49,8 +49,9 @@ class Dimensions extends ThemeExtension<Dimensions> {
   }
 }
 
-class _Spacing {
-  const _Spacing();
+/// Public spacing class for theme dimensions
+class Spacing {
+  const Spacing();
 
   final double s1 = Dimensions._v1;
   final double s1_25 = Dimensions._v1_25;
@@ -72,8 +73,9 @@ class _Spacing {
   final double s210 = Dimensions._v210;
 }
 
-class _Padding {
-  const _Padding();
+/// Public padding class for theme dimensions
+class Padding {
+  const Padding();
 
   final double p4 = Dimensions._v4;
   final double p16 = Dimensions._v16;
@@ -81,14 +83,16 @@ class _Padding {
   final double p24 = Dimensions._v24;
 }
 
-class _Margin {
-  const _Margin();
+/// Public margin class for theme dimensions
+class Margin {
+  const Margin();
 
   final double m6 = Dimensions._v6;
 }
 
-class _Radius {
-  const _Radius();
+/// Public radius class for theme dimensions
+class ThemeRadius {
+  const ThemeRadius();
 
   final double r4 = Dimensions._v4;
   final double r6 = Dimensions._v6;
