@@ -70,14 +70,10 @@ jobs:
         run: flutter test
 
       - name: Build APK (Release)
-        run: flutter build apk --release \
-          --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} \
-          --dart-define=ENVIRONMENT=production
+        run: flutter build apk --release --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} --dart-define=ENVIRONMENT=production
 
       - name: Build App Bundle (Release)
-        run: flutter build appbundle --release \
-          --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} \
-          --dart-define=ENVIRONMENT=production
+        run: flutter build appbundle --release --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} --dart-define=ENVIRONMENT=production
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
