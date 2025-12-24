@@ -28,13 +28,19 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final response = await studentService.register(requestJson);
 
       // Parse ResponseObject from HttpResponse
-      final responseData = response.data;
-      if (responseData == null) {
+      final responseJson = response.data;
+      if (responseJson == null || responseJson is! Map<String, dynamic>) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+
+      // Parse ResponseObject from JSON
+      final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+        responseJson,
+        (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+      );
 
       // Check if response is successful
       if (!responseData.isSuccess) {
@@ -87,13 +93,19 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final response = await studentService.login(model.toJson());
 
       // Parse ResponseObject from HttpResponse
-      final responseData = response.data;
-      if (responseData == null) {
+      final responseJson = response.data;
+      if (responseJson == null || responseJson is! Map<String, dynamic>) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+
+      // Parse ResponseObject from JSON
+      final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+        responseJson,
+        (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+      );
 
       // Check if response is successful
       if (!responseData.isSuccess) {
@@ -232,13 +244,19 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       };
       final response = await studentService.oauthLogin(request);
 
-      final responseData = response.data;
-      if (responseData == null) {
+      final responseJson = response.data;
+      if (responseJson == null || responseJson is! Map<String, dynamic>) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+
+      // Parse ResponseObject from JSON
+      final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+        responseJson,
+        (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+      );
 
       if (!responseData.isSuccess) {
         return ResponseObject.error(
@@ -289,13 +307,19 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       };
       final response = await studentService.setCredential(studentId, request);
 
-      final responseData = response.data;
-      if (responseData == null) {
+      final responseJson = response.data;
+      if (responseJson == null || responseJson is! Map<String, dynamic>) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+
+      // Parse ResponseObject from JSON
+      final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+        responseJson,
+        (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+      );
 
       if (!responseData.isSuccess) {
         return ResponseObject.error(
@@ -341,7 +365,7 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
     try {
       // Call logout API endpoint
       final response = await authService.logout();
-      final responseData = response.data;
+      final responseJson = response.data;
       
       // Clear local tokens regardless of API response
       await local.remove([
@@ -351,11 +375,19 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
         CacheKey.refreshToken,
       ]);
 
-      if (responseData != null && !responseData.isSuccess) {
-        return ResponseObject.error(
-          errorCode: responseData.errorCode ?? '5001',
-          errorDetail: responseData.errorDetail ?? 'Logout failed',
+      if (responseJson != null && responseJson is Map<String, dynamic>) {
+        // Parse ResponseObject from JSON
+        final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+          responseJson,
+          (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
         );
+
+        if (!responseData.isSuccess) {
+          return ResponseObject.error(
+            errorCode: responseData.errorCode ?? '5001',
+            errorDetail: responseData.errorDetail ?? 'Logout failed',
+          );
+        }
       }
 
       return ResponseObject.success(null);

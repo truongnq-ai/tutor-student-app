@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../../core/base/response_object.dart';
 import '../endpoints.dart';
 
 part 'student_service.g.dart';
@@ -14,25 +13,25 @@ abstract class StudentService {
 
   /// Manual registration
   @POST(Endpoints.studentRegister)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> register(
+  Future<HttpResponse<Map<String, dynamic>>> register(
     @Body() Map<String, dynamic> request,
   );
 
   /// Manual login
   @POST(Endpoints.studentLogin)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> login(
+  Future<HttpResponse<Map<String, dynamic>>> login(
     @Body() Map<String, dynamic> request,
   );
 
   /// OAuth login (Google/Apple)
   @POST(Endpoints.studentOAuthLogin)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> oauthLogin(
+  Future<HttpResponse<Map<String, dynamic>>> oauthLogin(
     @Body() Map<String, dynamic> request,
   );
 
   /// Set credential after OAuth login
   @POST(Endpoints.studentSetCredential)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> setCredential(
+  Future<HttpResponse<Map<String, dynamic>>> setCredential(
     @Query('studentId') String studentId,
     @Body() Map<String, dynamic> request,
   );
@@ -41,13 +40,13 @@ abstract class StudentService {
 
   /// Start trial
   @POST(Endpoints.trialStart)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> startTrial(
+  Future<HttpResponse<Map<String, dynamic>>> startTrial(
     @Body() Map<String, dynamic> request,
   );
 
   /// Get trial status
   @GET(Endpoints.trialStatus)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> getTrialStatus(
+  Future<HttpResponse<Map<String, dynamic>>> getTrialStatus(
     @Header('X-Device-Id') String? deviceId,
     @Header('X-Anonymous-Id') String? anonymousId,
   );

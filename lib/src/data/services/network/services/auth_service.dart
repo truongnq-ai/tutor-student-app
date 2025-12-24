@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../../core/base/response_object.dart';
 import '../endpoints.dart';
 
 part 'auth_service.g.dart';
@@ -12,10 +11,10 @@ abstract class AuthService {
 
   /// Refresh access token
   @GET(Endpoints.refreshToken)
-  Future<HttpResponse<ResponseObject<Map<String, dynamic>>>> refreshToken();
+  Future<HttpResponse<Map<String, dynamic>>> refreshToken();
 
   /// Logout
   @POST(Endpoints.logout)
-  Future<HttpResponse<ResponseObject<void>>> logout();
+  Future<HttpResponse<Map<String, dynamic>>> logout();
 }
 
