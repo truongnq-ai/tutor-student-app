@@ -11,8 +11,17 @@ import '../../features/authentication/forgot_password/view/reset_password_page.d
 import '../../features/authentication/forgot_password/view/reset_password_success_page.dart';
 import '../../features/authentication/login/view/login_page.dart';
 import '../../features/authentication/registration/view/registration_page.dart';
+import '../../features/authentication/view/auth_entry_page.dart';
 import '../../features/home/view/home_page.dart';
+import '../../features/onboarding/view/linking_success_page.dart';
 import '../../features/onboarding/view/onboarding_page.dart';
+import '../../features/onboarding/view/otp_verification_page.dart';
+import '../../features/onboarding/view/select_grade_page.dart';
+import '../../features/onboarding/view/select_learning_goal_page.dart';
+import '../../features/onboarding/view/trial_expiry_page.dart';
+import '../../features/onboarding/view/trial_start_page.dart';
+import '../../features/onboarding/view/trial_status_page.dart';
+import '../../features/onboarding/view/welcome_page.dart';
 import '../../features/profile/view/profile_page.dart';
 import '../../features/splash/view/splash_page.dart';
 import '../widgets/app_startup/startup_widget.dart';
@@ -41,6 +50,7 @@ GoRouter goRouter(Ref ref) {
         Routes.initial,
         Routes.onboarding,
         Routes.splash,
+        Routes.welcome,
       ].contains(state.uri.path)) {
         return ref.asListenable(routerStateProvider).value;
       }

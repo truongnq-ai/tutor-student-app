@@ -50,5 +50,37 @@ abstract class StudentService {
     @Header('X-Device-Id') String? deviceId,
     @Header('X-Anonymous-Id') String? anonymousId,
   );
+
+  // ==================== Grade & Learning Goals ====================
+
+  /// Save grade selection
+  @POST(Endpoints.studentSaveGrade)
+  Future<HttpResponse<dynamic>> saveGrade(
+    @Query('trialId') String? trialId,
+    @Query('anonymousId') String? anonymousId,
+    @Body() Map<String, dynamic> request,
+  );
+
+  /// Get grade selection
+  @GET(Endpoints.studentGetGrade)
+  Future<HttpResponse<dynamic>> getGrade(
+    @Query('trialId') String? trialId,
+    @Query('anonymousId') String? anonymousId,
+  );
+
+  /// Save learning goals
+  @POST(Endpoints.studentSaveLearningGoals)
+  Future<HttpResponse<dynamic>> saveLearningGoals(
+    @Query('trialId') String? trialId,
+    @Query('anonymousId') String? anonymousId,
+    @Body() Map<String, dynamic> request,
+  );
+
+  /// Get learning goals
+  @GET(Endpoints.studentGetLearningGoals)
+  Future<HttpResponse<dynamic>> getLearningGoals(
+    @Query('trialId') String? trialId,
+    @Query('anonymousId') String? anonymousId,
+  );
 }
 

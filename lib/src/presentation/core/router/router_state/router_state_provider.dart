@@ -31,12 +31,17 @@ class RouterState extends _$RouterState {
     }
 
     if (!isOnboarded) {
-      state = Routes.onboarding;
-      // Mark onboarding as completed
-      ref.read(markOnboardingCompletedUseCaseProvider).call();
+      // New flow: Go to Welcome instead of old onboarding
+      state = Routes.welcome;
       return;
     }
 
-    state = isLoggedIn ? Routes.home : Routes.login;
+    // If onboarded, check if logged in
+    if (isLoggedIn) {
+      state = Routes.home;
+    } else {
+      // If not logged in but onboarded, go to auth entry
+      state = Routes.authEntry;
+    }
   }
 }

@@ -28,6 +28,9 @@ class ErrorCodes {
   static const String otpInvalid = '2004';
   static const String otpExpired = '2005';
   static const String recaptchaFailed = '2006';
+  static const String missingRequestParameter = '2007';
+  static const String gradeInvalid = '2009';
+  static const String learningGoalsEmpty = '2010';
 
   // Resource errors (3000-3999)
   static const String notFound = '3001';
@@ -37,21 +40,25 @@ class ErrorCodes {
   static const String questionAlreadyCompleted = '3005';
   static const String questionStudentMismatch = '3006';
   static const String exerciseNotApproved = '3007';
+  static const String trialNotFound = '3007';
 
   // Service integration errors (4000-4999)
   static const String serviceUnavailable = '4001';
   static const String aiServiceUnavailable = '4002';
+  static const String otpVerificationError = '4006';
+  static const String rateLimitExceeded = '4008';
 
   // System errors (5000-5999)
   static const String internalError = '5001';
   static const String databaseError = '5002';
   static const String networkError = '5003';
 
+  // Business errors (0001-0999) - specific codes
+  static const String trialExpired = '0002';
+  
   // Special error codes from API spec
-  static const String trialExpired = '4030';
   static const String skillNotUnlocked = '4031';
   static const String prerequisiteNotMet = '4032';
-  static const String rateLimitExceeded = '4290';
 
   /// Check if error code is in a specific range
   static bool isBusinessError(String code) {

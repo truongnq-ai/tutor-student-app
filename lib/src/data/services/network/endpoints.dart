@@ -25,8 +25,14 @@ class Endpoints {
 
   // ==================== Onboarding & Trial ====================
   
-  static const String trialStart = '/api/student/trial/start';
-  static const String trialStatus = '/api/student/trial/status';
+  static const String trialStart = '/api/v1/student/trial/start';
+  static const String trialStatus = '/api/v1/student/trial/status';
+  
+  /// Grade & Learning Goals
+  static const String studentSaveGrade = '/api/v1/student/grade';
+  static const String studentGetGrade = '/api/v1/student/grade';
+  static const String studentSaveLearningGoals = '/api/v1/student/learning-goals';
+  static const String studentGetLearningGoals = '/api/v1/student/learning-goals';
 
   // ==================== Tutor Mode ====================
   
@@ -51,9 +57,9 @@ class Endpoints {
 
   // ==================== Parent Linking ====================
   
-  static const String linkRequestOtp = '/api/link/request-otp';
-  static const String linkVerifyOtp = '/api/link/verify-otp';
-  static const String linkConfirm = '/api/link/confirm';
+  static const String linkRequestOtp = '/api/v1/student/parent/link/request-otp';
+  static const String linkVerifyOtp = '/api/v1/student/parent/link/verify-otp';
+  static const String linkResendOtp = '/api/v1/student/parent/link/resend-otp';
 
   // ==================== Parent Dashboard ====================
   

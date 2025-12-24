@@ -11,6 +11,7 @@ enum CacheKey {
   language,
   deviceId,
   anonymousId,
+  trialId,
 }
 
 abstract class CacheService {

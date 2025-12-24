@@ -56,13 +56,15 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
             );
 
         if (response.isSuccess && response.data != null) {
-          // Credential set successfully, navigate to login
+          // Credential set successfully, navigate to Trial Start (if no trial) or Select Grade
           if (mounted) {
             setState(() => _isLoading = false);
-            context.pushReplacementNamed(Routes.login);
+            // Mock: Check if has trial, if not go to Trial Start
+            // In real implementation, check trial status from API
+            context.pushReplacementNamed(Routes.trialStart);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Đặt thông tin đăng nhập thành công. Vui lòng đăng nhập.'),
+                content: Text('Đặt thông tin đăng nhập thành công.'),
                 backgroundColor: Theme.of(context).colorScheme.primary,
               ),
             );
@@ -121,8 +123,8 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập tên đăng nhập';
                   }
-                  if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-                    return 'Tên đăng nhập chỉ được chứa chữ cái và số';
+                  if (!RegExp(r'^[a-zA-Z0-9]+$', caseSensitive: false).hasMatch(value)) {
+                    return 'Tên đăng nhập chỉ được dùng chữ và số, không phân biệt hoa/thường';
                   }
                   return null;
                 },
@@ -148,8 +150,8 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập mật khẩu';
                   }
-                  if (value.length < 6) {
-                    return 'Mật khẩu phải có ít nhất 6 ký tự';
+                  if (value.length < 8) {
+                    return 'Mật khẩu phải có ít nhất 8 ký tự';
                   }
                   return null;
                 },

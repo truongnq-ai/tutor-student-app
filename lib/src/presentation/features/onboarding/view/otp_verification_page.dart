@@ -1,0 +1,375 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/router/routes.dart';
+import '../../../core/theme/theme.dart';
+import '../../../core/widgets/loading_indicator.dart';
+import '../../../core/widgets/text/typography.dart';
+
+class OtpVerificationPage extends ConsumerStatefulWidget {
+  const OtpVerificationPage({super.key});
+
+  @override
+  ConsumerState<OtpVerificationPage> createState() =>
+      _OtpVerificationPageState();
+}
+
+class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
+  final List<TextEditingController> _controllers =
+      List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+  bool _isLoading = false;
+  String? _errorMessage;
+  Timer? _timer;
+  int _remainingSeconds = 300; // 5 minutes
+  bool _canResend = false;
+  int _resendCooldown = 60; // 60 seconds cooldown
+
+  String? _phoneNumber;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+    _startResendCooldown();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Get phone number from route parameters
+    final uri = GoRouterState.of(context).uri;
+    _phoneNumber = uri.queryParameters['phone'] ?? '0912345678';
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_remainingSeconds > 0) {
+            _remainingSeconds--;
+          } else {
+            timer.cancel();
+          }
+        });
+      }
+    });
+  }
+
+  void _startResendCooldown() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_resendCooldown > 0) {
+            _resendCooldown--;
+          } else {
+            _canResend = true;
+            timer.cancel();
+          }
+        });
+      }
+    });
+  }
+
+  void _onOtpChanged(int index, String value) {
+    if (value.length == 1 && index < 5) {
+      // Move to next field
+      _focusNodes[index + 1].requestFocus();
+    } else if (value.isEmpty && index > 0) {
+      // Move to previous field
+      _focusNodes[index - 1].requestFocus();
+    }
+
+    // Clear error when user types
+    if (_errorMessage != null) {
+      setState(() => _errorMessage = null);
+    }
+  }
+
+  String _getOtpCode() {
+    return _controllers.map((c) => c.text).join();
+  }
+
+  bool _isOtpComplete() {
+    return _getOtpCode().length == 6;
+  }
+
+  Future<void> _onVerify() async {
+    if (!_isOtpComplete()) return;
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    // Mock: Firebase Auth OTP verification
+    // In real implementation, this would call Firebase Auth
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (!mounted) return;
+
+    // Mock: Simulate success (in real app, verify with Firebase)
+    final otpCode = _getOtpCode();
+    final isValid = otpCode == '123456'; // Mock valid OTP
+
+    setState(() => _isLoading = false);
+
+    if (isValid) {
+      // Navigate to linking success
+      context.pushReplacementNamed(Routes.linkingSuccess);
+    } else {
+      setState(() {
+        _errorMessage = 'Mã OTP không đúng. Vui lòng thử lại.';
+        // Clear all fields
+        for (var controller in _controllers) {
+          controller.clear();
+        }
+        _focusNodes[0].requestFocus();
+      });
+    }
+  }
+
+  Future<void> _onResendOtp() async {
+    if (!_canResend) return;
+
+    setState(() {
+      _canResend = false;
+      _resendCooldown = 60;
+      _remainingSeconds = 300; // Reset timer
+    });
+
+    _startResendCooldown();
+    _startTimer();
+
+    // Mock: Resend OTP
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đã gửi lại mã OTP'),
+          backgroundColor: Color(0xFF4CAF50),
+        ),
+      );
+    }
+  }
+
+  String _formatTime(int seconds) {
+    final minutes = seconds ~/ 60;
+    final secs = seconds % 60;
+    return '${minutes.toString().padLeft(1, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isExpired = _remainingSeconds == 0;
+    final isWarning = _remainingSeconds < 60;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
+      appBar: AppBar(
+        title: const HeadingSmallText('Nhập mã OTP'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: context.padding.p24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Gap(context.spacing.s32),
+            // Description
+            BodyMediumText(
+              'Mã OTP đã được gửi đến số điện thoại $_phoneNumber. Vui lòng hỏi phụ huynh lấy mã.',
+              textAlign: TextAlign.center,
+              style: context.textStyle.bodyLarge.copyWith(
+                fontSize: 16,
+                height: 1.5, // 24px / 16px
+                color: const Color(0xFF757575),
+              ),
+            ),
+            Gap(context.spacing.s32),
+            // OTP input boxes
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(6, (index) {
+                return Semantics(
+                  label: 'Ô nhập mã OTP số ${index + 1}',
+                  child: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: TextFormField(
+                      controller: _controllers[index],
+                      focusNode: _focusNodes[index],
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(1),
+                      ],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: _errorMessage != null
+                                ? const Color(0xFFF44336)
+                                : _focusNodes[index].hasFocus
+                                    ? const Color(0xFF4CAF50)
+                                    : const Color(0xFFE0E0E0),
+                            width: _focusNodes[index].hasFocus ? 2 : 1,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFE0E0E0),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4CAF50),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF44336),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      style: context.textStyle.headingMedium.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onChanged: (value) => _onOtpChanged(index, value),
+                    ),
+                  ),
+                );
+              }),
+            ),
+            if (_errorMessage != null) ...[
+              Gap(context.spacing.s8),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: Color(0xFFF44336),
+                    size: 16,
+                  ),
+                  Gap(context.spacing.s4),
+                  Expanded(
+                    child: Text(
+                      _errorMessage!,
+                      style: context.textStyle.bodySmall.copyWith(
+                        fontSize: 12,
+                        height: 1.33, // 16px / 12px
+                        color: const Color(0xFFF44336),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            Gap(context.spacing.s24),
+            // Timer
+            Center(
+              child: Semantics(
+                label: 'Thời gian còn lại: ${_formatTime(_remainingSeconds)}',
+                child: Text(
+                  isExpired
+                      ? 'Mã OTP đã hết hạn. Vui lòng gửi lại mã.'
+                      : 'Còn lại: ${_formatTime(_remainingSeconds)}',
+                  style: context.textStyle.bodyMedium.copyWith(
+                    fontSize: 14,
+                    height: 1.43, // 20px / 14px
+                    color: isExpired
+                        ? const Color(0xFFF44336)
+                        : isWarning
+                            ? const Color(0xFFFF9800)
+                            : const Color(0xFF757575),
+                    fontWeight: isWarning ? FontWeight.w600 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+            Gap(context.spacing.s32),
+            // Verify button
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: FilledButton(
+                onPressed: _isOtpComplete() && !_isLoading ? _onVerify : null,
+                style: FilledButton.styleFrom(
+                  backgroundColor: _isOtpComplete()
+                      ? const Color(0xFF4CAF50)
+                      : const Color(0xFFBDBDBD),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 2,
+                ),
+                child: _isLoading
+                    ? const LoadingIndicator()
+                    : Text(
+                        'Xác nhận',
+                        style: context.textStyle.bodyLarge.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+            Gap(context.spacing.s16),
+            // Resend link
+            Center(
+              child: TextButton(
+                onPressed: _canResend ? _onResendOtp : null,
+                child: Text(
+                  _canResend
+                      ? 'Gửi lại mã OTP'
+                      : 'Gửi lại mã OTP (còn $_resendCooldown giây)',
+                  style: context.textStyle.bodyMedium.copyWith(
+                    fontSize: 14,
+                    height: 1.43, // 20px / 14px
+                    color: _canResend
+                        ? const Color(0xFF2196F3)
+                        : const Color(0xFFBDBDBD),
+                  ),
+                ),
+              ),
+            ),
+            Gap(context.spacing.s32),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

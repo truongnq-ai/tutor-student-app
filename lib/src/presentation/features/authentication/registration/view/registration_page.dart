@@ -35,11 +35,11 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
     ref.listenManual(registrationProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
-          // Registration successful, navigate to login
-          context.pushReplacementNamed(Routes.login);
+          // Registration successful, navigate to Trial Start
+          context.pushReplacementNamed(Routes.trialStart);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Đăng ký thành công. Vui lòng đăng nhập.'),
+              content: Text('Đăng ký thành công. Bắt đầu dùng thử miễn phí!'),
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
           );
@@ -109,8 +109,8 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập tên đăng nhập';
                   }
-                  if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-                    return 'Tên đăng nhập chỉ được chứa chữ cái và số';
+                  if (!RegExp(r'^[a-zA-Z0-9]+$', caseSensitive: false).hasMatch(value)) {
+                    return 'Tên đăng nhập chỉ được dùng chữ và số, không phân biệt hoa/thường';
                   }
                   return null;
                 },
@@ -136,8 +136,8 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập mật khẩu';
                   }
-                  if (value.length < 6) {
-                    return 'Mật khẩu phải có ít nhất 6 ký tự';
+                  if (value.length < 8) {
+                    return 'Mật khẩu phải có ít nhất 8 ký tự';
                   }
                   return null;
                 },

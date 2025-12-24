@@ -38,12 +38,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listenManual(loginProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
-          context.pushReplacementNamed(Routes.home);
+          // After login, check if has grade, if not go to Select Grade
+          // Mock: Assume no grade, go to Select Grade
+          // In real implementation, check grade from user profile
+          context.pushReplacementNamed(Routes.selectGrade);
         case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
+          // User-friendly error message
+          final friendlyMessage = errorMessage.contains('username') ||
+                  errorMessage.contains('password') ||
+                  errorMessage.contains('incorrect') ||
+                  errorMessage.contains('invalid')
+              ? 'Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.'
+              : errorMessage;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(errorMessage),
+              content: Text(friendlyMessage),
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );

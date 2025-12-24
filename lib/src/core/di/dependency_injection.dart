@@ -7,7 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/authentication_repository_impl.dart';
 import '../../data/repositories/locale_repository_impl.dart';
+import '../../data/repositories/onboarding_repository_impl.dart';
+import '../../data/repositories/parent_linking_repository_impl.dart';
 import '../../data/repositories/router_repository_impl.dart';
+import '../../data/repositories/trial_repository_impl.dart';
 import '../../core/config/env.dart';
 import '../../data/services/cache/cache_service.dart';
 import '../../data/services/network/endpoints.dart';
@@ -26,11 +29,17 @@ import '../../data/services/oauth/mock_oauth_service.dart';
 import '../../data/services/oauth/oauth_service.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../../domain/repositories/locale_repository.dart';
+import '../../domain/repositories/onboarding_repository.dart';
+import '../../domain/repositories/parent_linking_repository.dart';
 import '../../domain/repositories/router_repository.dart';
+import '../../domain/repositories/trial_repository.dart';
 import '../../domain/use_cases/authentication_use_case.dart';
 import '../../domain/use_cases/locale_use_case.dart';
+import '../../domain/use_cases/onboarding_use_case.dart';
+import '../../domain/use_cases/parent_linking_use_case.dart';
 import '../../domain/use_cases/reset_repository_use_case.dart';
 import '../../domain/use_cases/router_use_case.dart';
+import '../../domain/use_cases/trial_use_case.dart';
 import '../../presentation/core/router/router.dart';
 
 part 'dependency_injection.g.dart';

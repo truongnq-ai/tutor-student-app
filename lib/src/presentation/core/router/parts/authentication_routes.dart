@@ -3,6 +3,13 @@ part of '../router.dart';
 List<GoRoute> _authenticationRoutes(Ref ref) {
   return [
     GoRoute(
+      path: Routes.authEntry,
+      name: Routes.authEntry,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: AuthEntryPage());
+      },
+    ),
+    GoRoute(
       path: Routes.login,
       name: Routes.login,
       pageBuilder: (context, state) {

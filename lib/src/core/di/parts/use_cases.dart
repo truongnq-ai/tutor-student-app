@@ -54,3 +54,48 @@ GetUserLoginStatusUseCase getUserLoginStatusUseCase(Ref ref) {
 MarkOnboardingCompletedUseCase markOnboardingCompletedUseCase(Ref ref) {
   return MarkOnboardingCompletedUseCase(ref.read(routerRepositoryProvider));
 }
+
+@riverpod
+StartTrialUseCase startTrialUseCase(Ref ref) {
+  return StartTrialUseCase(ref.read(trialRepositoryProvider));
+}
+
+@riverpod
+GetTrialStatusUseCase getTrialStatusUseCase(Ref ref) {
+  return GetTrialStatusUseCase(ref.read(trialRepositoryProvider));
+}
+
+@riverpod
+SaveGradeUseCase saveGradeUseCase(Ref ref) {
+  return SaveGradeUseCase(ref.read(onboardingRepositoryProvider));
+}
+
+@riverpod
+GetGradeUseCase getGradeUseCase(Ref ref) {
+  return GetGradeUseCase(ref.read(onboardingRepositoryProvider));
+}
+
+@riverpod
+SaveLearningGoalsUseCase saveLearningGoalsUseCase(Ref ref) {
+  return SaveLearningGoalsUseCase(ref.read(onboardingRepositoryProvider));
+}
+
+@riverpod
+GetLearningGoalsUseCase getLearningGoalsUseCase(Ref ref) {
+  return GetLearningGoalsUseCase(ref.read(onboardingRepositoryProvider));
+}
+
+@riverpod
+RequestOtpUseCase requestOtpUseCase(Ref ref) {
+  return RequestOtpUseCase(ref.read(parentLinkingRepositoryProvider));
+}
+
+@riverpod
+VerifyOtpUseCase verifyOtpUseCase(Ref ref) {
+  return VerifyOtpUseCase(ref.read(parentLinkingRepositoryProvider));
+}
+
+@riverpod
+ResendOtpUseCase resendOtpUseCase(Ref ref) {
+  return ResendOtpUseCase(ref.read(parentLinkingRepositoryProvider));
+}
