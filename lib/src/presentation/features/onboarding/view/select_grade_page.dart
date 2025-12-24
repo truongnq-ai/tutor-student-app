@@ -56,7 +56,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                   children: [
                     Gap(context.spacing.s32),
                     // Header
-                    HeadingLargeText(
+                    Text(
                       'Bạn đang học lớp mấy?',
                       style: context.textStyle.headingLarge.copyWith(
                         fontSize: 24,

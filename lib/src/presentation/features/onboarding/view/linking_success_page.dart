@@ -66,7 +66,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               ),
               Gap(context.spacing.s24),
               // Title
-              HeadingLargeText(
+              Text(
                 'Liên kết thành công!',
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(
@@ -78,7 +78,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               ),
               Gap(context.spacing.s16),
               // Description
-              BodyMediumText(
+              Text(
                 'Tài khoản của bạn đã được liên kết với phụ huynh. Dữ liệu học tập trong 7 ngày dùng thử đã được giữ lại.',
                 textAlign: TextAlign.center,
                 style: context.textStyle.bodyLarge.copyWith(

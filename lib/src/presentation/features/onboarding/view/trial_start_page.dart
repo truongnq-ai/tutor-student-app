@@ -80,7 +80,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
             ),
             Gap(context.spacing.s32),
             // Title
-            HeadingLargeText(
+            Text(
               'Bắt đầu dùng thử miễn phí!',
               textAlign: TextAlign.center,
               style: context.textStyle.headingLarge.copyWith(
@@ -92,7 +92,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
             ),
             Gap(context.spacing.s16),
             // Description
-            BodyMediumText(
+            Text(
               'Bạn có 7 ngày để trải nghiệm đầy đủ tính năng của Tutor',
               textAlign: TextAlign.center,
               style: context.textStyle.bodyLarge.copyWith(

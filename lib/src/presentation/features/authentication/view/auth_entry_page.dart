@@ -7,7 +7,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
 import '../../../core/widgets/text/typography.dart';
-import '../../../../features/authentication/oauth/widgets/oauth_button.dart';
+import '../oauth/widgets/oauth_button.dart';
 import '../login/riverpod/oauth_provider.dart';
 
 class AuthEntryPage extends ConsumerWidget {
@@ -71,7 +71,7 @@ class AuthEntryPage extends ConsumerWidget {
               const FlutterLogo(size: 100),
               Gap(context.spacing.s48),
               // Header
-              HeadingLargeText(
+              Text(
                 'Chọn cách đăng nhập',
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(

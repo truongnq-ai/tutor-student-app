@@ -129,7 +129,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
               ),
               Gap(context.spacing.s32),
               // Title
-              HeadingLargeText(
+              Text(
                 'Thời gian dùng thử đã kết thúc!',
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(
@@ -141,7 +141,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
               ),
               Gap(context.spacing.s16),
               // Description
-              BodyMediumText(
+              Text(
                 'Bạn đã hoàn thành 7 ngày dùng thử. Để tiếp tục học, bạn cần liên kết với tài khoản phụ huynh',
                 textAlign: TextAlign.center,
                 style: context.textStyle.bodyLarge.copyWith(

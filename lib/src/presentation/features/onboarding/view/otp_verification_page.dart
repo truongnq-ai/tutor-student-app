@@ -198,7 +198,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
           children: [
             Gap(context.spacing.s32),
             // Description
-            BodyMediumText(
+            Text(
               'Mã OTP đã được gửi đến số điện thoại $_phoneNumber. Vui lòng hỏi phụ huynh lấy mã.',
               textAlign: TextAlign.center,
               style: context.textStyle.bodyLarge.copyWith(

@@ -68,7 +68,7 @@ class _SelectLearningGoalPageState
                   children: [
                     Gap(context.spacing.s32),
                     // Header
-                    HeadingLargeText(
+                    Text(
                       'Mục tiêu học tập của bạn là gì?',
                       style: context.textStyle.headingLarge.copyWith(
                         fontSize: 24,

@@ -57,7 +57,7 @@ class WelcomePage extends ConsumerWidget {
                 ),
                 Gap(context.spacing.s32),
                 // Title
-                HeadingLargeText(
+                Text(
                   'Chào mừng đến với Tutor!',
                   textAlign: TextAlign.center,
                   style: context.textStyle.headingLarge.copyWith(
@@ -69,7 +69,7 @@ class WelcomePage extends ConsumerWidget {
                 ),
                 Gap(context.spacing.s16),
                 // Subtitle
-                BodyMediumText(
+                Text(
                   'Gia sư Toán AI cá nhân hoá cho bạn',
                   textAlign: TextAlign.center,
                   style: context.textStyle.bodyLarge.copyWith(
