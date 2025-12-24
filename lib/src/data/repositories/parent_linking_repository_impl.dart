@@ -1,8 +1,8 @@
-import '../../../core/base/response_object.dart';
-import '../../../core/constants/error_codes.dart';
-import '../../../domain/repositories/parent_linking_repository.dart';
-import '../../services/cache/cache_service.dart';
-import '../../services/network/services/linking_service.dart';
+import '../../core/base/response_object.dart';
+import '../../core/constants/error_codes.dart';
+import '../../domain/repositories/parent_linking_repository.dart';
+import '../services/cache/cache_service.dart';
+import '../services/network/services/linking_service.dart';
 
 final class ParentLinkingRepositoryImpl extends ParentLinkingRepository {
   ParentLinkingRepositoryImpl({

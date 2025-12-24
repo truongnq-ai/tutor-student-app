@@ -1,8 +1,8 @@
-import '../../../core/base/response_object.dart';
-import '../../../core/constants/error_codes.dart';
-import '../../../domain/repositories/onboarding_repository.dart';
-import '../../services/cache/cache_service.dart';
-import '../../services/network/services/student_service.dart';
+import '../../core/base/response_object.dart';
+import '../../core/constants/error_codes.dart';
+import '../../domain/repositories/onboarding_repository.dart';
+import '../services/cache/cache_service.dart';
+import '../services/network/services/student_service.dart';
 
 final class OnboardingRepositoryImpl extends OnboardingRepository {
   OnboardingRepositoryImpl({
@@ -12,9 +12,6 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
 
   final StudentService studentService;
   final CacheService cacheService;
-
-  static const String _gradeKey = 'selected_grade';
-  static const String _learningGoalsKey = 'learning_goals';
 
   /// Get trialId or anonymousId for API calls
   Future<Map<String, String?>> _getTrialIdentifiers() async {
@@ -84,7 +81,7 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
       }
 
       // Save to cache on success
-      await cacheService.save(_gradeKey, grade);
+      await cacheService.save(CacheKey.grade, grade);
 
       return ResponseObject.success(null);
     } catch (e) {
@@ -99,7 +96,7 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
   Future<ResponseObject<int?>> getGrade() async {
     try {
       // Try cache first
-      final cachedGrade = cacheService.get<int>(_gradeKey);
+      final cachedGrade = cacheService.get<int>(CacheKey.grade);
       if (cachedGrade != null) {
         return ResponseObject.success(cachedGrade);
       }
@@ -152,13 +149,13 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
 
       // Save to cache if found
       if (grade != null) {
-        await cacheService.save(_gradeKey, grade);
+        await cacheService.save(CacheKey.grade, grade);
       }
 
       return ResponseObject.success(grade);
     } catch (e) {
       // On error, return cached value if available
-      final cachedGrade = cacheService.get<int>(_gradeKey);
+      final cachedGrade = cacheService.get<int>(CacheKey.grade);
       return ResponseObject.success(cachedGrade);
     }
   }
@@ -221,7 +218,7 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
       }
 
       // Save to cache on success
-      await cacheService.save(_learningGoalsKey, goals.toList());
+      await cacheService.save(CacheKey.learningGoals, goals.toList());
 
       return ResponseObject.success(null);
     } catch (e) {
@@ -236,7 +233,7 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
   Future<ResponseObject<Set<String>>> getLearningGoals() async {
     try {
       // Try cache first
-      final cachedGoalsList = cacheService.get<List<dynamic>>(_learningGoalsKey);
+      final cachedGoalsList = cacheService.get<List<dynamic>>(CacheKey.learningGoals);
       if (cachedGoalsList != null) {
         final goals = cachedGoalsList.map((e) => e.toString()).toSet();
         return ResponseObject.success(goals);
@@ -293,13 +290,13 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
 
       // Save to cache if found
       if (goals.isNotEmpty) {
-        await cacheService.save(_learningGoalsKey, goals.toList());
+        await cacheService.save(CacheKey.learningGoals, goals.toList());
       }
 
       return ResponseObject.success(goals);
     } catch (e) {
       // On error, return cached value if available
-      final cachedGoalsList = cacheService.get<List<dynamic>>(_learningGoalsKey);
+      final cachedGoalsList = cacheService.get<List<dynamic>>(CacheKey.learningGoals);
       if (cachedGoalsList != null) {
         final goals = cachedGoalsList.map((e) => e.toString()).toSet();
         return ResponseObject.success(goals);

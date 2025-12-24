@@ -7,33 +7,46 @@ class SharedPreferencesService implements CacheService {
 
   @override
   Future<void> save<T>(CacheKey key, T value) async {
-    switch (T) {
-      case const (String):
-        await prefs.setString(key.name, value as String);
-        break;
-      case const (int):
-        await prefs.setInt(key.name, value as int);
-        break;
-      case const (bool):
-        await prefs.setBool(key.name, value as bool);
-        break;
-      case const (double):
-        await prefs.setDouble(key.name, value as double);
-        break;
-      default:
-        await prefs.setString(key.name, value as String);
+    if (value is String) {
+      await prefs.setString(key.name, value);
+    } else if (value is int) {
+      await prefs.setInt(key.name, value);
+    } else if (value is bool) {
+      await prefs.setBool(key.name, value);
+    } else if (value is double) {
+      await prefs.setDouble(key.name, value);
+    } else if (value is List<String>) {
+      await prefs.setStringList(key.name, value);
+    } else if (value is List) {
+      // Convert list to string list for storage
+      await prefs.setStringList(key.name, value.map((e) => e.toString()).toList());
+    } else {
+      await prefs.setString(key.name, value.toString());
     }
   }
 
   @override
   T? get<T>(CacheKey key) {
-    return switch (T) {
-      const (String) => prefs.getString(key.name) as T?,
-      const (int) => prefs.getInt(key.name) as T?,
-      const (bool) => prefs.getBool(key.name) as T?,
-      const (double) => prefs.getDouble(key.name) as T?,
-      _ => prefs.get(key.name) as T?,
-    };
+    if (T == String) {
+      return prefs.getString(key.name) as T?;
+    } else if (T == int) {
+      return prefs.getInt(key.name) as T?;
+    } else if (T == bool) {
+      return prefs.getBool(key.name) as T?;
+    } else if (T == double) {
+      return prefs.getDouble(key.name) as T?;
+    } else if (T == List<String>) {
+      return prefs.getStringList(key.name) as T?;
+    } else if (T.toString().startsWith('List<')) {
+      // For List<dynamic> or other List types, try to get as string list
+      final stringList = prefs.getStringList(key.name);
+      if (stringList != null) {
+        return stringList as T?;
+      }
+      return null;
+    } else {
+      return prefs.get(key.name) as T?;
+    }
   }
 
   @override

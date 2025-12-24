@@ -1,10 +1,10 @@
-import '../../../core/base/response_object.dart';
-import '../../../core/constants/error_codes.dart';
-import '../../../domain/entities/trial_entity.dart';
-import '../../../domain/repositories/trial_repository.dart';
-import '../../models/trial_model.dart';
-import '../../services/cache/cache_service.dart';
-import '../../services/network/services/student_service.dart';
+import '../../core/base/response_object.dart';
+import '../../core/constants/error_codes.dart';
+import '../../domain/entities/trial_entity.dart';
+import '../../domain/repositories/trial_repository.dart';
+import '../models/trial_model.dart';
+import '../services/cache/cache_service.dart';
+import '../services/network/services/student_service.dart';
 
 final class TrialRepositoryImpl extends TrialRepository {
   TrialRepositoryImpl({
