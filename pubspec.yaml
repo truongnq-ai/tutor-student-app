@@ -49,7 +49,7 @@ dependencies:
   cached_network_image: ^3.3.0
   # OAuth
   google_sign_in: ^6.2.1
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^6.1.3
   # Logging
   logger: ^2.4.0
   pretty_dio_logger: ^1.4.0
