@@ -7,17 +7,17 @@ part 'practice_service.g.dart';
 
 @RestApi(baseUrl: '')
 abstract class PracticeService {
-  factory PracticeService(Dio dio, {String baseUrl = ''}) = _PracticeService;
+  factory PracticeService(Dio dio, {String? baseUrl}) = _PracticeService;
 
   /// Submit practice answer
   @POST(Endpoints.practiceSubmit)
-  Future<HttpResponse<Map<String, dynamic>>> submitPractice(
+  Future<HttpResponse<dynamic>> submitPractice(
     @Body() Map<String, dynamic> request,
   );
 
   /// Get practice history
   @GET(Endpoints.practiceHistory)
-  Future<HttpResponse<Map<String, dynamic>>> getPracticeHistory(
+  Future<HttpResponse<dynamic>> getPracticeHistory(
     @Query('page') int? page,
     @Query('pageSize') int? pageSize,
     @Query('skillId') String? skillId,
@@ -27,7 +27,7 @@ abstract class PracticeService {
 
   /// Get practice questions
   @GET(Endpoints.practiceQuestions)
-  Future<HttpResponse<Map<String, dynamic>>> getPracticeQuestions(
+  Future<HttpResponse<dynamic>> getPracticeQuestions(
     @Query('status') String? status,
     @Query('skillId') String? skillId,
     @Query('limit') int? limit,
@@ -36,13 +36,13 @@ abstract class PracticeService {
 
   /// Get practice question detail
   @GET(Endpoints.practiceQuestionDetail)
-  Future<HttpResponse<Map<String, dynamic>>> getPracticeQuestionDetail(
+  Future<HttpResponse<dynamic>> getPracticeQuestionDetail(
     @Path('id') String questionId,
   );
 
   /// Submit practice question answer
   @POST(Endpoints.practiceQuestionSubmit)
-  Future<HttpResponse<Map<String, dynamic>>> submitPracticeQuestion(
+  Future<HttpResponse<dynamic>> submitPracticeQuestion(
     @Path('id') String questionId,
     @Body() Map<String, dynamic> request,
   );

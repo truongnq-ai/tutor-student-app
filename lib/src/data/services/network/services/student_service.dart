@@ -7,31 +7,31 @@ part 'student_service.g.dart';
 
 @RestApi(baseUrl: '')
 abstract class StudentService {
-  factory StudentService(Dio dio, {String baseUrl = ''}) = _StudentService;
+  factory StudentService(Dio dio, {String? baseUrl}) = _StudentService;
 
   // ==================== Authentication ====================
 
   /// Manual registration
   @POST(Endpoints.studentRegister)
-  Future<HttpResponse<Map<String, dynamic>>> register(
+  Future<HttpResponse<dynamic>> register(
     @Body() Map<String, dynamic> request,
   );
 
   /// Manual login
   @POST(Endpoints.studentLogin)
-  Future<HttpResponse<Map<String, dynamic>>> login(
+  Future<HttpResponse<dynamic>> login(
     @Body() Map<String, dynamic> request,
   );
 
   /// OAuth login (Google/Apple)
   @POST(Endpoints.studentOAuthLogin)
-  Future<HttpResponse<Map<String, dynamic>>> oauthLogin(
+  Future<HttpResponse<dynamic>> oauthLogin(
     @Body() Map<String, dynamic> request,
   );
 
   /// Set credential after OAuth login
   @POST(Endpoints.studentSetCredential)
-  Future<HttpResponse<Map<String, dynamic>>> setCredential(
+  Future<HttpResponse<dynamic>> setCredential(
     @Query('studentId') String studentId,
     @Body() Map<String, dynamic> request,
   );
@@ -40,13 +40,13 @@ abstract class StudentService {
 
   /// Start trial
   @POST(Endpoints.trialStart)
-  Future<HttpResponse<Map<String, dynamic>>> startTrial(
+  Future<HttpResponse<dynamic>> startTrial(
     @Body() Map<String, dynamic> request,
   );
 
   /// Get trial status
   @GET(Endpoints.trialStatus)
-  Future<HttpResponse<Map<String, dynamic>>> getTrialStatus(
+  Future<HttpResponse<dynamic>> getTrialStatus(
     @Header('X-Device-Id') String? deviceId,
     @Header('X-Anonymous-Id') String? anonymousId,
   );

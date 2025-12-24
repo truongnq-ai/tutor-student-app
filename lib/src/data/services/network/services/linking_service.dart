@@ -7,23 +7,23 @@ part 'linking_service.g.dart';
 
 @RestApi(baseUrl: '')
 abstract class LinkingService {
-  factory LinkingService(Dio dio, {String baseUrl = ''}) = _LinkingService;
+  factory LinkingService(Dio dio, {String? baseUrl}) = _LinkingService;
 
   /// Request OTP for parent linking
   @POST(Endpoints.linkRequestOtp)
-  Future<HttpResponse<Map<String, dynamic>>> requestOtp(
+  Future<HttpResponse<dynamic>> requestOtp(
     @Body() Map<String, dynamic> request,
   );
 
   /// Verify OTP and link parent
   @POST(Endpoints.linkVerifyOtp)
-  Future<HttpResponse<Map<String, dynamic>>> verifyOtp(
+  Future<HttpResponse<dynamic>> verifyOtp(
     @Body() Map<String, dynamic> request,
   );
 
   /// Confirm link (parent-first flow)
   @POST(Endpoints.linkConfirm)
-  Future<HttpResponse<Map<String, dynamic>>> confirmLink(
+  Future<HttpResponse<dynamic>> confirmLink(
     @Body() Map<String, dynamic> request,
   );
 }

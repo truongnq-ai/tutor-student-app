@@ -29,16 +29,21 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
-      if (responseJson == null || responseJson is! Map<String, dynamic>) {
+      if (responseJson == null) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+      
+      // Ensure responseJson is a Map
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
 
       // Parse ResponseObject from JSON
       final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
-        responseJson,
+        responseMap,
         (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
       );
 
@@ -94,16 +99,21 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
-      if (responseJson == null || responseJson is! Map<String, dynamic>) {
+      if (responseJson == null) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+      
+      // Ensure responseJson is a Map
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
 
       // Parse ResponseObject from JSON
       final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
-        responseJson,
+        responseMap,
         (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
       );
 
@@ -245,16 +255,21 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final response = await studentService.oauthLogin(request);
 
       final responseJson = response.data;
-      if (responseJson == null || responseJson is! Map<String, dynamic>) {
+      if (responseJson == null) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+      
+      // Ensure responseJson is a Map
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
 
       // Parse ResponseObject from JSON
       final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
-        responseJson,
+        responseMap,
         (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
       );
 
@@ -308,16 +323,21 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final response = await studentService.setCredential(studentId, request);
 
       final responseJson = response.data;
-      if (responseJson == null || responseJson is! Map<String, dynamic>) {
+      if (responseJson == null) {
         return ResponseObject.error(
           errorCode: '5001',
           errorDetail: 'Invalid response format',
         );
       }
+      
+      // Ensure responseJson is a Map
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
 
       // Parse ResponseObject from JSON
       final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
-        responseJson,
+        responseMap,
         (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
       );
 
@@ -375,10 +395,15 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
         CacheKey.refreshToken,
       ]);
 
-      if (responseJson != null && responseJson is Map<String, dynamic>) {
+      if (responseJson != null) {
+        // Ensure responseJson is a Map
+        final responseMap = responseJson is Map<String, dynamic>
+            ? responseJson
+            : <String, dynamic>{};
+        
         // Parse ResponseObject from JSON
         final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
-          responseJson,
+          responseMap,
           (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
         );
 

@@ -7,17 +7,17 @@ part 'mini_test_service.g.dart';
 
 @RestApi(baseUrl: '')
 abstract class MiniTestService {
-  factory MiniTestService(Dio dio, {String baseUrl = ''}) = _MiniTestService;
+  factory MiniTestService(Dio dio, {String? baseUrl}) = _MiniTestService;
 
   /// Start mini test
   @POST(Endpoints.miniTestStart)
-  Future<HttpResponse<Map<String, dynamic>>> startMiniTest(
+  Future<HttpResponse<dynamic>> startMiniTest(
     @Body() Map<String, dynamic> request,
   );
 
   /// Submit mini test answers
   @POST(Endpoints.miniTestSubmit)
-  Future<HttpResponse<Map<String, dynamic>>> submitMiniTest(
+  Future<HttpResponse<dynamic>> submitMiniTest(
     @Body() Map<String, dynamic> request,
   );
 }
