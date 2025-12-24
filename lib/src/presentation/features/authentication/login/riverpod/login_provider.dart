@@ -1,19 +1,21 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../../core/base/result.dart';
+import '../../../../../core/base/response_object.dart';
+import '../../../../../core/constants/error_codes.dart';
 import '../../../../../core/di/dependency_injection.dart';
+import '../../../../../domain/entities/login_entity.dart';
 
 part 'login_provider.g.dart';
 
 @riverpod
 class Login extends _$Login {
   @override
-  AsyncValue build() {
+  AsyncValue<LoginResponseEntity?> build() {
     return const AsyncValue.data(null);
   }
 
   void login({
-    required String email,
+    required String username,
     required String password,
     bool? shouldRemember,
   }) async {
@@ -21,14 +23,27 @@ class Login extends _$Login {
 
     state = const AsyncValue.loading();
 
-    final result = await ref
-        .read(loginUseCaseProvider)
-        .call(email: email, password: password, shouldRemember: shouldRemember);
+    try {
+      final response = await ref
+          .read(loginUseCaseProvider)
+          .call(
+            username: username,
+            password: password,
+            shouldRemember: shouldRemember,
+          );
 
-    state = switch (result) {
-      Success() => AsyncValue.data(result),
-      Error(:final error) => AsyncValue.error(error, StackTrace.current),
-      _ => AsyncValue.error('Something went wrong', StackTrace.current),
-    };
+      if (response.isSuccess && response.data != null) {
+        state = AsyncValue.data(response.data);
+      } else {
+        // Handle error - check errorCode
+        final errorMessage = response.getErrorMessage();
+        state = AsyncValue.error(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+      }
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
   }
 }

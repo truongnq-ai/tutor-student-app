@@ -51,5 +51,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Chúng tôi cần quyền truy cập camera để chụp ảnh bài Toán</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Chúng tôi cần quyền truy cập thư viện ảnh để chọn ảnh bài Toán</string>
 </dict>
 </plist>

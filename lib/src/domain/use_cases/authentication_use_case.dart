@@ -1,4 +1,4 @@
-import '../../core/base/result.dart';
+import '../../core/base/response_object.dart';
 import '../entities/login_entity.dart';
 import '../entities/sign_up_entity.dart';
 import '../repositories/authentication_repository.dart';
@@ -8,7 +8,9 @@ final class RegisterUseCase {
 
   final AuthenticationRepository repository;
 
-  Future<SignUpResponseEntity> call(SignUpRequestEntity request) async {
+  Future<ResponseObject<SignUpResponseEntity>> call(
+    SignUpRequestEntity request,
+  ) async {
     return repository.register(request);
   }
 }
@@ -18,24 +20,18 @@ final class LoginUseCase {
 
   final AuthenticationRepository repository;
 
-  Future<Result<LoginResponseEntity, String>> call({
-    required String email,
+  Future<ResponseObject<LoginResponseEntity>> call({
+    required String username,
     required String password,
     bool? shouldRemember,
   }) async {
     final request = LoginRequestEntity(
-      username: email,
+      username: username,
       password: password,
       shouldRemeber: shouldRemember,
     );
 
-    final result = await repository.login(request);
-
-    return switch (result) {
-      Success(:final data) => Success(data),
-      Error(:final error) => Error(error.message),
-      _ => const Error('Something went wrong'),
-    };
+    return repository.login(request);
   }
 }
 
@@ -44,7 +40,7 @@ final class LogoutUseCase {
 
   final AuthenticationRepository repository;
 
-  Future<void> call() async {
+  Future<ResponseObject<void>> call() async {
     return repository.logout();
   }
 }

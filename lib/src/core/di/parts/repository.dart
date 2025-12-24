@@ -3,7 +3,7 @@ part of '../dependency_injection.dart';
 @Riverpod(keepAlive: true)
 AuthenticationRepository authenticationRepository(Ref ref) {
   return AuthenticationRepositoryImpl(
-    remote: ref.read(restClientServiceProvider),
+    studentService: ref.read(studentServiceProvider),
     local: ref.read(cacheServiceProvider),
   );
 }

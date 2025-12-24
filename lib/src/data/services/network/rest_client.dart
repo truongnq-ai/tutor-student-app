@@ -5,11 +5,18 @@ import 'endpoints.dart';
 
 part 'rest_client.g.dart';
 
+/// Base REST client (kept for backward compatibility)
+/// 
+/// Note: New code should use specific service interfaces:
+/// - StudentService
+/// - TutorService
+/// - LearningService
+/// - PracticeService
+/// - MiniTestService
+/// - LinkingService
+/// - AuthService
 @RestApi(baseUrl: Endpoints.base)
 abstract class RestClient {
-  factory RestClient(Dio dio, {String? baseUrl, ParseErrorLogger errorLogger}) =
+  factory RestClient(Dio dio, {String? baseUrl, ParseErrorLogger? errorLogger}) =
       _RestClient;
-
-  @POST(Endpoints.login)
-  Future<HttpResponse> login(@Body() Map<String, dynamic> request);
 }

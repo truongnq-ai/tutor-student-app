@@ -1,3 +1,9 @@
+part 'dependency_injection.g.dart';
+part 'parts/externals.dart';
+part 'parts/repository.dart';
+part 'parts/services.dart';
+part 'parts/use_cases.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,9 +26,3 @@ import '../../domain/use_cases/locale_use_case.dart';
 import '../../domain/use_cases/reset_repository_use_case.dart';
 import '../../domain/use_cases/router_use_case.dart';
 import '../../presentation/core/router/router.dart';
-
-part 'dependency_injection.g.dart';
-part 'parts/externals.dart';
-part 'parts/repository.dart';
-part 'parts/services.dart';
-part 'parts/use_cases.dart';

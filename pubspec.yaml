@@ -44,6 +44,12 @@ dependencies:
   freezed_annotation: ^3.0.0
   # Media
   flutter_svg: ^2.0.10+1
+  image_picker: ^1.0.5
+  camera: ^0.10.5+5
+  cached_network_image: ^3.3.0
+  # OAuth
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^5.0.0
   # Logging
   logger: ^2.4.0
   pretty_dio_logger: ^1.4.0

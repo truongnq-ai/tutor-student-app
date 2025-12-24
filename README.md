@@ -1,76 +1,129 @@
 # Tutor Student App
 
-**Flutter mobile application for students - Personalized math learning**
+**Ứng dụng Flutter cho học sinh - Học Toán cá nhân hóa**
 
-## Project Overview
+## Tổng Quan Dự Án
 
-Tutor Student App is a Flutter mobile application that enables middle school students (Grades 6-7) to learn math through personalized tutoring. Students can solve math problems via image or text input, practice skills, take mini tests, and track their learning progress.
+Tutor Student App là ứng dụng mobile Flutter dành cho học sinh trung học cơ sở (lớp 6-7) để học Toán thông qua gia sư AI cá nhân hóa. Học sinh có thể giải bài Toán bằng cách chụp ảnh hoặc nhập văn bản, luyện tập kỹ năng, làm mini test, và theo dõi tiến độ học tập.
 
-This module is part of the Tutor ecosystem - an AI-powered math tutoring platform.
+Module này là một phần của hệ thống Tutor - nền tảng gia sư Toán AI.
 
-## Role in System
+## Vai Trò Trong Hệ Thống
 
-The Student App enables students to:
-- **Onboarding**: Set up grade and learning goals
-- **Tutor Mode**: Solve math problems by uploading images or entering text
-- **Practice**: Complete personalized practice sessions
-- **Mini Tests**: Take skill assessment tests
-- **Progress Tracking**: View mastery levels and learning history
+Student App cho phép học sinh:
+- **Onboarding**: Thiết lập lớp học và mục tiêu học tập
+- **Tutor Mode**: Giải bài Toán bằng cách upload ảnh hoặc nhập văn bản
+- **Practice**: Hoàn thành các buổi luyện tập cá nhân hóa
+- **Mini Test**: Làm bài kiểm tra đánh giá kỹ năng
+- **Progress Tracking**: Xem mức độ thành thạo và lịch sử học tập
+- **Parent Linking**: Liên kết với phụ huynh bằng số điện thoại
 
 ## Tech Stack
 
-### Required (from Project Specification)
+### Yêu Cầu (từ Project Specification)
 
-| Component | Version | Purpose |
-|-----------|---------|---------|
+| Component | Version | Mục Đích |
+|-----------|---------|----------|
 | Flutter | 3.16+ | Mobile framework |
-| Dart | 3.2+ | Programming language |
-| State Management | Riverpod/BLoC | State management |
-| REST API | Retrofit/Dio | API communication |
-| Camera/Image | image_picker, camera | Image capture |
+| Dart | 3.2+ | Ngôn ngữ lập trình |
+| State Management | Riverpod/BLoC | Quản lý state |
+| REST API | Retrofit/Dio | Giao tiếp API |
+| Camera/Image | image_picker, camera | Chụp ảnh |
 
-### Current Implementation
+### Hiện Trạng Triển Khai
 
-| Component | Version | Status |
-|-----------|---------|--------|
-| Flutter | 3.38.4+ | ✅ Meets requirement |
-| Dart | 3.10.3+ | ✅ Meets requirement |
+| Component | Version | Trạng Thái |
+|-----------|---------|------------|
+| Flutter | 3.38.4+ | ✅ Đạt yêu cầu |
+| Dart | 3.10.3+ | ✅ Đạt yêu cầu |
 | Riverpod | 2.5.1 | ✅ State management |
 | go_router | 17.0.1 | ✅ Navigation |
 | Retrofit | 4.4.0 | ✅ API client |
 | Dio | 5.8.0+1 | ✅ HTTP client |
 | SharedPreferences | 2.3.1 | ✅ Local storage |
+| flutter_localizations | Latest | ✅ Đa ngôn ngữ |
+| logger | 2.4.0 | ✅ Logging |
 
-### Missing / To Be Added
+### Thiếu / Cần Bổ Sung
 
-- [ ] **image_picker** - For selecting images from gallery
-- [ ] **camera** - For capturing photos
-- [ ] **google_sign_in** - For Google OAuth
-- [ ] **sign_in_with_apple** - For Apple OAuth
-- [ ] **cached_network_image** - For image caching
-- [ ] **API Client Setup** - Configure Retrofit for Core Service
-- [ ] **Environment Configuration** - API endpoints setup
+- [ ] **image_picker** - Để chọn ảnh từ thư viện
+- [ ] **camera** - Để chụp ảnh
+- [ ] **google_sign_in** - Cho Google OAuth
+- [ ] **sign_in_with_apple** - Cho Apple OAuth
+- [ ] **cached_network_image** - Để cache ảnh từ mạng
+- [ ] **API Client Setup** - Cấu hình Retrofit cho Core Service
+- [ ] **Environment Configuration** - Thiết lập API endpoints
 
-## Prerequisites
+## Kiến Trúc Module
 
-- **Flutter SDK** 3.38.4 or later
-- **Dart SDK** 3.10.3 or later
-- **Android Studio** (for Android development)
-- **Xcode** 15+ (for iOS development, macOS only)
-- **Git** for version control
+Module này sử dụng **Clean Architecture** với các layer:
 
-### Verify Installation
+- **Presentation Layer**: UI components, pages, widgets, routing
+- **Domain Layer**: Business logic, entities, use cases, repository interfaces
+- **Data Layer**: API services, repository implementations, models
+- **Core Layer**: Dependency injection, utilities, extensions, logging
+
+### Cấu Trúc Thư Mục
+
+```
+tutor-student-app/
+├── lib/
+│   ├── src/
+│   │   ├── core/              # Core utilities
+│   │   │   ├── base/          # Base classes (exceptions, failures, repositories)
+│   │   │   ├── di/            # Dependency injection
+│   │   │   ├── extensions/    # Extension methods
+│   │   │   ├── logger/        # Logging
+│   │   │   └── utiliity/      # Utilities (validation)
+│   │   ├── domain/            # Business logic layer
+│   │   │   ├── entities/      # Business entities
+│   │   │   ├── repositories/  # Repository interfaces
+│   │   │   └── use_cases/     # Business use cases
+│   │   ├── data/              # Data layer
+│   │   │   ├── models/        # Data models
+│   │   │   ├── repositories/  # Repository implementations
+│   │   │   └── services/      # API services
+│   │   │       ├── cache/     # Cache services
+│   │   │       └── network/   # Network services (Retrofit, Dio)
+│   │   └── presentation/      # UI layer
+│   │       ├── core/          # Core UI components
+│   │       │   ├── application_state/  # App state providers
+│   │       │   ├── router/     # Navigation
+│   │       │   ├── theme/      # Theming
+│   │       │   └── widgets/    # Reusable widgets
+│   │       └── features/       # Feature-specific UI
+│   │           ├── authentication/  # Auth flow
+│   │           ├── onboarding/      # Onboarding flow
+│   │           ├── home/           # Home screen
+│   │           ├── profile/        # Profile screen
+│   │           └── splash/         # Splash screen
+│   └── main.dart              # Application entry point
+├── test/                       # Test files
+├── android/                    # Android-specific
+├── ios/                        # iOS-specific
+└── pubspec.yaml               # Dependencies
+```
+
+## Yêu Cầu Hệ Thống
+
+- **Flutter SDK** 3.38.4 trở lên
+- **Dart SDK** 3.10.3 trở lên
+- **Android Studio** (cho phát triển Android)
+- **Xcode** 15+ (cho phát triển iOS, chỉ trên macOS)
+- **Git** để quản lý phiên bản
+
+### Kiểm Tra Cài Đặt
 
 ```bash
 flutter --version
 flutter doctor
 ```
 
-Ensure all checks pass in `flutter doctor`.
+Đảm bảo tất cả các kiểm tra trong `flutter doctor` đều pass.
 
-## Installation
+## Cài Đặt
 
-### 1. Install Dependencies
+### 1. Cài Đặt Dependencies
 
 ```bash
 cd tutor-student-app
@@ -79,23 +132,23 @@ flutter pub get
 
 ### 2. Generate Code
 
-This project uses code generation for:
+Dự án sử dụng code generation cho:
 - Riverpod providers
 - Retrofit API clients
 - Freezed models
 - JSON serialization
 
 ```bash
-# One-time generation
+# Generate một lần
 dart run build_runner build --delete-conflicting-outputs
 
-# Watch mode (for development)
+# Watch mode (cho development)
 dart run build_runner watch --delete-conflicting-outputs
 ```
 
-### 3. Environment Configuration
+### 3. Cấu Hình Environment
 
-Create `lib/src/core/config/env.dart`:
+Tạo `lib/src/core/config/env.dart`:
 
 ```dart
 class Env {
@@ -115,27 +168,27 @@ class Env {
 }
 ```
 
-### 4. Run Application
+### 4. Chạy Ứng Dụng
 
 ```bash
-# List available devices
+# Liệt kê các thiết bị có sẵn
 flutter devices
 
-# Run on connected device/emulator
+# Chạy trên thiết bị/emulator đã kết nối
 flutter run
 
-# Run on specific device
+# Chạy trên thiết bị cụ thể
 flutter run -d <device-id>
 
-# Run in release mode
+# Chạy ở chế độ release
 flutter run --release
 ```
 
-## Configuration
+## Cấu Hình
 
 ### Environment Variables
 
-Set environment variables when running:
+Thiết lập environment variables khi chạy:
 
 ```bash
 # Development
@@ -147,11 +200,11 @@ flutter run --dart-define=API_BASE_URL=https://api.tutor.app/api \
            --dart-define=ENVIRONMENT=production
 ```
 
-### Platform-Specific Setup
+### Cấu Hình Platform-Specific
 
 #### Android
 
-1. Update `android/app/build.gradle`:
+1. Cập nhật `android/app/build.gradle`:
    ```gradle
    android {
        compileSdkVersion 34
@@ -160,7 +213,7 @@ flutter run --dart-define=API_BASE_URL=https://api.tutor.app/api \
    }
    ```
 
-2. Add permissions in `android/app/src/main/AndroidManifest.xml`:
+2. Thêm permissions trong `android/app/src/main/AndroidManifest.xml`:
    ```xml
    <uses-permission android:name="android.permission.CAMERA" />
    <uses-permission android:name="android.permission.INTERNET" />
@@ -169,64 +222,28 @@ flutter run --dart-define=API_BASE_URL=https://api.tutor.app/api \
 
 #### iOS
 
-1. Update `ios/Runner/Info.plist`:
+1. Cập nhật `ios/Runner/Info.plist`:
    ```xml
    <key>NSCameraUsageDescription</key>
-   <string>We need camera access to capture math problems</string>
+   <string>Chúng tôi cần quyền truy cập camera để chụp ảnh bài Toán</string>
    <key>NSPhotoLibraryUsageDescription</key>
-   <string>We need photo library access to select math problem images</string>
+   <string>Chúng tôi cần quyền truy cập thư viện ảnh để chọn ảnh bài Toán</string>
    ```
 
-2. Configure signing in Xcode
+2. Cấu hình signing trong Xcode
 
-## Development
+## Phát Triển
 
-### Project Structure
-
-```
-tutor-student-app/
-├── lib/
-│   ├── src/
-│   │   ├── core/              # Core utilities
-│   │   │   ├── config/        # Environment config
-│   │   │   ├── di/            # Dependency injection
-│   │   │   ├── extensions/    # Extension methods
-│   │   │   └── logger/        # Logging
-│   │   ├── domain/            # Business logic layer
-│   │   │   ├── entities/      # Business entities
-│   │   │   ├── repositories/  # Repository interfaces
-│   │   │   └── use_cases/     # Business use cases
-│   │   ├── data/              # Data layer
-│   │   │   ├── models/        # Data models
-│   │   │   ├── repositories/  # Repository implementations
-│   │   │   └── services/      # API services
-│   │   └── presentation/      # UI layer
-│   │       ├── core/          # Core UI components
-│   │       │   ├── router/     # Navigation
-│   │       │   ├── theme/      # Theming
-│   │       │   └── widgets/    # Reusable widgets
-│   │       └── features/       # Feature-specific UI
-│   │           ├── onboarding/ # Onboarding flow
-│   │           ├── tutor/      # Tutor mode (solve problems)
-│   │           ├── practice/   # Practice sessions
-│   │           └── progress/   # Progress tracking
-│   └── main.dart              # Application entry point
-├── test/                       # Test files
-├── android/                    # Android-specific
-├── ios/                        # iOS-specific
-└── pubspec.yaml               # Dependencies
-```
-
-### Available Commands
+### Các Lệnh Có Sẵn
 
 ```bash
-# Get dependencies
+# Cài đặt dependencies
 flutter pub get
 
 # Generate code
 dart run build_runner build --delete-conflicting-outputs
 
-# Run app
+# Chạy app
 flutter run
 
 # Build APK (Android)
@@ -235,19 +252,19 @@ flutter build apk
 # Build IPA (iOS)
 flutter build ios
 
-# Run tests
+# Chạy tests
 flutter test
 
-# Analyze code
+# Phân tích code
 flutter analyze
 
 # Format code
 dart format lib/
 ```
 
-### Adding Dependencies
+### Thêm Dependencies
 
-Add to `pubspec.yaml`:
+Thêm vào `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -263,12 +280,12 @@ dependencies:
   cached_network_image: ^3.3.0
 ```
 
-Then run:
+Sau đó chạy:
 ```bash
 flutter pub get
 ```
 
-## Building
+## Build
 
 ### Android APK
 
@@ -279,23 +296,23 @@ flutter build apk --debug
 # Release APK
 flutter build apk --release
 
-# Split APKs (smaller size)
+# Split APKs (kích thước nhỏ hơn)
 flutter build apk --split-per-abi
 ```
 
 ### iOS IPA
 
 ```bash
-# Build for iOS
+# Build cho iOS
 flutter build ios --release
 
-# Then archive and export in Xcode
+# Sau đó archive và export trong Xcode
 ```
 
 ### App Bundle (Android)
 
 ```bash
-# Build app bundle for Play Store
+# Build app bundle cho Play Store
 flutter build appbundle --release
 ```
 
@@ -303,15 +320,15 @@ flutter build appbundle --release
 
 ### Android Deployment
 
-1. **Generate Keystore**:
+1. **Tạo Keystore**:
    ```bash
    keytool -genkey -v -keystore ~/upload-keystore.jks \
      -keyalg RSA -keysize 2048 -validity 10000 \
      -alias upload
    ```
 
-2. **Configure Signing**:
-   Create `android/key.properties`:
+2. **Cấu Hình Signing**:
+   Tạo `android/key.properties`:
    ```properties
    storePassword=<password>
    keyPassword=<password>
@@ -319,169 +336,255 @@ flutter build appbundle --release
    storeFile=<path-to-keystore>
    ```
 
-3. **Update build.gradle**:
-   Reference `key.properties` in `android/app/build.gradle`
+3. **Cập Nhật build.gradle**:
+   Tham chiếu `key.properties` trong `android/app/build.gradle`
 
 4. **Build Release**:
    ```bash
    flutter build appbundle --release
    ```
 
-5. **Upload to Play Store**:
-   - Use Google Play Console
-   - Upload the `.aab` file
+5. **Upload lên Play Store**:
+   - Sử dụng Google Play Console
+   - Upload file `.aab`
 
 ### iOS Deployment
 
-1. **Configure Signing**:
-   - Open project in Xcode
-   - Configure signing & capabilities
-   - Set bundle identifier
+1. **Cấu Hình Signing**:
+   - Mở project trong Xcode
+   - Cấu hình signing & capabilities
+   - Thiết lập bundle identifier
 
 2. **Build Archive**:
    ```bash
    flutter build ios --release
    ```
-   Then archive in Xcode
+   Sau đó archive trong Xcode
 
-3. **Upload to App Store**:
-   - Use Xcode Organizer
-   - Upload to App Store Connect
+3. **Upload lên App Store**:
+   - Sử dụng Xcode Organizer
+   - Upload lên App Store Connect
 
-## API Integration
+## Tích Hợp API
 
 ### API Client Setup
 
-The app uses Retrofit for API communication. Configure in:
+Ứng dụng sử dụng Retrofit cho giao tiếp API. Cấu hình tại:
 
 ```
-lib/src/data/services/api_client.dart
-```
-
-Example API client:
-
-```dart
-import 'package:retrofit/retrofit.dart';
-import 'package:dio/dio.dart';
-
-part 'api_client.g.dart';
-
-@RestApi()
-abstract class ApiClient {
-  factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
-  
-  // Tutor Mode
-  @POST('/tutor/solve/image')
-  @MultiPart()
-  Future<SolveResponse> solveImage(
-    @Part() File image,
-    @Part() int grade,
-  );
-  
-  @POST('/tutor/solve/text')
-  Future<SolveResponse> solveText(
-    @Body() SolveTextRequest request,
-  );
-  
-  // Learning
-  @GET('/learning/today')
-  Future<LearningPlanResponse> getTodayPlan();
-  
-  // Practice
-  @POST('/practice/submit')
-  Future<PracticeResponse> submitPractice(
-    @Body() PracticeRequest request,
-  );
-}
+lib/src/data/services/network/rest_client.dart
 ```
 
 ### Core Service Endpoints
 
-The app integrates with Core Service for:
+Ứng dụng tích hợp với Core Service cho:
 
 - **Authentication**:
-  - `POST /api/student/register` - Student registration
-  - `POST /api/student/login` - Student login
-  - `POST /api/student/oauth/login` - OAuth login
+  - `POST /api/student/register` - Đăng ký học sinh
+  - `POST /api/student/login` - Đăng nhập học sinh
+  - `POST /api/student/oauth/login` - Đăng nhập OAuth
+  - `POST /api/student/set-credential` - Thiết lập username/password sau OAuth
 
 - **Tutor Mode**:
-  - `POST /api/tutor/solve/image` - Solve from image
-  - `POST /api/tutor/solve/text` - Solve from text
+  - `POST /api/tutor/solve/image` - Giải bài từ ảnh
+  - `POST /api/tutor/solve/text` - Giải bài từ văn bản
 
 - **Learning**:
-  - `GET /api/learning/today` - Today's learning plan
-  - `POST /api/practice/submit` - Submit practice
-  - `GET /api/practice/history` - Practice history
+  - `GET /api/learning/today` - Lộ trình học hôm nay
+  - `POST /api/practice/submit` - Nộp bài luyện tập
+  - `GET /api/practice/history` - Lịch sử luyện tập
+
+- **Mini Test**:
+  - `POST /api/minitest/start` - Bắt đầu mini test
+  - `POST /api/minitest/submit` - Nộp kết quả mini test
 
 - **Linking**:
-  - `POST /api/link/request-otp` - Request OTP for parent linking
-  - `POST /api/link/verify-otp` - Verify OTP and link
+  - `POST /api/link/request-otp` - Yêu cầu OTP để liên kết phụ huynh
+  - `POST /api/link/verify-otp` - Xác thực OTP và liên kết
 
-## Next Steps
+### Response Format
 
-### Implementation Status
+Tất cả API trả về response với cấu trúc:
 
-- ✅ **Foundation**: Flutter 3.38.4+ with Clean Architecture
-- ✅ **State Management**: Riverpod setup
-- ✅ **Navigation**: go_router configured
-- ✅ **API Client**: Retrofit + Dio setup
-- ✅ **Local Storage**: SharedPreferences configured
-- 🚧 **Dependencies**: Need to add image_picker, camera, OAuth packages
-- 📋 **Onboarding**: Need to implement onboarding flow
-- 📋 **Tutor Mode**: Need to implement camera/image picker and solution display
-- 📋 **Practice**: Need to implement practice sessions
-- 📋 **Progress**: Need to implement progress tracking
+```dart
+// Success Response
+{
+  "errorCode": "0000",        // Optional - mã thành công
+  "errorDetail": "Operation successful",  // Optional
+  "data": {...}               // Dữ liệu trả về
+}
+// HTTP 200
 
-### Required Implementations
+// Error Response
+{
+  "errorCode": "0001",        // Required - mã lỗi
+  "errorDetail": "Error description",  // Required
+  "data": null                // Optional
+}
+// HTTP 400/401/403/404/500
+```
 
-1. **Add Missing Packages**
-   - Add `image_picker` and `camera` to `pubspec.yaml`
-   - Add `google_sign_in` and `sign_in_with_apple`
-   - Add `cached_network_image`
+## Hiện Trạng Module
 
-2. **Onboarding Flow**
-   - Grade selection screen
-   - Learning goal selection
-   - Trial setup
+### Đã Hoàn Thành
 
-3. **Tutor Mode**
-   - Camera integration
-   - Image picker
-   - Image upload to Core Service
-   - Solution display (step-by-step)
+- ✅ **Foundation**: Flutter 3.38.4+ với Clean Architecture
+- ✅ **State Management**: Riverpod đã được setup
+- ✅ **Navigation**: go_router đã được cấu hình
+- ✅ **API Client**: Retrofit + Dio đã được setup
+- ✅ **Local Storage**: SharedPreferences đã được cấu hình
+- ✅ **Authentication**: Đã có login, registration, forgot password
+- ✅ **Onboarding**: Đã có onboarding page (cần customize)
+- ✅ **Home**: Đã có home page (cần implement features)
+- ✅ **Profile**: Đã có profile page (cần implement features)
+- ✅ **Localization**: Đã có hỗ trợ đa ngôn ngữ
+- ✅ **Theme**: Đã có theme system
 
-4. **Practice & Mini Test**
-   - Question display
-   - Answer input
-   - Result display
-   - Progress update
+### Đang Thiếu
 
-5. **API Client**
-   - Configure Retrofit endpoints
-   - Setup authentication interceptors
-   - Add error handling
+- 🚧 **Dependencies**: Cần thêm image_picker, camera, OAuth packages
+- 📋 **Onboarding Flow**: Cần customize cho chọn lớp và mục tiêu học tập
+- 📋 **Tutor Mode**: Cần implement camera/image picker và hiển thị lời giải
+- 📋 **Practice**: Cần implement practice sessions
+- 📋 **Mini Test**: Cần implement mini test flow
+- 📋 **Progress Tracking**: Cần implement progress tracking đầy đủ
+- 📋 **Parent Linking**: Cần implement parent linking flow
+- 📋 **API Integration**: Cần cấu hình Retrofit endpoints cho Core Service
+- 📋 **Environment Configuration**: Cần setup environment-specific configs
 
-6. **Environment Configuration**
-   - Setup environment-specific configs
-   - Configure API endpoints
-   - Add build configurations
+## Cần Triển Khai
+
+### 1. Thêm Packages Còn Thiếu
+
+**Thêm vào `pubspec.yaml`**:
+- `image_picker` - Để chọn ảnh từ thư viện
+- `camera` - Để chụp ảnh
+- `google_sign_in` - Cho Google OAuth
+- `sign_in_with_apple` - Cho Apple OAuth
+- `cached_network_image` - Để cache ảnh từ mạng
+
+### 2. Onboarding Flow
+
+**Cần implement**:
+- Màn hình chọn lớp học (lớp 6 hoặc lớp 7)
+- Màn hình chọn mục tiêu học tập
+- Setup trial account nếu chưa đăng nhập
+- Lưu thông tin onboarding vào local storage
+
+**Files cần tạo/customize**:
+- `lib/src/presentation/features/onboarding/view/grade_selection_page.dart`
+- `lib/src/presentation/features/onboarding/view/learning_goal_page.dart`
+- `lib/src/presentation/features/onboarding/view/onboarding_page.dart` (customize)
+
+### 3. Tutor Mode
+
+**Cần implement**:
+- Tích hợp camera để chụp ảnh bài Toán
+- Image picker để chọn ảnh từ thư viện
+- Upload ảnh lên Core Service
+- Hiển thị lời giải từng bước
+- Hiển thị cảnh báo lỗi sai thường gặp
+
+**Files cần tạo**:
+- `lib/src/presentation/features/tutor/view/tutor_page.dart`
+- `lib/src/presentation/features/tutor/view/solution_display_page.dart`
+- `lib/src/presentation/features/tutor/widgets/camera_widget.dart`
+- `lib/src/presentation/features/tutor/widgets/image_picker_widget.dart`
+- `lib/src/data/services/network/tutor_service.dart`
+
+### 4. Practice Sessions
+
+**Cần implement**:
+- Hiển thị câu hỏi luyện tập
+- Input câu trả lời
+- Hiển thị kết quả và giải thích
+- Cập nhật mastery sau mỗi bài
+- Điều chỉnh độ khó dựa trên performance
+
+**Files cần tạo**:
+- `lib/src/presentation/features/practice/view/practice_page.dart`
+- `lib/src/presentation/features/practice/view/question_display_widget.dart`
+- `lib/src/presentation/features/practice/view/result_display_widget.dart`
+- `lib/src/data/services/network/practice_service.dart`
+
+### 5. Mini Test
+
+**Cần implement**:
+- Bắt đầu mini test cho một skill
+- Hiển thị câu hỏi với timer
+- Nộp kết quả
+- Hiển thị điểm số và phân tích
+- Cập nhật mastery dựa trên kết quả
+
+**Files cần tạo**:
+- `lib/src/presentation/features/mini_test/view/mini_test_page.dart`
+- `lib/src/presentation/features/mini_test/view/test_result_page.dart`
+- `lib/src/data/services/network/mini_test_service.dart`
+
+### 6. Progress Tracking
+
+**Cần implement**:
+- Hiển thị mastery levels cho từng skill
+- Biểu đồ tiến độ theo thời gian
+- Lịch sử học tập
+- Gợi ý cải thiện dựa trên điểm yếu
+
+**Files cần tạo**:
+- `lib/src/presentation/features/progress/view/progress_page.dart`
+- `lib/src/presentation/features/progress/widgets/mastery_chart_widget.dart`
+- `lib/src/presentation/features/progress/widgets/learning_history_widget.dart`
+- `lib/src/data/services/network/progress_service.dart`
+
+### 7. Parent Linking
+
+**Cần implement**:
+- Màn hình nhập số điện thoại phụ huynh
+- Gửi OTP
+- Xác thực OTP
+- Liên kết với tài khoản phụ huynh
+
+**Files cần tạo**:
+- `lib/src/presentation/features/parent_linking/view/link_parent_page.dart`
+- `lib/src/presentation/features/parent_linking/view/otp_verification_page.dart`
+- `lib/src/data/services/network/linking_service.dart`
+
+### 8. API Client Configuration
+
+**Cần implement**:
+- Cấu hình Retrofit endpoints cho tất cả API
+- Setup authentication interceptors
+- Xử lý error handling
+- Token refresh mechanism
+
+**Files cần customize**:
+- `lib/src/data/services/network/rest_client.dart`
+- `lib/src/data/services/network/endpoints.dart`
+- `lib/src/data/services/network/interceptor/token_manager.dart`
+
+### 9. Environment Configuration
+
+**Cần implement**:
+- Tạo `lib/src/core/config/env.dart`
+- Setup environment-specific configs
+- Cấu hình API endpoints
+- Thêm build configurations
 
 ## Testing
 
-### Run Tests
+### Chạy Tests
 
 ```bash
-# All tests
+# Tất cả tests
 flutter test
 
-# Specific test file
+# Test file cụ thể
 flutter test test/features/tutor/tutor_test.dart
 
-# With coverage
+# Với coverage
 flutter test --coverage
 ```
 
-### Test Structure
+### Cấu Trúc Test
 
 ```
 test/
@@ -492,29 +595,29 @@ test/
 
 ## Troubleshooting
 
-### Common Issues
+### Các Vấn Đề Thường Gặp
 
-**Issue**: Flutter doctor shows issues
+**Vấn đề**: Flutter doctor hiển thị lỗi
 ```bash
-# Run flutter doctor and fix issues
+# Chạy flutter doctor và sửa lỗi
 flutter doctor -v
 
-# Common fixes:
-# - Install Android SDK
-# - Accept Android licenses: flutter doctor --android-licenses
-# - Install Xcode (macOS only)
+# Các cách sửa thường gặp:
+# - Cài đặt Android SDK
+# - Chấp nhận Android licenses: flutter doctor --android-licenses
+# - Cài đặt Xcode (chỉ trên macOS)
 ```
 
-**Issue**: Code generation fails
+**Vấn đề**: Code generation thất bại
 ```bash
-# Clean and regenerate
+# Clean và regenerate
 flutter clean
 flutter pub get
 dart run build_runner clean
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-**Issue**: Android build fails
+**Vấn đề**: Android build thất bại
 ```bash
 # Clean build
 cd android
@@ -525,9 +628,9 @@ flutter pub get
 flutter build apk
 ```
 
-**Issue**: iOS build fails
+**Vấn đề**: iOS build thất bại
 ```bash
-# Clean and rebuild
+# Clean và rebuild
 cd ios
 pod deintegrate
 pod install
@@ -537,22 +640,23 @@ flutter pub get
 flutter build ios
 ```
 
-**Issue**: API connection errors
-- Verify Core Service is running
-- Check API_BASE_URL in environment
-- Verify network permissions in AndroidManifest.xml / Info.plist
+**Vấn đề**: Lỗi kết nối API
+- Kiểm tra Core Service đang chạy
+- Kiểm tra API_BASE_URL trong environment
+- Kiểm tra network permissions trong AndroidManifest.xml / Info.plist
 
-## Related Documentation
+## Tài Liệu Liên Quan
 
-- [System Architecture](../../tutor_docs/technical_design/system_architecture_phase_1-2025-12-15-00-21.md)
-- [API Specification](../../tutor_docs/technical_design/api_specification_phase_1-2025-12-15-03-30.md)
-- [Student User Stories](../../tutor_docs/user_stories/student_user_stories_phase_1-2025-12-14-22-45.md)
-- [Development Setup](../../tutor_docs/technical_design/development_setup_phase_1-2025-12-15-03-00.md)
+- [System Architecture](../../tutor_docs/04-for-developers/architecture/system-architecture.md)
+- [API Specification](../../tutor_docs/04-for-developers/architecture/api-specification.md)
+- [Student User Stories](../../tutor_docs/03-for-product-owners/user-stories/student/README.md)
+- [Development Setup](../../tutor_docs/04-for-developers/setup/development-setup.md)
+- [Flutter Coding Standards](../../tutor_docs/04-for-developers/coding-standards/flutter/README.md)
 
 ## License
 
-This project is part of the Tutor platform and is licensed under the MIT License.
+Dự án này là một phần của nền tảng Tutor và được cấp phép theo MIT License.
 
 ---
 
-**Last Updated**: 2025-12-15
+**Cập Nhật Lần Cuối**: 2025-01-22

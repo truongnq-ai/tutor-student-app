@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/extensions/app_localization.dart';
 import '../../../../../core/extensions/validation.dart';
-import '../../../../../core/utiliity/validation/validation.dart';
+import '../../../../../core/utility/validation/validation.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/link_text.dart';
@@ -37,10 +37,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       switch (next) {
         case AsyncData(:final value) when value != null:
           context.pushReplacementNamed(Routes.home);
-        case AsyncError(:final error):
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error.toString())));
+        case AsyncError(:final error, :final stackTrace):
+          final errorMessage = error.toString().replaceFirst('Exception: ', '');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
       }
     });
   }

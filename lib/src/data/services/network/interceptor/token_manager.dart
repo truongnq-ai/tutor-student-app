@@ -32,6 +32,18 @@ class TokenManager extends Interceptor {
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
+
+    // Add device ID and anonymous ID for trial users
+    final deviceId = await cacheService.get<String>(CacheKey.deviceId);
+    final anonymousId = await cacheService.get<String>(CacheKey.anonymousId);
+    
+    if (deviceId != null) {
+      options.headers['X-Device-Id'] = deviceId;
+    }
+    if (anonymousId != null) {
+      options.headers['X-Anonymous-Id'] = anonymousId;
+    }
+
     handler.next(options);
   }
 
@@ -102,10 +114,43 @@ class TokenManager extends Interceptor {
       );
     }
 
-    final newToken = refreshResp.data['data']['accessToken'] as String;
-    await saveToken(CacheKey.accessToken, newToken);
+    // Handle ResponseObject format
+    final responseData = refreshResp.data;
+    Map<String, dynamic>? data;
+    
+    if (responseData is Map<String, dynamic>) {
+      // Check if it's ResponseObject format
+      if (responseData.containsKey('data')) {
+        data = responseData['data'] as Map<String, dynamic>?;
+      } else {
+        data = responseData;
+      }
+    }
 
-    return newToken;
+    if (data == null) {
+      throw DioException(
+        requestOptions: RequestOptions(),
+        error: 'Invalid refresh token response format',
+      );
+    }
+
+    final newAccessToken = data['accessToken'] as String?;
+    final newRefreshToken = data['refreshToken'] as String?;
+
+    if (newAccessToken == null) {
+      throw DioException(
+        requestOptions: RequestOptions(),
+        error: 'No access token in refresh response',
+      );
+    }
+
+    // Save new tokens (refresh token rotation)
+    await saveToken(CacheKey.accessToken, newAccessToken);
+    if (newRefreshToken != null) {
+      await saveToken(CacheKey.refreshToken, newRefreshToken);
+    }
+
+    return newAccessToken;
   }
 
   Future<void> _retryFailedRequest(
