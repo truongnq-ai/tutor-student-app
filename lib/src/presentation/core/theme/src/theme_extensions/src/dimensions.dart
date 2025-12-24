@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class Dimensions extends ThemeExtension<Dimensions> {
   const Dimensions();
 
-  ThemeSpacing get spacing => const ThemeSpacing();
-  ThemePadding get padding => const ThemePadding();
-  ThemeMargin get margin => const ThemeMargin();
-  ThemeRadius get radius => const ThemeRadius();
+  ThemeSpacing get spacing => ThemeSpacing.instance;
+  ThemePadding get padding => ThemePadding.instance;
+  ThemeMargin get margin => ThemeMargin.instance;
+  ThemeRadius get radius => ThemeRadius.instance;
 
   /// Source of truth
   static const double _v1 = 1;
@@ -51,49 +51,58 @@ class Dimensions extends ThemeExtension<Dimensions> {
 
 /// Public spacing class for theme dimensions
 class ThemeSpacing {
+  const ThemeSpacing._();
 
-  final double s1 = Dimensions._v1;
-  final double s1_25 = Dimensions._v1_25;
-  final double s2 = Dimensions._v2;
-  final double s4 = Dimensions._v4;
-  final double s6 = Dimensions._v6;
-  final double s8 = Dimensions._v8;
-  final double s12 = Dimensions._v12;
-  final double s16 = Dimensions._v16;
-  final double s24 = Dimensions._v24;
-  final double s30 = Dimensions._v30;
-  final double s32 = Dimensions._v32;
-  final double s44 = Dimensions._v44;
-  final double s48 = Dimensions._v48;
-  final double s66 = Dimensions._v66;
-  final double s80 = Dimensions._v80;
-  final double s100 = Dimensions._v100;
-  final double s200 = Dimensions._v200;
-  final double s210 = Dimensions._v210;
+  static const ThemeSpacing instance = ThemeSpacing._();
+
+  double get s1 => Dimensions._v1;
+  double get s1_25 => Dimensions._v1_25;
+  double get s2 => Dimensions._v2;
+  double get s4 => Dimensions._v4;
+  double get s6 => Dimensions._v6;
+  double get s8 => Dimensions._v8;
+  double get s12 => Dimensions._v12;
+  double get s16 => Dimensions._v16;
+  double get s24 => Dimensions._v24;
+  double get s30 => Dimensions._v30;
+  double get s32 => Dimensions._v32;
+  double get s44 => Dimensions._v44;
+  double get s48 => Dimensions._v48;
+  double get s66 => Dimensions._v66;
+  double get s80 => Dimensions._v80;
+  double get s100 => Dimensions._v100;
+  double get s200 => Dimensions._v200;
+  double get s210 => Dimensions._v210;
 }
 
 /// Public padding class for theme dimensions
 class ThemePadding {
-  const ThemePadding();
+  const ThemePadding._();
 
-  final double p4 = Dimensions._v4;
-  final double p8 = Dimensions._v8;
-  final double p16 = Dimensions._v16;
-  final double p20 = Dimensions._v20;
-  final double p24 = Dimensions._v24;
+  static const ThemePadding instance = ThemePadding._();
+
+  double get p4 => Dimensions._v4;
+  double get p8 => Dimensions._v8;
+  double get p16 => Dimensions._v16;
+  double get p20 => Dimensions._v20;
+  double get p24 => Dimensions._v24;
 }
 
 /// Public margin class for theme dimensions
 class ThemeMargin {
-  const ThemeMargin();
+  const ThemeMargin._();
 
-  final double m6 = Dimensions._v6;
+  static const ThemeMargin instance = ThemeMargin._();
+
+  double get m6 => Dimensions._v6;
 }
 
 /// Public radius class for theme dimensions
 class ThemeRadius {
-  const ThemeRadius();
+  const ThemeRadius._();
 
-  final double r4 = Dimensions._v4;
-  final double r6 = Dimensions._v6;
+  static const ThemeRadius instance = ThemeRadius._();
+
+  double get r4 => Dimensions._v4;
+  double get r6 => Dimensions._v6;
 }
