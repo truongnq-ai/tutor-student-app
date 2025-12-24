@@ -43,7 +43,7 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
           );
-        case AsyncError(:final error, :final stackTrace):
+        case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/extensions/app_localization.dart';
-import '../../../../../core/extensions/riverpod_extensions.dart';
 import '../../../../../core/extensions/validation.dart';
 import '../../../../../core/utility/validation/validation.dart';
 import '../../../../core/router/routes.dart';
@@ -40,7 +39,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       switch (next) {
         case AsyncData(:final value) when value != null:
           context.pushReplacementNamed(Routes.home);
-        case AsyncError(:final error, :final stackTrace):
+        case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -85,7 +84,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               context.pushReplacementNamed(Routes.home);
             }
           }
-        case AsyncError(:final error, :final stackTrace):
+        case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
