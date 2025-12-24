@@ -7,7 +7,7 @@ import '../../models/trial_model.dart';
 class TrialMockService {
   Future<ResponseObject<TrialEntity>> startTrial() async {
     // Mock: Simulate API call delay
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     final now = DateTime.now();
     final endDate = now.add(const Duration(days: 7));
@@ -30,7 +30,7 @@ class TrialMockService {
 
   Future<ResponseObject<TrialEntity>> getTrialStatus() async {
     // Mock: Simulate API call delay
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     final now = DateTime.now();
     final endDate = now.add(const Duration(days: 5));

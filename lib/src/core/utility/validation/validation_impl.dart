@@ -9,7 +9,7 @@ class Validator {
 
   FormFieldValidator<T> apply<T>(List<Validation<T>> validations) {
     return (T? value) {
-      for (Validation validation in validations) {
+      for (Validation<T> validation in validations) {
         final error = validation.validate(context, value);
         if (error != null) return error;
       }

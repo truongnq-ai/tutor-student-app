@@ -280,7 +280,7 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
         );
       }
 
-      final oauthResponse = responseData.data as Map<String, dynamic>? ?? {};
+      final oauthResponse = responseData.data ?? {};
       
       // If tokens are returned (not requiresSetCredential), save them
       final requiresSetCredential = oauthResponse['requiresSetCredential'] as bool? ?? false;

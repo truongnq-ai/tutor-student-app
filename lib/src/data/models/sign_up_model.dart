@@ -24,7 +24,7 @@ class SignUpResponseModel extends SignUpResponseEntity {
     
     return SignUpResponseModel(
       studentId: userId ?? '',
-      username: username ?? '',
+      username: username,
     );
   }
 }

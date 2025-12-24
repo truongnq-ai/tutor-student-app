@@ -6,7 +6,7 @@ class MockOAuthService implements OAuthService {
   @override
   Future<String?> signInWithGoogle() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     
     // Return a fake ID token
     final random = Random();
@@ -17,7 +17,7 @@ class MockOAuthService implements OAuthService {
   @override
   Future<String?> signInWithApple() async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     
     // Return a fake ID token
     final random = Random();

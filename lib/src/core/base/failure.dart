@@ -138,7 +138,7 @@ abstract class Failure with _$Failure {
     return Failure(type: FailureType.unknown, message: e.toString());
   }
 
-  static ({String message, String? code})? _parseError(Response? response) {
+  static ({String message, String? code})? _parseError(Response<dynamic>? response) {
     if (response == null) return null;
 
     try {

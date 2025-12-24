@@ -34,8 +34,8 @@ class TokenManager extends Interceptor {
     }
 
     // Add device ID and anonymous ID for trial users
-    final deviceId = await cacheService.get<String>(CacheKey.deviceId);
-    final anonymousId = await cacheService.get<String>(CacheKey.anonymousId);
+    final deviceId = cacheService.get<String>(CacheKey.deviceId);
+    final anonymousId = cacheService.get<String>(CacheKey.anonymousId);
     
     if (deviceId != null) {
       options.headers['X-Device-Id'] = deviceId;
@@ -96,7 +96,7 @@ class TokenManager extends Interceptor {
       );
     }
 
-    final refreshResp = await dio.fetch(
+    final refreshResp = await dio.fetch<dynamic>(
       RequestOptions(
         baseUrl: baseUrl,
         path: refreshTokenEndpoint,
@@ -161,7 +161,7 @@ class TokenManager extends Interceptor {
     options.headers['Authorization'] = 'Bearer $newToken';
     options.extra['retry'] = true;
 
-    final retryResponse = await dio.fetch(options);
+    final retryResponse = await dio.fetch<dynamic>(options);
     handler.resolve(retryResponse);
   }
 

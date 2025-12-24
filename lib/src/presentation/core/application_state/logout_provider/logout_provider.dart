@@ -17,7 +17,7 @@ class Logout extends _$Logout {
     state = const AsyncValue.loading();
 
     // Intentional simulated delay to show loading indicator
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     try {
       await ref.read(logoutUseCaseProvider).call();
