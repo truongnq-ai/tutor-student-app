@@ -148,25 +148,13 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ### 3. Cấu Hình Environment
 
-Tạo `lib/src/core/config/env.dart`:
+File `lib/src/core/config/env.dart` đã được cấu hình sẵn với:
+- Auto-select API URL theo environment (development/production)
+- Production URL mặc định: `https://apitutor.dienluc.vn`
+- Development URL mặc định: `https://apitutor.dienluc.vn`
+- Có thể override bằng `--dart-define=API_BASE_URL=<url>`
 
-```dart
-class Env {
-  // API Configuration
-  static const String apiBaseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: 'http://localhost:8080/api',
-  );
-  
-  // Application
-  static const String appName = 'Tutor';
-  static const String appVersion = '1.0.0';
-  static const String environment = String.fromEnvironment(
-    'ENVIRONMENT',
-    defaultValue: 'development',
-  );
-}
-```
+**Lưu ý:** Base URL không bao gồm `/api` vì endpoints đã có prefix `/api/v1/...`
 
 ### 4. Chạy Ứng Dụng
 
@@ -191,14 +179,24 @@ flutter run --release
 Thiết lập environment variables khi chạy:
 
 ```bash
-# Development
-flutter run --dart-define=API_BASE_URL=http://localhost:8080/api \
+# Development (sử dụng URL mặc định từ code)
+flutter run --dart-define=ENVIRONMENT=development
+
+# Development với custom API URL
+flutter run --dart-define=API_BASE_URL=http://localhost:8080 \
            --dart-define=ENVIRONMENT=development
 
-# Production
-flutter run --dart-define=API_BASE_URL=https://api.tutor.app/api \
+# Production (sử dụng URL mặc định từ code)
+flutter run --dart-define=ENVIRONMENT=production
+
+# Production với custom API URL
+flutter run --dart-define=API_BASE_URL=https://apitutor.dienluc.vn \
            --dart-define=ENVIRONMENT=production
 ```
+
+**Lưu ý:** 
+- Base URL không bao gồm `/api` (ví dụ: `http://localhost:8080` thay vì `http://localhost:8080/api`)
+- Nếu không truyền `API_BASE_URL`, hệ thống sẽ tự động chọn URL dựa trên `ENVIRONMENT`
 
 ### Cấu Hình Platform-Specific
 

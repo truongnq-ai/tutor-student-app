@@ -1,10 +1,32 @@
 /// Environment configuration for the application
 class Env {
   // API Configuration
-  static const String apiBaseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: 'http://localhost:8080/api',
-  );
+  // Production API URL (base domain only, without /api)
+  static const String _productionApiUrl = 'https://apitutor.dienluc.vn';
+  // Development API URL
+  static const String _developmentApiUrl = 'https://apitutor.dienluc.vn';
+  
+  /// Get API base URL based on environment
+  /// 
+  /// Priority:
+  /// 1. API_BASE_URL from build-time (--dart-define)
+  /// 2. Auto-select based on ENVIRONMENT (production/development)
+  /// 3. Default to development URL
+  static String get apiBaseUrl {
+    // Check if API_BASE_URL is explicitly provided via --dart-define
+    const urlFromEnv = String.fromEnvironment('API_BASE_URL');
+    if (urlFromEnv.isNotEmpty) {
+      return urlFromEnv;
+    }
+    
+    // Auto-select based on ENVIRONMENT
+    const env = String.fromEnvironment(
+      'ENVIRONMENT',
+      defaultValue: 'development',
+    );
+    
+    return env == 'production' ? _productionApiUrl : _developmentApiUrl;
+  }
 
   // Application
   static const String appName = 'Tutor';
