@@ -25,7 +25,7 @@ class TrialMockService {
       isLinked: false,
     );
 
-    return ResponseObject.success(trial);
+    return ResponseObject<TrialEntity>.success(trial);
   }
 
   Future<ResponseObject<TrialEntity>> getTrialStatus() async {
@@ -48,7 +48,7 @@ class TrialMockService {
       isLinked: false,
     );
 
-    return ResponseObject.success(trial);
+    return ResponseObject<TrialEntity>.success(trial);
   }
 }
 

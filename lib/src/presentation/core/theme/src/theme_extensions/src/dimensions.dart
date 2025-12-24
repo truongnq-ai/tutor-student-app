@@ -16,6 +16,7 @@ class Dimensions extends ThemeExtension<Dimensions> {
   static const double _v6 = 6;
   static const double _v8 = 8;
   static const double _v12 = 12;
+  static const double _v14 = 14;
   static const double _v16 = 16;
   static const double _v20 = 20;
   static const double _v24 = 24;
@@ -83,6 +84,8 @@ class ThemePadding {
 
   double get p4 => Dimensions._v4;
   double get p8 => Dimensions._v8;
+  double get p12 => Dimensions._v12;
+  double get p14 => Dimensions._v14;
   double get p16 => Dimensions._v16;
   double get p20 => Dimensions._v20;
   double get p24 => Dimensions._v24;

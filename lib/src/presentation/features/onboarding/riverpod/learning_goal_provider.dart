@@ -5,16 +5,16 @@ part 'learning_goal_provider.g.dart';
 @riverpod
 class LearningGoals extends _$LearningGoals {
   @override
-  Set<String> build() {
+  AsyncValue<Set<String>> build() {
     // Mock: Get from local storage or return empty set
     // In real implementation, this would read from cache/local storage
-    return {};
+    return const AsyncValue.data({});
   }
 
   Future<void> saveLearningGoals(Set<String> goals) async {
     if (state.isLoading) return;
 
-    state = const AsyncValue.loading();
+    state = const AsyncValue<Set<String>>.loading();
 
     try {
       // Mock: Save learning goals (local storage)
@@ -26,9 +26,9 @@ class LearningGoals extends _$LearningGoals {
         throw Exception('Vui lòng chọn ít nhất một mục tiêu học tập.');
       }
 
-      state = AsyncValue.data(goals);
+      state = AsyncValue<Set<String>>.data(goals);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      state = AsyncValue<Set<String>>.error(e, stackTrace);
     }
   }
 

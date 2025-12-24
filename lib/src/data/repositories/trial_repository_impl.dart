@@ -78,7 +78,7 @@ final class TrialRepositoryImpl extends TrialRepository {
         await cacheService.save(CacheKey.trialId, trialModel.trialId!);
       }
 
-      return ResponseObject.success(trialModel);
+      return ResponseObject<TrialEntity>.success(trialModel);
     } catch (e) {
       return ResponseObject.error(
         errorCode: ErrorCodes.internalError,
@@ -155,7 +155,7 @@ final class TrialRepositoryImpl extends TrialRepository {
         await cacheService.save(CacheKey.trialId, trialModel.trialId!);
       }
 
-      return ResponseObject.success(trialModel);
+      return ResponseObject<TrialEntity>.success(trialModel);
     } catch (e) {
       return ResponseObject.error(
         errorCode: ErrorCodes.internalError,

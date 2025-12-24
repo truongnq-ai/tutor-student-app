@@ -7,7 +7,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
 import '../../../core/widgets/text/typography.dart';
-import '../../oauth/widgets/oauth_button.dart';
+import '../../../../features/authentication/oauth/widgets/oauth_button.dart';
 import '../login/riverpod/oauth_provider.dart';
 
 class AuthEntryPage extends ConsumerWidget {

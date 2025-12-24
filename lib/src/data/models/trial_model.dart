@@ -1,4 +1,4 @@
-import '../../../domain/entities/trial_entity.dart';
+import '../../domain/entities/trial_entity.dart';
 
 class TrialModel extends TrialEntity {
   TrialModel({

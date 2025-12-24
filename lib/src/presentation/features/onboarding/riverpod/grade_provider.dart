@@ -5,16 +5,16 @@ part 'grade_provider.g.dart';
 @riverpod
 class GradeSelection extends _$GradeSelection {
   @override
-  int? build() {
+  AsyncValue<int> build() {
     // Mock: Get from local storage or return null
     // In real implementation, this would read from cache/local storage
-    return null;
+    return const AsyncValue.data(null);
   }
 
   Future<void> selectGrade(int grade) async {
     if (state.isLoading) return;
 
-    state = const AsyncValue.loading();
+    state = const AsyncValue<int>.loading();
 
     try {
       // Mock: Save grade selection (local storage)
@@ -26,9 +26,9 @@ class GradeSelection extends _$GradeSelection {
         throw Exception('Lớp học không hợp lệ. Chỉ có thể chọn lớp 6 hoặc 7.');
       }
 
-      state = AsyncValue.data(grade);
+      state = AsyncValue<int>.data(grade);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      state = AsyncValue<int>.error(e, stackTrace);
     }
   }
 

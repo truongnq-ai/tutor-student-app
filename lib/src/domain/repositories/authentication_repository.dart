@@ -3,7 +3,7 @@ import '../../core/base/response_object.dart';
 import '../entities/login_entity.dart';
 import '../entities/sign_up_entity.dart';
 
-abstract base class AuthenticationRepository extends Repository {
+abstract base class AuthenticationRepository extends Repository<void> {
   Future<ResponseObject<SignUpResponseEntity>> register(SignUpRequestEntity data);
 
   Future<ResponseObject<LoginResponseEntity>> login(LoginRequestEntity data);

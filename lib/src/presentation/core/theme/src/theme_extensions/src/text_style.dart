@@ -48,6 +48,15 @@ class TextStyleExtension extends ThemeExtension<TextStyleExtension> {
     );
   }
 
+  TextStyle get bodySmall {
+    return const TextStyle(
+      height: 1.43,
+      fontSize: 14,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
   TextStyle get labelMedium {
     return const TextStyle(
       height: 1.15,
