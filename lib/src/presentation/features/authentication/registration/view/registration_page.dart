@@ -44,11 +44,26 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
             ),
           );
         case AsyncError(:final error):
-          final errorMessage = error.toString().replaceFirst('Exception: ', '');
+          // Extract user-friendly error message
+          String errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại.';
+          
+          if (error is Exception) {
+            final errorString = error.toString();
+            // Remove "Exception: " prefix if present
+            if (errorString.startsWith('Exception: ')) {
+              errorMessage = errorString.substring(11);
+            } else {
+              errorMessage = errorString;
+            }
+          } else {
+            errorMessage = error.toString();
+          }
+          
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(errorMessage),
               backgroundColor: Theme.of(context).colorScheme.error,
+              duration: const Duration(seconds: 4),
             ),
           );
       }
