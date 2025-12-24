@@ -63,24 +63,16 @@ class _SplashPageState extends ConsumerState<SplashPage>
 
     // Mock: Check login status (giả lập)
     // In real implementation, this would check actual login status
-    final isLoggedIn = false; // Mock value
-    final isOnboarded = false; // Mock value
+    // final isLoggedIn = false; // Mock value
+    // final isOnboarded = false; // Mock value
 
-    if (isLoggedIn) {
-      context.go(Routes.home);
-    } else if (isOnboarded) {
-      context.go(Routes.login);
-    } else {
-      context.go(Routes.welcome);
-    }
+    // Always navigate to welcome for now
+    context.go(Routes.welcome);
   }
 
   @override
   Widget build(BuildContext context) {
     final isReducedMotion = MediaQuery.of(context).disableAnimations;
-    final animationDuration = isReducedMotion
-        ? Duration.zero
-        : const Duration(milliseconds: 400);
 
     return Scaffold(
       body: Container(

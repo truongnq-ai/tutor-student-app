@@ -17,7 +17,7 @@ class OtpVerification extends _$OtpVerification {
     try {
       // Mock: Send OTP via Firebase Auth
       // In real implementation, this would call Firebase Auth to send OTP
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       // Mock: Validate phone number format
       final phoneRegex = RegExp(r'^0[0-9]{9}$');
@@ -43,7 +43,7 @@ class OtpVerification extends _$OtpVerification {
     try {
       // Mock: Verify OTP via Firebase Auth
       // In real implementation, this would call Firebase Auth to verify OTP
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       // Mock: Accept OTP "123456" as valid
       final isValid = otpCode == '123456';

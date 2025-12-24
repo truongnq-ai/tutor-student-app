@@ -55,7 +55,7 @@ class Trial extends _$Trial {
     try {
       // Mock: Create trial profile
       // In real implementation, this would call the API
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       final now = DateTime.now();
       final endDate = now.add(const Duration(days: 7));

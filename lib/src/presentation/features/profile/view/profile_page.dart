@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/routes.dart';
-import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});

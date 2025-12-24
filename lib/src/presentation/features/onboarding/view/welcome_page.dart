@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
-import '../../../core/widgets/text/typography.dart';
 
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});

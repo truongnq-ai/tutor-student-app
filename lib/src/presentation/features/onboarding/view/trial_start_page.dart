@@ -24,7 +24,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
 
     // Mock: Create trial profile
     // In real implementation, this would call the API
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
 

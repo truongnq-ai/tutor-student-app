@@ -28,7 +28,7 @@ class _SelectLearningGoalPageState
 
     // Mock: Save learning goals (local storage)
     // In real implementation, this would call the API
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
 

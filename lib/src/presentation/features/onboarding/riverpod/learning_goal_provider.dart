@@ -19,7 +19,7 @@ class LearningGoals extends _$LearningGoals {
     try {
       // Mock: Save learning goals (local storage)
       // In real implementation, this would call the API and save to local storage
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
 
       // Validate: minimum 1 selection required
       if (goals.isEmpty) {

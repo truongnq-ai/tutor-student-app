@@ -121,7 +121,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
 
     // Mock: Firebase Auth OTP verification
     // In real implementation, this would call Firebase Auth
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
 
@@ -159,7 +159,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
     _startTimer();
 
     // Mock: Resend OTP
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
