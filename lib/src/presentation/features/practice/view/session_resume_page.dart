@@ -219,7 +219,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
               ),
             ),
           ],
-        ),
+        ],
       ),
     );
   }

@@ -123,7 +123,7 @@ class PracticeCard extends StatelessWidget {
               if (durationSec != null) ...[
                 Gap(context.spacing.s4),
                 Text(
-                  context.locale.practice_CardDuration(_formatDuration(durationSec!)),
+                  context.locale.practice_CardDuration(_formatDuration(context, durationSec!)),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -171,7 +171,7 @@ class PracticeCard extends StatelessWidget {
     );
   }
 
-  String _formatDuration(int seconds) {
+  String _formatDuration(BuildContext context, int seconds) {
     if (seconds < 60) {
       return context.locale.practice_CardDurationSeconds(seconds);
     } else {

@@ -39,6 +39,11 @@ class TextStyleExtension extends ThemeExtension<TextStyleExtension> {
     );
   }
 
+  /// Default body text style (16px).
+  /// Alias for [bodyLarge] to match design standards.
+  /// Use this for default text, paragraphs, and descriptions.
+  TextStyle get body => bodyLarge;
+
   TextStyle get bodyMedium {
     return const TextStyle(
       height: 1.42,

@@ -15,7 +15,8 @@ class PracticeSessionCompletePage extends ConsumerStatefulWidget {
   ConsumerState<PracticeSessionCompletePage> createState() => _PracticeSessionCompletePageState();
 }
 
-class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCompletePage> {
+class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCompletePage>
+    with SingleTickerProviderStateMixin {
   // Parse parameters from route
   int? _totalQuestions;
   int? _correctCount;
@@ -25,13 +26,6 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
   String? _skillName;
   String? _skillId;
   String? _sessionId;
-
-  @override
-  ConsumerState<PracticeSessionCompletePage> createState() => _PracticeSessionCompletePageState();
-}
-
-class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCompletePage>
-    with SingleTickerProviderStateMixin {
   late AnimationController _celebrationController;
   late Animation<double> _celebrationAnimation;
 
