@@ -95,13 +95,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             }
           }
         case AsyncError(:final error):
-          final errorMessage = error.toString().replaceFirst('Exception: ', '');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMessage),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
+          // Don't show error for user cancellation (already handled in provider)
+          // Error messages are already user-friendly from the provider
+          final errorMessage = error.toString()
+              .replaceFirst('Exception: ', '')
+              .replaceFirst('Error: ', '');
+          
+          // Only show error if it's not a cancellation
+          if (errorMessage.isNotEmpty && 
+              !errorMessage.toLowerCase().contains('cancelled') &&
+              !errorMessage.toLowerCase().contains('canceled')) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                backgroundColor: Theme.of(context).colorScheme.error,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
       }
     });
   }

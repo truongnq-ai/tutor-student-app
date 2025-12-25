@@ -22,16 +22,29 @@ class OAuthLogin extends _$OAuthLogin {
       
       // Get ID token from OAuth provider
       String? idToken;
-      if (provider == 'google') {
-        idToken = await oauthService.signInWithGoogle();
-      } else if (provider == 'apple') {
-        idToken = await oauthService.signInWithApple();
-      } else {
-        throw Exception('Unsupported OAuth provider: $provider');
+      try {
+        if (provider == 'google') {
+          idToken = await oauthService.signInWithGoogle();
+        } else if (provider == 'apple') {
+          idToken = await oauthService.signInWithApple();
+        } else {
+          throw Exception('Nhà cung cấp đăng nhập không được hỗ trợ: $provider');
+        }
+      } catch (e) {
+        // Handle OAuth provider errors (network, user cancellation, etc.)
+        if (e.toString().contains('cancelled') || 
+            e.toString().contains('canceled') ||
+            e.toString().contains('user_cancelled')) {
+          // User cancelled - don't show error, just reset state
+          state = const AsyncValue.data(null);
+          return;
+        }
+        // Re-throw other OAuth errors with user-friendly message
+        throw Exception('Không thể kết nối với ${provider == 'google' ? 'Google' : 'Apple'}. Vui lòng thử lại.');
       }
 
       if (idToken == null) {
-        // User cancelled
+        // User cancelled - don't show error
         state = const AsyncValue.data(null);
         return;
       }
@@ -47,14 +60,42 @@ class OAuthLogin extends _$OAuthLogin {
         state = AsyncValue.data(response.data);
       } else {
         final errorMessage = response.getErrorMessage();
+        // Provide user-friendly error message
+        final friendlyMessage = _getUserFriendlyErrorMessage(errorMessage);
         state = AsyncValue.error(
-          Exception(errorMessage),
+          Exception(friendlyMessage),
           StackTrace.current,
         );
       }
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      // Handle network errors, timeout, etc.
+      final errorMessage = _getUserFriendlyErrorMessage(e.toString());
+      state = AsyncValue.error(
+        Exception(errorMessage),
+        stackTrace,
+      );
     }
+  }
+
+  String _getUserFriendlyErrorMessage(String errorMessage) {
+    // Map technical errors to user-friendly messages
+    if (errorMessage.contains('timeout') || errorMessage.contains('TimeoutException')) {
+      return 'Kết nối quá lâu. Vui lòng kiểm tra internet và thử lại.';
+    }
+    if (errorMessage.contains('network') || errorMessage.contains('NetworkException')) {
+      return 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.';
+    }
+    if (errorMessage.contains('401') || errorMessage.contains('UNAUTHORIZED')) {
+      return 'Xác thực thất bại. Vui lòng thử lại.';
+    }
+    if (errorMessage.contains('400') || errorMessage.contains('VALIDATION_ERROR')) {
+      return 'Thông tin đăng nhập không hợp lệ. Vui lòng thử lại.';
+    }
+    if (errorMessage.contains('500') || errorMessage.contains('INTERNAL_SERVER_ERROR')) {
+      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+    }
+    // Return original message if no mapping found, but remove technical prefixes
+    return errorMessage.replaceFirst('Exception: ', '').replaceFirst('Error: ', '');
   }
 }
 

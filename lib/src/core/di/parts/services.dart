@@ -49,16 +49,12 @@ AuthService authService(Ref ref) {
 
 @riverpod
 OAuthService oauthService(Ref ref) {
-  // Use mock in development, real services in production
-  // Note: In production, you may want to use a factory that returns
-  // the appropriate service based on platform or configuration
-  if (Env.isDevelopment) {
-    return MockOAuthService();
-  } else {
-    // In production, return GoogleOAuthService as default
-    // You can inject AppleOAuthService separately if needed
-    return GoogleOAuthService();
-  }
+  // Always use real services (no mock)
+  // Composite service routes to the appropriate provider (Google/Apple)
+  return CompositeOAuthService(
+    googleService: ref.read(googleOAuthServiceProvider),
+    appleService: ref.read(appleOAuthServiceProvider),
+  );
 }
 
 @riverpod
