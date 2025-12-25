@@ -71,7 +71,7 @@ class _SelectLearningGoalPageState
   Widget build(BuildContext context) {
     final goalsState = ref.watch(learningGoalsProvider);
     final isLoading = goalsState.isLoading;
-    final error = goalsState.errorOrNull;
+    final error = goalsState.hasError ? goalsState.error : null;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),

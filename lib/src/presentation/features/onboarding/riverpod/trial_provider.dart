@@ -4,8 +4,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/base/failure.dart';
 import '../../../../core/constants/error_codes.dart';
-import '../../../../core/di/parts/repository.dart';
-import '../../../../domain/repositories/trial_repository.dart';
+import '../../../../core/di/dependency_injection.dart';
+import '../../../../domain/entities/trial_entity.dart';
 
 part 'trial_provider.g.dart';
 
@@ -45,7 +45,7 @@ class TrialStatus {
     }
   }
 
-  factory TrialStatus.fromEntity(dynamic entity) {
+  factory TrialStatus.fromEntity(TrialEntity entity) {
     return TrialStatus(
       daysRemaining: entity.daysRemaining,
       daysUsed: entity.daysUsed,

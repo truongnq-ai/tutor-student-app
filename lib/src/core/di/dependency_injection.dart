@@ -11,7 +11,6 @@ import '../../data/repositories/onboarding_repository_impl.dart';
 import '../../data/repositories/parent_linking_repository_impl.dart';
 import '../../data/repositories/router_repository_impl.dart';
 import '../../data/repositories/trial_repository_impl.dart';
-import '../../core/config/env.dart';
 import '../../data/services/cache/cache_service.dart';
 import '../../data/services/network/endpoints.dart';
 import '../../data/services/network/interceptor/token_manager.dart';

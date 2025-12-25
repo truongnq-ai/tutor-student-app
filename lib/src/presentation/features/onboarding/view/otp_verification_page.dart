@@ -401,7 +401,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
                 child: Text(
                   canResend
                       ? 'Gửi lại mã OTP'
-                      : 'Gửi lại mã OTP (còn ${cooldownRemaining ?? 0} giây)',
+                      : 'Gửi lại mã OTP (còn $cooldownRemaining giây)',
                   style: context.textStyle.bodyMedium.copyWith(
                     fontSize: 14,
                     height: 1.43, // 20px / 14px

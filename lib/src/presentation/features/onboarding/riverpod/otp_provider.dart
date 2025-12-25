@@ -4,8 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/base/failure.dart';
 import '../../../../core/constants/error_codes.dart';
-import '../../../../core/di/parts/repository.dart';
-import '../../../../domain/repositories/parent_linking_repository.dart';
+import '../../../../core/di/dependency_injection.dart';
 
 part 'otp_provider.g.dart';
 

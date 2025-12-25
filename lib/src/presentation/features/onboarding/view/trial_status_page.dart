@@ -32,7 +32,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
     final trialState = ref.watch(trialProvider);
     final trialStatus = trialState.value;
     final isLoading = trialState.isLoading;
-    final error = trialState.errorOrNull;
+    final error = trialState.hasError ? trialState.error : null;
 
     // Handle error states
     if (error != null) {

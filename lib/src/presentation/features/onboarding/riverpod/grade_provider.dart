@@ -4,8 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/base/failure.dart';
 import '../../../../core/constants/error_codes.dart';
-import '../../../../core/di/parts/repository.dart';
-import '../../../../domain/repositories/onboarding_repository.dart';
+import '../../../../core/di/dependency_injection.dart';
 
 part 'grade_provider.g.dart';
 
@@ -26,8 +25,11 @@ class GradeSelection extends _$GradeSelection {
       final response = await repository.getGrade().timeout(
         const Duration(seconds: 5),
         onTimeout: () {
-          // On timeout, return cached value if available (graceful degradation)
-          return null;
+          // On timeout, throw exception to be caught by outer catch
+          throw TimeoutException(
+            'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.',
+            const Duration(seconds: 5),
+          );
         },
       );
 

@@ -58,7 +58,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
     final gradeState = ref.watch(gradeSelectionProvider);
     final selectedGrade = gradeState.value;
     final isLoading = gradeState.isLoading;
-    final error = gradeState.errorOrNull;
+    final error = gradeState.hasError ? gradeState.error : null;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),

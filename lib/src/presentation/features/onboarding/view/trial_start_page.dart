@@ -50,7 +50,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
     final now = DateTime.now();
     final endDate = now.add(const Duration(days: 7));
     final isLoading = trialState.isLoading;
-    final error = trialState.errorOrNull;
+    final error = trialState.hasError ? trialState.error : null;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
