@@ -8,6 +8,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../riverpod/trial_provider.dart';
 
 class TrialStartPage extends ConsumerStatefulWidget {
   const TrialStartPage({super.key});
@@ -17,25 +18,39 @@ class TrialStartPage extends ConsumerStatefulWidget {
 }
 
 class _TrialStartPageState extends ConsumerState<TrialStartPage> {
-  bool _isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    // Listen to trial provider state changes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.listenManual(trialProvider, (previous, next) {
+        next.when(
+          data: (trialStatus) {
+            if (trialStatus != null && mounted) {
+              // Navigate to select grade on success
+              context.go(Routes.selectGrade);
+            }
+          },
+          loading: () {},
+          error: (error, stackTrace) {
+            // Error handling is done in the UI
+          },
+        );
+      });
+    });
+  }
 
   Future<void> _onStartTrial() async {
-    setState(() => _isLoading = true);
-
-    // Mock: Create trial profile
-    // In real implementation, this would call the API
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-
-    setState(() => _isLoading = false);
-    context.go(Routes.selectGrade);
+    await ref.read(trialProvider.notifier).startTrial();
   }
 
   @override
   Widget build(BuildContext context) {
+    final trialState = ref.watch(trialProvider);
     final now = DateTime.now();
     final endDate = now.add(const Duration(days: 7));
+    final isLoading = trialState.isLoading;
+    final error = trialState.errorOrNull;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -51,6 +66,63 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Error message
+            if (error != null) ...[
+              Gap(context.spacing.s16),
+              Container(
+                padding: EdgeInsets.all(context.padding.p16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFEBEE),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFFF44336).withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Color(0xFFF44336),
+                      size: 20,
+                    ),
+                    Gap(context.spacing.s8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            error.toString().replaceFirst('Exception: ', ''),
+                            style: context.textStyle.bodyMedium.copyWith(
+                              fontSize: 14,
+                              color: const Color(0xFF212121),
+                            ),
+                          ),
+                          Gap(context.spacing.s8),
+                          TextButton(
+                            onPressed: _onStartTrial,
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              'Thử lại',
+                              style: context.textStyle.bodyMedium.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFF44336),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             Gap(context.spacing.s32),
             // Illustration
             Center(
@@ -225,7 +297,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
               width: double.infinity,
               height: 56,
               child: FilledButton(
-                onPressed: _isLoading ? null : _onStartTrial,
+                onPressed: isLoading ? null : _onStartTrial,
                 style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF4CAF50),
                   foregroundColor: Colors.white,
@@ -235,7 +307,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                   ),
                   elevation: 2,
                 ),
-                child: _isLoading
+                child: isLoading
                     ? const LoadingIndicator()
                     : Text(
                         'Bắt đầu',

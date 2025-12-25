@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
+import '../riverpod/trial_provider.dart';
 
 class LinkingSuccessPage extends ConsumerStatefulWidget {
   const LinkingSuccessPage({super.key});
@@ -16,14 +17,39 @@ class LinkingSuccessPage extends ConsumerStatefulWidget {
 }
 
 class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
-  // Mock data - in real implementation, get from route params or state
-  final String _phoneNumber = '0912345678';
-  final String _password = '0912345678'; // Temporary password
-  final String _dashboardLink =
-      'https://dashboard.tutor.app/activate?token=abc123';
-  final int _totalExercises = 45;
-  final int _skillsLearned = 8;
-  final int _streakDays = 7;
+  String? _username;
+  String? _password;
+  String? _dashboardLink;
+  int _totalExercises = 0;
+  int _skillsLearned = 0;
+  int _streakDays = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get data from route parameters
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uri = GoRouterState.of(context).uri;
+      setState(() {
+        _username = uri.queryParameters['username'] ?? '';
+        _password = uri.queryParameters['password'] ?? '';
+        _dashboardLink = uri.queryParameters['dashboardLink'] ?? '';
+      });
+      // Load trial status for achievement data
+      _loadTrialStatus();
+    });
+  }
+
+  Future<void> _loadTrialStatus() async {
+    final trialStatus = await ref.read(trialProvider.notifier).getTrialStatus();
+    if (trialStatus != null && mounted) {
+      setState(() {
+        _totalExercises = trialStatus.totalExercises;
+        _skillsLearned = trialStatus.skillsLearned;
+        _streakDays = trialStatus.daysUsed;
+      });
+    }
+  }
 
   void _copyToClipboard(String text, String label) {
     Clipboard.setData(ClipboardData(text: text));
@@ -167,36 +193,41 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                       ),
                       Gap(context.spacing.s16),
                       // Username
-                      _InfoField(
-                        label: 'Tên đăng nhập:',
-                        value: _phoneNumber,
-                        onCopy: () => _copyToClipboard(_phoneNumber, 'tên đăng nhập'),
-                      ),
-                      Gap(context.spacing.s12),
-                      // Password
-                      _InfoField(
-                        label: 'Mật khẩu:',
-                        value: _password,
-                        onCopy: () => _copyToClipboard(_password, 'mật khẩu'),
-                      ),
-                      Gap(context.spacing.s8),
-                      Text(
-                        'Mật khẩu tạm thời, vui lòng đổi sau khi đăng nhập',
-                        style: context.textStyle.bodySmall.copyWith(
-                          fontSize: 12,
-                          height: 1.33, // 16px / 12px
-                          color: const Color(0xFFFF9800),
-                          fontStyle: FontStyle.italic,
+                      if (_username != null && _username!.isNotEmpty)
+                        _InfoField(
+                          label: 'Tên đăng nhập:',
+                          value: _username!,
+                          onCopy: () => _copyToClipboard(_username!, 'tên đăng nhập'),
                         ),
-                      ),
-                      Gap(context.spacing.s16),
+                      if (_username != null && _username!.isNotEmpty)
+                        Gap(context.spacing.s12),
+                      // Password
+                      if (_password != null && _password!.isNotEmpty) ...[
+                        _InfoField(
+                          label: 'Mật khẩu:',
+                          value: _password!,
+                          onCopy: () => _copyToClipboard(_password!, 'mật khẩu'),
+                        ),
+                        Gap(context.spacing.s8),
+                        Text(
+                          'Mật khẩu tạm thời, vui lòng đổi sau khi đăng nhập',
+                          style: context.textStyle.bodySmall.copyWith(
+                            fontSize: 12,
+                            height: 1.33, // 16px / 12px
+                            color: const Color(0xFFFF9800),
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        Gap(context.spacing.s16),
+                      ],
                       // Dashboard link
-                      _InfoField(
-                        label: 'Truy cập dashboard:',
-                        value: _dashboardLink,
-                        onCopy: () => _copyToClipboard(_dashboardLink, 'liên kết'),
-                        isLink: true,
-                      ),
+                      if (_dashboardLink != null && _dashboardLink!.isNotEmpty)
+                        _InfoField(
+                          label: 'Truy cập dashboard:',
+                          value: _dashboardLink!,
+                          onCopy: () => _copyToClipboard(_dashboardLink!, 'liên kết'),
+                          isLink: true,
+                        ),
                     ],
                   ),
                 ),

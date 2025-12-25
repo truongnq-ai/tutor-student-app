@@ -7,6 +7,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../riverpod/learning_goal_provider.dart';
 
 class SelectLearningGoalPage extends ConsumerStatefulWidget {
   const SelectLearningGoalPage({super.key});
@@ -19,21 +20,41 @@ class SelectLearningGoalPage extends ConsumerStatefulWidget {
 class _SelectLearningGoalPageState
     extends ConsumerState<SelectLearningGoalPage> {
   final Set<String> _selectedGoals = {};
-  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load learning goals when page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final goalsState = ref.read(learningGoalsProvider);
+      if (goalsState.value != null && goalsState.value!.isNotEmpty) {
+        setState(() {
+          _selectedGoals.addAll(goalsState.value!);
+        });
+      }
+    });
+  }
 
   Future<void> _onStartLearning() async {
     if (_selectedGoals.isEmpty) return;
 
-    setState(() => _isLoading = true);
-
-    // Mock: Save learning goals (local storage)
-    // In real implementation, this would call the API
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-
-    setState(() => _isLoading = false);
-    context.go(Routes.home);
+    await ref.read(learningGoalsProvider.notifier).saveLearningGoals(_selectedGoals);
+    
+    // Listen to state changes
+    ref.listenManual(learningGoalsProvider, (previous, next) {
+      next.when(
+        data: (goals) {
+          if (goals.isNotEmpty && mounted) {
+            // Navigate to home on success
+            context.go(Routes.home);
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {
+          // Error handling is done in the UI
+        },
+      );
+    });
   }
 
   void _toggleGoal(String goalId) {
@@ -48,6 +69,10 @@ class _SelectLearningGoalPageState
 
   @override
   Widget build(BuildContext context) {
+    final goalsState = ref.watch(learningGoalsProvider);
+    final isLoading = goalsState.isLoading;
+    final error = goalsState.errorOrNull;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -77,7 +102,69 @@ class _SelectLearningGoalPageState
                         color: const Color(0xFF212121),
                       ),
                     ),
-                    Gap(context.spacing.s32),
+                    Gap(context.spacing.s16),
+                    // Error message
+                    if (error != null) ...[
+                      Container(
+                        padding: EdgeInsets.all(context.padding.p16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFEBEE),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFFF44336).withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: Color(0xFFF44336),
+                              size: 20,
+                            ),
+                            Gap(context.spacing.s8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    error.toString().replaceFirst('Exception: ', ''),
+                                    style: context.textStyle.bodyMedium.copyWith(
+                                      fontSize: 14,
+                                      color: const Color(0xFF212121),
+                                    ),
+                                  ),
+                                  Gap(context.spacing.s8),
+                                  TextButton(
+                                    onPressed: () {
+                                      if (_selectedGoals.isNotEmpty) {
+                                        ref.read(learningGoalsProvider.notifier).saveLearningGoals(_selectedGoals);
+                                      }
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: Size.zero,
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: Text(
+                                      'Thử lại',
+                                      style: context.textStyle.bodyMedium.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFF44336),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(context.spacing.s16),
+                    ],
+                    Gap(context.spacing.s16),
                     // Learning goal cards
                     _LearningGoalCard(
                       goalId: 'follow_curriculum',
@@ -129,7 +216,7 @@ class _SelectLearningGoalPageState
                 height: 56,
                 child: FilledButton(
                   onPressed:
-                      _selectedGoals.isNotEmpty && !_isLoading
+                      _selectedGoals.isNotEmpty && !isLoading
                           ? _onStartLearning
                           : null,
                   style: FilledButton.styleFrom(
@@ -143,7 +230,7 @@ class _SelectLearningGoalPageState
                     ),
                     elevation: 2,
                   ),
-                  child: _isLoading
+                  child: isLoading
                       ? const LoadingIndicator()
                       : Text(
                           'Bắt đầu học',

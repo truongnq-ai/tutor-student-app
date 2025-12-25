@@ -7,6 +7,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../riverpod/grade_provider.dart';
 
 class SelectGradePage extends ConsumerStatefulWidget {
   const SelectGradePage({super.key});
@@ -16,26 +17,49 @@ class SelectGradePage extends ConsumerStatefulWidget {
 }
 
 class _SelectGradePageState extends ConsumerState<SelectGradePage> {
-  int? _selectedGrade;
-  bool _isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    // Load grade when page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final gradeState = ref.read(gradeSelectionProvider);
+      if (gradeState.value != null) {
+        // Grade already loaded from provider initialization
+      }
+    });
+  }
 
   Future<void> _onContinue() async {
-    if (_selectedGrade == null) return;
+    final gradeState = ref.read(gradeSelectionProvider);
+    final selectedGrade = gradeState.value;
+    if (selectedGrade == null) return;
 
-    setState(() => _isLoading = true);
-
-    // Mock: Save grade selection (local storage)
-    // In real implementation, this would call the API
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-
-    setState(() => _isLoading = false);
-    context.go(Routes.selectLearningGoal);
+    await ref.read(gradeSelectionProvider.notifier).selectGrade(selectedGrade);
+    
+    // Listen to state changes
+    ref.listenManual(gradeSelectionProvider, (previous, next) {
+      next.when(
+        data: (grade) {
+          if (grade != null && mounted) {
+            // Navigate to select learning goal on success
+            context.go(Routes.selectLearningGoal);
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {
+          // Error handling is done in the UI
+        },
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final gradeState = ref.watch(gradeSelectionProvider);
+    final selectedGrade = gradeState.value;
+    final isLoading = gradeState.isLoading;
+    final error = gradeState.errorOrNull;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -65,16 +89,78 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                         color: const Color(0xFF212121),
                       ),
                     ),
-                    Gap(context.spacing.s32),
+                    Gap(context.spacing.s16),
+                    // Error message
+                    if (error != null) ...[
+                      Container(
+                        padding: EdgeInsets.all(context.padding.p16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFEBEE),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFFF44336).withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: Color(0xFFF44336),
+                              size: 20,
+                            ),
+                            Gap(context.spacing.s8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    error.toString().replaceFirst('Exception: ', ''),
+                                    style: context.textStyle.bodyMedium.copyWith(
+                                      fontSize: 14,
+                                      color: const Color(0xFF212121),
+                                    ),
+                                  ),
+                                  Gap(context.spacing.s8),
+                                  TextButton(
+                                    onPressed: () {
+                                      if (selectedGrade != null) {
+                                        ref.read(gradeSelectionProvider.notifier).selectGrade(selectedGrade);
+                                      }
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: Size.zero,
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: Text(
+                                      'Thử lại',
+                                      style: context.textStyle.bodyMedium.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFF44336),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(context.spacing.s16),
+                    ],
+                    Gap(context.spacing.s16),
                     // Grade selection cards
                     _GradeCard(
                       grade: 6,
                       title: 'Lớp 6',
                       description: 'Chương trình Toán lớp 6',
                       icon: Icons.school,
-                      isSelected: _selectedGrade == 6,
+                      isSelected: selectedGrade == 6,
                       onTap: () {
-                        setState(() => _selectedGrade = 6);
+                        ref.read(gradeSelectionProvider.notifier).selectGrade(6);
                       },
                     ),
                     Gap(context.spacing.s16),
@@ -83,9 +169,9 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                       title: 'Lớp 7',
                       description: 'Chương trình Toán lớp 7',
                       icon: Icons.school,
-                      isSelected: _selectedGrade == 7,
+                      isSelected: selectedGrade == 7,
                       onTap: () {
-                        setState(() => _selectedGrade = 7);
+                        ref.read(gradeSelectionProvider.notifier).selectGrade(7);
                       },
                     ),
                     Gap(context.spacing.s32),
@@ -110,11 +196,11 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                 width: double.infinity,
                 height: 56,
                 child: FilledButton(
-                  onPressed: _selectedGrade != null && !_isLoading
+                  onPressed: selectedGrade != null && !isLoading
                       ? _onContinue
                       : null,
                   style: FilledButton.styleFrom(
-                    backgroundColor: _selectedGrade != null
+                    backgroundColor: selectedGrade != null
                         ? const Color(0xFF4CAF50)
                         : const Color(0xFFBDBDBD),
                     foregroundColor: Colors.white,
@@ -124,7 +210,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                     ),
                     elevation: 2,
                   ),
-                  child: _isLoading
+                  child: isLoading
                       ? const LoadingIndicator()
                       : Text(
                           'Tiếp tục',

@@ -1,8 +1,15 @@
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../../core/base/failure.dart';
+import '../../../../core/constants/error_codes.dart';
+import '../../../../core/di/parts/repository.dart';
+import '../../../../domain/repositories/trial_repository.dart';
 
 part 'trial_provider.g.dart';
 
-// Mock trial status model
+// Trial status model
 class TrialStatus {
   final int daysRemaining;
   final int daysUsed;
@@ -37,13 +44,27 @@ class TrialStatus {
       return 'Đã hết hạn';
     }
   }
+
+  factory TrialStatus.fromEntity(dynamic entity) {
+    return TrialStatus(
+      daysRemaining: entity.daysRemaining,
+      daysUsed: entity.daysUsed,
+      totalDays: entity.totalDays,
+      startDate: entity.startDate,
+      endDate: entity.endDate,
+      solvesToday: entity.solvesToday,
+      maxSolvesPerDay: entity.maxSolvesPerDay,
+      totalExercises: entity.totalExercises,
+      skillsLearned: entity.skillsLearned,
+      isLinked: entity.isLinked,
+    );
+  }
 }
 
 @riverpod
 class Trial extends _$Trial {
   @override
   AsyncValue<TrialStatus?> build() {
-    // Mock: Return null initially (no trial)
     return const AsyncValue.data(null);
   }
 
@@ -53,55 +74,149 @@ class Trial extends _$Trial {
     state = const AsyncValue.loading();
 
     try {
-      // Mock: Create trial profile
-      // In real implementation, this would call the API
-      await Future<void>.delayed(const Duration(seconds: 1));
-
-      final now = DateTime.now();
-      final endDate = now.add(const Duration(days: 7));
-
-      final trialStatus = TrialStatus(
-        daysRemaining: 7,
-        daysUsed: 0,
-        totalDays: 7,
-        startDate: now,
-        endDate: endDate,
-        solvesToday: 0,
-        maxSolvesPerDay: 5,
-        totalExercises: 0,
-        skillsLearned: 0,
-        isLinked: false,
+      final repository = ref.read(trialRepositoryProvider);
+      
+      // Add timeout (10 seconds)
+      final response = await repository.startTrial().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException(
+            'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.',
+            const Duration(seconds: 10),
+          );
+        },
       );
 
+      if (!response.isSuccess) {
+        final errorCode = response.errorCode ?? ErrorCodes.internalError;
+        String errorMessage = response.errorDetail ?? 'Không thể bắt đầu trial. Vui lòng thử lại.';
+        
+        // Handle specific error codes
+        if (errorCode == ErrorCodes.trialNotFound) {
+          errorMessage = 'Không tìm thấy trial. Vui lòng thử lại.';
+        } else if (errorCode == ErrorCodes.trialExpired) {
+          errorMessage = 'Trial đã hết hạn.';
+        } else if (errorCode == ErrorCodes.missingRequestParameter) {
+          errorMessage = 'Thiếu thông tin cần thiết. Vui lòng thử lại.';
+        }
+        
+        state = AsyncValue.error(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        return;
+      }
+
+      if (response.data == null) {
+        state = AsyncValue.error(
+          Exception('Không nhận được dữ liệu từ server. Vui lòng thử lại.'),
+          StackTrace.current,
+        );
+        return;
+      }
+
+      final trialStatus = TrialStatus.fromEntity(response.data!);
       state = AsyncValue.data(trialStatus);
+    } on TimeoutException catch (e, stackTrace) {
+      state = AsyncValue.error(
+        Exception(e.message ?? 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.'),
+        stackTrace,
+      );
+    } on Failure catch (e, stackTrace) {
+      String errorMessage = 'Không thể bắt đầu trial. Vui lòng thử lại.';
+      if (e.type == FailureType.timeout) {
+        errorMessage = 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.';
+      } else if (e.type == FailureType.network) {
+        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.';
+      }
+      state = AsyncValue.error(Exception(errorMessage), stackTrace);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      String errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+      if (e.toString().contains('timeout') || e.toString().contains('Timeout')) {
+        errorMessage = 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.';
+      }
+      state = AsyncValue.error(Exception(errorMessage), stackTrace);
     }
   }
 
   Future<TrialStatus?> getTrialStatus() async {
-    // Mock: Get trial status
-    // In real implementation, this would call the API
+    if (state.isLoading) return null;
+
+    // Return cached value if available
     if (state.value != null) {
       return state.value;
     }
 
-    // Mock: Return sample trial status
-    final now = DateTime.now();
-    final endDate = now.add(const Duration(days: 5));
+    state = const AsyncValue.loading();
 
-    return TrialStatus(
-      daysRemaining: 5,
-      daysUsed: 2,
-      totalDays: 7,
-      startDate: now.subtract(const Duration(days: 2)),
-      endDate: endDate,
-      solvesToday: 3,
-      maxSolvesPerDay: 5,
-      totalExercises: 45,
-      skillsLearned: 8,
-      isLinked: false,
-    );
+    try {
+      final repository = ref.read(trialRepositoryProvider);
+      
+      // Add timeout (10 seconds)
+      final response = await repository.getTrialStatus().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw TimeoutException(
+            'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.',
+            const Duration(seconds: 10),
+          );
+        },
+      );
+
+      if (!response.isSuccess) {
+        final errorCode = response.errorCode ?? ErrorCodes.internalError;
+        
+        // Handle specific error codes
+        if (errorCode == ErrorCodes.trialNotFound) {
+          state = const AsyncValue.data(null);
+          return null;
+        } else if (errorCode == ErrorCodes.trialExpired) {
+          state = AsyncValue.error(
+            Exception('Trial đã hết hạn.'),
+            StackTrace.current,
+          );
+          return null;
+        }
+        
+        String errorMessage = response.errorDetail ?? 'Không thể lấy trạng thái trial. Vui lòng thử lại.';
+        state = AsyncValue.error(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        return null;
+      }
+
+      if (response.data == null) {
+        state = const AsyncValue.data(null);
+        return null;
+      }
+
+      final trialStatus = TrialStatus.fromEntity(response.data!);
+      state = AsyncValue.data(trialStatus);
+      return trialStatus;
+    } on TimeoutException catch (e, stackTrace) {
+      state = AsyncValue.error(
+        Exception(e.message ?? 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.'),
+        stackTrace,
+      );
+      return null;
+    } on Failure catch (e, stackTrace) {
+      String errorMessage = 'Không thể lấy trạng thái trial. Vui lòng thử lại.';
+      if (e.type == FailureType.timeout) {
+        errorMessage = 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.';
+      } else if (e.type == FailureType.network) {
+        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.';
+      }
+      state = AsyncValue.error(Exception(errorMessage), stackTrace);
+      return null;
+    } catch (e, stackTrace) {
+      String errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+      if (e.toString().contains('timeout') || e.toString().contains('Timeout')) {
+        errorMessage = 'Không thể kết nối. Vui lòng kiểm tra internet và thử lại.';
+      }
+      state = AsyncValue.error(Exception(errorMessage), stackTrace);
+      return null;
+    }
   }
 }
 

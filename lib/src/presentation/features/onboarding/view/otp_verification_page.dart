@@ -10,6 +10,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../riverpod/otp_provider.dart';
 
 class OtpVerificationPage extends ConsumerStatefulWidget {
   const OtpVerificationPage({super.key});
@@ -23,12 +24,10 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
-  bool _isLoading = false;
   String? _errorMessage;
   Timer? _timer;
+  Timer? _cooldownTimer;
   int _remainingSeconds = 300; // 5 minutes
-  bool _canResend = false;
-  int _resendCooldown = 60; // 60 seconds cooldown
 
   String? _phoneNumber;
 
@@ -36,7 +35,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
   void initState() {
     super.initState();
     _startTimer();
-    _startResendCooldown();
+    _startCooldownTimer();
   }
 
   @override
@@ -50,6 +49,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _cooldownTimer?.cancel();
     for (var controller in _controllers) {
       controller.dispose();
     }
@@ -73,14 +73,14 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
     });
   }
 
-  void _startResendCooldown() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+  void _startCooldownTimer() {
+    _cooldownTimer?.cancel();
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
-          if (_resendCooldown > 0) {
-            _resendCooldown--;
-          } else {
-            _canResend = true;
+          // Check cooldown from provider
+          final cooldownRemaining = ref.read(otpVerificationProvider.notifier).getResendCooldownRemaining();
+          if (cooldownRemaining == null) {
             timer.cancel();
           }
         });
@@ -112,63 +112,106 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
   }
 
   Future<void> _onVerify() async {
-    if (!_isOtpComplete()) return;
+    if (!_isOtpComplete() || _phoneNumber == null) return;
 
+    // Clear previous error
     setState(() {
-      _isLoading = true;
       _errorMessage = null;
     });
 
-    // Mock: Firebase Auth OTP verification
-    // In real implementation, this would call Firebase Auth
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-
-    // Mock: Simulate success (in real app, verify with Firebase)
     final otpCode = _getOtpCode();
-    final isValid = otpCode == '123456'; // Mock valid OTP
 
-    setState(() => _isLoading = false);
+    // Verify OTP using provider
+    final verifyResult = await ref.read(otpVerificationProvider.notifier).verifyOtp(_phoneNumber!, otpCode);
 
-    if (isValid) {
-      // Navigate to linking success
-      context.pushReplacementNamed(Routes.linkingSuccess);
-    } else {
-      setState(() {
-        _errorMessage = 'Mã OTP không đúng. Vui lòng thử lại.';
-        // Clear all fields
-        for (var controller in _controllers) {
-          controller.clear();
-        }
-        _focusNodes[0].requestFocus();
-      });
-    }
+    // Listen to state changes
+    ref.listenManual(otpVerificationProvider, (previous, next) {
+      next.when(
+        data: (success) {
+          if (success == true && verifyResult != null && mounted) {
+            // Navigate to linking success with data
+            context.pushReplacementNamed(
+              Routes.linkingSuccess,
+              queryParameters: {
+                'username': verifyResult['username'] ?? '',
+                'password': verifyResult['password'] ?? '',
+                'dashboardLink': verifyResult['dashboardLink'] ?? '',
+              },
+            );
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {
+          if (mounted) {
+            String errorMessage = error.toString().replaceFirst('Exception: ', '');
+            setState(() {
+              _errorMessage = errorMessage;
+              // Clear all fields on error
+              for (var controller in _controllers) {
+                controller.clear();
+              }
+              _focusNodes[0].requestFocus();
+            });
+          }
+        },
+      );
+    });
   }
 
   Future<void> _onResendOtp() async {
-    if (!_canResend) return;
+    if (_phoneNumber == null) return;
 
-    setState(() {
-      _canResend = false;
-      _resendCooldown = 60;
-      _remainingSeconds = 300; // Reset timer
-    });
-
-    _startResendCooldown();
-    _startTimer();
-
-    // Mock: Resend OTP
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Đã gửi lại mã OTP'),
-          backgroundColor: Color(0xFF4CAF50),
-        ),
-      );
+    // Check cooldown
+    final cooldownRemaining = ref.read(otpVerificationProvider.notifier).getResendCooldownRemaining();
+    if (cooldownRemaining != null && cooldownRemaining > 0) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Vui lòng đợi $cooldownRemaining giây trước khi yêu cầu lại OTP.'),
+            backgroundColor: const Color(0xFFFF9800),
+          ),
+        );
+      }
+      return;
     }
+
+    // Resend OTP using provider
+    await ref.read(otpVerificationProvider.notifier).resendOtp(_phoneNumber!);
+
+    // Listen to state changes
+    ref.listenManual(otpVerificationProvider, (previous, next) {
+      next.when(
+        data: (success) {
+          if (success == true && mounted) {
+            // Reset timer
+            setState(() {
+              _remainingSeconds = 300;
+            });
+            _startTimer();
+            _startCooldownTimer();
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Đã gửi lại mã OTP'),
+                backgroundColor: Color(0xFF4CAF50),
+              ),
+            );
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {
+          if (mounted) {
+            String errorMessage = error.toString().replaceFirst('Exception: ', '');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        },
+      );
+    });
   }
 
   String _formatTime(int seconds) {
@@ -179,8 +222,12 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final otpState = ref.watch(otpVerificationProvider);
+    final isLoading = otpState.isLoading;
     final isExpired = _remainingSeconds == 0;
     final isWarning = _remainingSeconds < 60;
+    final cooldownRemaining = ref.read(otpVerificationProvider.notifier).getResendCooldownRemaining();
+    final canResend = cooldownRemaining == null;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -322,7 +369,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
               width: double.infinity,
               height: 48,
               child: FilledButton(
-                onPressed: _isOtpComplete() && !_isLoading ? _onVerify : null,
+                onPressed: _isOtpComplete() && !isLoading ? _onVerify : null,
                 style: FilledButton.styleFrom(
                   backgroundColor: _isOtpComplete()
                       ? const Color(0xFF4CAF50)
@@ -334,7 +381,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
                   ),
                   elevation: 2,
                 ),
-                child: _isLoading
+                child: isLoading
                     ? const LoadingIndicator()
                     : Text(
                         'Xác nhận',
@@ -350,15 +397,15 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
             // Resend link
             Center(
               child: TextButton(
-                onPressed: _canResend ? _onResendOtp : null,
+                onPressed: canResend ? _onResendOtp : null,
                 child: Text(
-                  _canResend
+                  canResend
                       ? 'Gửi lại mã OTP'
-                      : 'Gửi lại mã OTP (còn $_resendCooldown giây)',
+                      : 'Gửi lại mã OTP (còn ${cooldownRemaining ?? 0} giây)',
                   style: context.textStyle.bodyMedium.copyWith(
                     fontSize: 14,
                     height: 1.43, // 20px / 14px
-                    color: _canResend
+                    color: canResend
                         ? const Color(0xFF2196F3)
                         : const Color(0xFFBDBDBD),
                   ),

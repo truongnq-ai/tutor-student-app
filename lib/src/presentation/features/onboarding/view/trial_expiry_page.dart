@@ -8,6 +8,8 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../riverpod/otp_provider.dart';
+import '../riverpod/trial_provider.dart';
 
 class TrialExpiryPage extends ConsumerStatefulWidget {
   const TrialExpiryPage({super.key});
@@ -19,14 +21,32 @@ class TrialExpiryPage extends ConsumerStatefulWidget {
 class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
-  bool _isLoading = false;
   String? _errorMessage;
-  int _requestCountToday = 0; // Mock: Track request count
 
-  // Mock achievement data
-  final int _totalExercises = 45;
-  final int _skillsImproved = 3;
-  final int _streakDays = 7;
+  // Achievement data from trial status
+  int _totalExercises = 0;
+  int _skillsLearned = 0;
+  int _streakDays = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load trial status to get achievement data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTrialStatus();
+    });
+  }
+
+  Future<void> _loadTrialStatus() async {
+    final trialStatus = await ref.read(trialProvider.notifier).getTrialStatus();
+    if (trialStatus != null && mounted) {
+      setState(() {
+        _totalExercises = trialStatus.totalExercises;
+        _skillsLearned = trialStatus.skillsLearned;
+        _streakDays = trialStatus.daysUsed;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -37,35 +57,52 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
   Future<void> _onSendOTP() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Mock: Check rate limiting (max 3 times/day)
-    if (_requestCountToday >= 3) {
-      setState(() {
-        _errorMessage =
-            '⚠️ Bạn đã gửi quá 3 lần hôm nay. Vui lòng thử lại vào ngày mai.';
-      });
-      return;
-    }
+    final phoneNumber = _phoneController.text.trim();
 
+    // Clear previous error
     setState(() {
-      _isLoading = true;
       _errorMessage = null;
     });
 
-    // Mock: Send OTP (simulate API call)
-    await Future<void>.delayed(const Duration(seconds: 1));
+    // Send OTP using provider
+    await ref.read(otpVerificationProvider.notifier).sendOtp(phoneNumber);
 
-    if (!mounted) return;
-
-    setState(() {
-      _isLoading = false;
-      _requestCountToday++;
+    // Listen to state changes
+    ref.listenManual(otpVerificationProvider, (previous, next) {
+      next.when(
+        data: (success) {
+          if (success == true && mounted) {
+            // Navigate to OTP verification on success
+            context.pushNamed(
+              Routes.otpVerification,
+              queryParameters: {'phone': phoneNumber},
+            );
+          }
+        },
+        loading: () {},
+        error: (error, stackTrace) {
+          if (mounted) {
+            String errorMessage = error.toString().replaceFirst('Exception: ', '');
+            
+            // Handle rate limit error
+            if (errorMessage.contains('quá nhiều yêu cầu') || 
+                errorMessage.contains('Rate limit')) {
+              setState(() {
+                _errorMessage = '⚠️ Bạn đã gửi quá 3 lần hôm nay. Vui lòng thử lại vào ngày mai.';
+              });
+            } else if (errorMessage.contains('tìm thấy trial')) {
+              setState(() {
+                _errorMessage = 'Không tìm thấy trial. Vui lòng thử lại.';
+              });
+            } else {
+              setState(() {
+                _errorMessage = errorMessage;
+              });
+            }
+          }
+        },
+      );
     });
-
-    // Navigate to OTP verification
-    await context.pushNamed(
-      Routes.otpVerification,
-      queryParameters: {'phone': _phoneController.text},
-    );
   }
 
   String? _validatePhone(String? value) {
@@ -84,6 +121,9 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final otpState = ref.watch(otpVerificationProvider);
+    final isLoading = otpState.isLoading;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFF9E6), // Warm yellow
       appBar: AppBar(
@@ -190,8 +230,8 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                         Expanded(
                           child: _AchievementItem(
                             icon: '🎯',
-                            value: '$_skillsImproved',
-                            label: 'skill cải thiện',
+                            value: '$_skillsLearned',
+                            label: 'skill đã học',
                           ),
                         ),
                         Expanded(
@@ -271,12 +311,47 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                 },
               ),
               Gap(context.spacing.s24),
+              // Error message display
+              if (_errorMessage != null) ...[
+                Container(
+                  padding: EdgeInsets.all(context.padding.p16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFEBEE),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: const Color(0xFFF44336).withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Color(0xFFF44336),
+                        size: 20,
+                      ),
+                      Gap(context.spacing.s8),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: context.textStyle.bodyMedium.copyWith(
+                            fontSize: 14,
+                            color: const Color(0xFF212121),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(context.spacing.s16),
+              ],
               // Send OTP button
               SizedBox(
                 width: double.infinity,
                 height: 48,
                 child: FilledButton(
-                  onPressed: _isLoading ? null : _onSendOTP,
+                  onPressed: isLoading ? null : _onSendOTP,
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF4CAF50),
                     foregroundColor: Colors.white,
@@ -286,7 +361,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                     ),
                     elevation: 2,
                   ),
-                  child: _isLoading
+                  child: isLoading
                       ? const LoadingIndicator()
                       : Text(
                           'Gửi mã OTP',
