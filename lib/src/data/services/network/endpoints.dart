@@ -41,9 +41,11 @@ class Endpoints {
 
   // ==================== Learning & Practice ====================
   
-  static const String learningToday = '/api/learning/today';
-  static const String practiceSubmit = '/api/practice/submit';
-  static const String practiceHistory = '/api/practice/history';
+  static const String learningToday = '/api/v1/learning/today';
+  static const String learningWeakSkills = '/api/v1/learning/weak-skills';
+  static const String practiceSubmit = '/api/v1/practice/submit';
+  static const String practiceHistory = '/api/v1/practice/history';
+  static const String practiceSessionInfo = '/api/v1/practice/sessions/{sessionId}';
   
   /// Practice Questions (new API)
   static const String practiceQuestions = '/api/practice/questions';

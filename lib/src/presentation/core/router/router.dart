@@ -27,11 +27,19 @@ import '../../features/splash/view/splash_page.dart';
 import '../widgets/app_startup/startup_widget.dart';
 import '../widgets/navigation_shell.dart';
 import '../../features/authentication/oauth/view/set_credential_page.dart';
+import '../../features/learning/view/today_learning_plan_page.dart';
+import '../../features/practice/view/practice_history_page.dart';
+import '../../features/practice/view/practice_question_page.dart';
+import '../../features/practice/view/practice_result_page.dart';
+import '../../features/practice/view/practice_session_complete_page.dart';
+import '../../features/practice/view/session_resume_page.dart';
+import '../../features/practice/view/skill_selection_page.dart';
 import 'router_state/router_state_provider.dart';
 import 'routes.dart';
 
 part 'parts/authentication_routes.dart';
 part 'parts/on_boarding_routes.dart';
+part 'parts/learning_routes.dart';
 part 'parts/shell_routes.dart';
 part 'router.g.dart';
 
@@ -71,6 +79,7 @@ GoRouter goRouter(Ref ref) {
       ),
       ..._onboardingRoutes(ref),
       ..._authenticationRoutes(ref),
+      ..._learningRoutes(ref),
       _shellRoutes(ref),
     ],
   );

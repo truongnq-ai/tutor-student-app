@@ -12,7 +12,10 @@ abstract class PracticeService {
   /// Submit practice answer
   @POST(Endpoints.practiceSubmit)
   Future<HttpResponse<dynamic>> submitPractice(
-    @Body() Map<String, dynamic> request,
+    @Query('skillId') String skillId,
+    @Query('answer') String answer,
+    @Query('durationSec') int? durationSec,
+    @Query('questionId') String? questionId,
   );
 
   /// Get practice history
@@ -21,8 +24,6 @@ abstract class PracticeService {
     @Query('page') int? page,
     @Query('pageSize') int? pageSize,
     @Query('skillId') String? skillId,
-    @Query('fromDate') String? fromDate,
-    @Query('toDate') String? toDate,
   );
 
   /// Get practice questions
@@ -45,6 +46,12 @@ abstract class PracticeService {
   Future<HttpResponse<dynamic>> submitPracticeQuestion(
     @Path('id') String questionId,
     @Body() Map<String, dynamic> request,
+  );
+
+  /// Get session information
+  @GET(Endpoints.practiceSessionInfo)
+  Future<HttpResponse<dynamic>> getSessionInfo(
+    @Path('sessionId') String sessionId,
   );
 }
 

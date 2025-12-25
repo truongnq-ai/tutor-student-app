@@ -22,4 +22,16 @@ class Routes {
 
   static const String home = '/home';
   static const String profile = '/profile';
+
+  // Learning Flow Routes
+  static const String todayLearningPlan = '/learning/today';
+  static const String practiceQuestion = '/practice/question';
+  static const String practiceResult = '/practice/result';
+  static const String practiceSessionComplete = '/practice/session-complete';
+  static const String skillSelection = '/practice/skill-selection';
+  static const String practiceHistory = '/practice/history';
+  static const String sessionResume = '/practice/session-resume';
+
+  // Mini Test Routes (placeholder - will be implemented later)
+  static const String miniTestStart = '/minitest/start';
 }

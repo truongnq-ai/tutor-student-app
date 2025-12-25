@@ -42,3 +42,24 @@ ParentLinkingRepository parentLinkingRepository(Ref ref) {
     cacheService: ref.read(cacheServiceProvider),
   );
 }
+
+@Riverpod(keepAlive: true)
+LearningRepository learningRepository(Ref ref) {
+  return LearningRepositoryImpl(
+    learningService: ref.read(learningServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+PracticeRepository practiceRepository(Ref ref) {
+  return PracticeRepositoryImpl(
+    practiceService: ref.read(practiceServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+QuestionRepository questionRepository(Ref ref) {
+  return QuestionRepositoryImpl(
+    practiceService: ref.read(practiceServiceProvider),
+  );
+}

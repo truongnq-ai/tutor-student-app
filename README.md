@@ -422,33 +422,9 @@ Tất cả API trả về response với cấu trúc:
 // HTTP 400/401/403/404/500
 ```
 
-## Hiện Trạng Module
+## Roadmap
 
-### Đã Hoàn Thành
-
-- ✅ **Foundation**: Flutter 3.38.4+ với Clean Architecture
-- ✅ **State Management**: Riverpod đã được setup
-- ✅ **Navigation**: go_router đã được cấu hình
-- ✅ **API Client**: Retrofit + Dio đã được setup
-- ✅ **Local Storage**: SharedPreferences đã được cấu hình
-- ✅ **Authentication**: Đã có login, registration, forgot password
-- ✅ **Onboarding**: Đã có onboarding page (cần customize)
-- ✅ **Home**: Đã có home page (cần implement features)
-- ✅ **Profile**: Đã có profile page (cần implement features)
-- ✅ **Localization**: Đã có hỗ trợ đa ngôn ngữ
-- ✅ **Theme**: Đã có theme system
-
-### Đang Thiếu
-
-- 🚧 **Dependencies**: Cần thêm image_picker, camera, OAuth packages
-- 📋 **Onboarding Flow**: Cần customize cho chọn lớp và mục tiêu học tập
-- 📋 **Tutor Mode**: Cần implement camera/image picker và hiển thị lời giải
-- 📋 **Practice**: Cần implement practice sessions
-- 📋 **Mini Test**: Cần implement mini test flow
-- 📋 **Progress Tracking**: Cần implement progress tracking đầy đủ
-- 📋 **Parent Linking**: Cần implement parent linking flow
-- 📋 **API Integration**: Cần cấu hình Retrofit endpoints cho Core Service
-- 📋 **Environment Configuration**: Cần setup environment-specific configs
+Xem [Student App Roadmap](../../tutor_docs/04-for-developers/roadmap/student-app.md) để theo dõi tiến độ triển khai chi tiết.
 
 ## Cần Triển Khai
 
