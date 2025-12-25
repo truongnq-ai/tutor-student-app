@@ -5,9 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_ar.dart';
-import 'app_localizations_bn.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_vi.dart';
 
 // ignore_for_file: type=lint
 
@@ -95,340 +94,645 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('ar'),
-    Locale('bn'),
     Locale('en'),
+    Locale('vi'),
   ];
 
-  /// No description provided for @english.
+  /// No description provided for @language_vietnamese.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiếng Việt'**
+  String get language_vietnamese;
+
+  /// No description provided for @language_english.
   ///
   /// In en, this message translates to:
   /// **'English'**
-  String get english;
+  String get language_english;
 
-  /// No description provided for @bangla.
-  ///
-  /// In en, this message translates to:
-  /// **'বাংলা'**
-  String get bangla;
-
-  /// No description provided for @arabic.
-  ///
-  /// In en, this message translates to:
-  /// **'العربية'**
-  String get arabic;
-
-  /// No description provided for @home.
+  /// No description provided for @navigation_home.
   ///
   /// In en, this message translates to:
   /// **'Home'**
-  String get home;
+  String get navigation_home;
 
-  /// No description provided for @profile.
+  /// No description provided for @navigation_profile.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
-  String get profile;
+  String get navigation_profile;
 
-  /// No description provided for @login.
+  /// No description provided for @auth_login_title.
   ///
   /// In en, this message translates to:
   /// **'Login'**
-  String get login;
+  String get auth_login_title;
 
-  /// No description provided for @createNewPassword.
+  /// No description provided for @auth_login_button.
   ///
   /// In en, this message translates to:
-  /// **'Create New password'**
-  String get createNewPassword;
+  /// **'Login'**
+  String get auth_login_button;
 
-  /// No description provided for @createNewPasswordHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Your new password must be different from previous used passwords.'**
-  String get createNewPasswordHint;
-
-  /// No description provided for @resetPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Password'**
-  String get resetPassword;
-
-  /// No description provided for @newPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'New Password'**
-  String get newPassword;
-
-  /// No description provided for @passwordChangeSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Password Changed Successfully'**
-  String get passwordChangeSuccess;
-
-  /// No description provided for @emailRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Email is required'**
-  String get emailRequired;
-
-  /// No description provided for @passwordRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Password is required'**
-  String get passwordRequired;
-
-  /// No description provided for @isRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'This field is required'**
-  String get isRequired;
-
-  /// No description provided for @validEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter valid email address'**
-  String get validEmail;
-
-  /// No description provided for @enterAssociatedEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the email associated with your account and we’ll send an email with instructions to reset your password.'**
-  String get enterAssociatedEmail;
-
-  /// Error message for minimum length validation
-  ///
-  /// In en, this message translates to:
-  /// **'This field must be at least {min} characters long'**
-  String minLengthValidation(int min);
-
-  /// Error message for maximum length validation
-  ///
-  /// In en, this message translates to:
-  /// **'This field must be at most {max} characters long'**
-  String maxLengthValidation(int max);
-
-  /// No description provided for @yourPasswordChanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Your password has been changed successfully.'**
-  String get yourPasswordChanged;
-
-  /// No description provided for @confirmPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Password'**
-  String get confirmPassword;
-
-  /// No description provided for @logout.
-  ///
-  /// In en, this message translates to:
-  /// **'Logout'**
-  String get logout;
-
-  /// No description provided for @getStarted.
-  ///
-  /// In en, this message translates to:
-  /// **'Get Started'**
-  String get getStarted;
-
-  /// No description provided for @rememberMe.
+  /// No description provided for @auth_login_remember_me.
   ///
   /// In en, this message translates to:
   /// **'Remember me'**
-  String get rememberMe;
+  String get auth_login_remember_me;
 
-  /// No description provided for @forgotPassword.
+  /// No description provided for @auth_login_forgot_password.
   ///
   /// In en, this message translates to:
-  /// **'Forgot password'**
-  String get forgotPassword;
+  /// **'Forgot password?'**
+  String get auth_login_forgot_password;
 
-  /// No description provided for @backToLogin.
-  ///
-  /// In en, this message translates to:
-  /// **'Back to login'**
-  String get backToLogin;
-
-  /// No description provided for @continueAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get continueAction;
-
-  /// No description provided for @signUp.
+  /// No description provided for @auth_signup_title.
   ///
   /// In en, this message translates to:
   /// **'Sign up'**
-  String get signUp;
+  String get auth_signup_title;
 
-  /// No description provided for @signIn.
+  /// No description provided for @auth_signup_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get auth_signup_button;
+
+  /// No description provided for @auth_signin_button.
   ///
   /// In en, this message translates to:
   /// **'Sign in'**
-  String get signIn;
+  String get auth_signin_button;
 
-  /// No description provided for @email.
+  /// No description provided for @auth_forgot_password_title.
   ///
   /// In en, this message translates to:
-  /// **'Email'**
-  String get email;
+  /// **'Forgot Password'**
+  String get auth_forgot_password_title;
 
-  /// No description provided for @emailAddress.
+  /// No description provided for @auth_forgot_password_description.
   ///
   /// In en, this message translates to:
-  /// **'Email Address'**
-  String get emailAddress;
+  /// **'Enter the email associated with your account and we\'ll send an email with instructions to reset your password.'**
+  String get auth_forgot_password_description;
 
-  /// No description provided for @password.
+  /// No description provided for @auth_forgot_password_button.
   ///
   /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
+  /// **'Send'**
+  String get auth_forgot_password_button;
 
-  /// No description provided for @firstName.
+  /// No description provided for @auth_forgot_password_back_to_login.
   ///
   /// In en, this message translates to:
-  /// **'First Name'**
-  String get firstName;
+  /// **'Back to login'**
+  String get auth_forgot_password_back_to_login;
 
-  /// No description provided for @lastName.
+  /// No description provided for @auth_reset_password_title.
   ///
   /// In en, this message translates to:
-  /// **'Last Name'**
-  String get lastName;
+  /// **'Reset Password'**
+  String get auth_reset_password_title;
 
-  /// No description provided for @dontHaveAccount.
+  /// No description provided for @auth_reset_password_new_password.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get auth_reset_password_new_password;
+
+  /// No description provided for @auth_reset_password_confirm_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get auth_reset_password_confirm_password;
+
+  /// No description provided for @auth_reset_password_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your new password must be different from previous used passwords.'**
+  String get auth_reset_password_hint;
+
+  /// No description provided for @auth_reset_password_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get auth_reset_password_button;
+
+  /// No description provided for @auth_reset_password_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Changed Successfully'**
+  String get auth_reset_password_success;
+
+  /// No description provided for @auth_reset_password_success_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password has been changed successfully.'**
+  String get auth_reset_password_success_message;
+
+  /// No description provided for @auth_account_dont_have.
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account? '**
-  String get dontHaveAccount;
+  String get auth_account_dont_have;
 
-  /// No description provided for @alreadyHaveAccount.
+  /// No description provided for @auth_account_already_have.
   ///
   /// In en, this message translates to:
   /// **'Already have an account? '**
-  String get alreadyHaveAccount;
+  String get auth_account_already_have;
 
-  /// No description provided for @checkYourMail.
+  /// No description provided for @auth_verification_check_mail.
   ///
   /// In en, this message translates to:
   /// **'Check your mail'**
-  String get checkYourMail;
+  String get auth_verification_check_mail;
 
-  /// No description provided for @enterVerificationCode.
+  /// Verification code instruction with email placeholder
   ///
   /// In en, this message translates to:
-  /// **'Please enter 4 digit code sent to your mail hello**@gmail.com.'**
-  String get enterVerificationCode;
+  /// **'Please enter 4 digit code sent to your mail {email}.'**
+  String auth_verification_enter_code(String email);
 
-  /// No description provided for @didntGetCode.
+  /// No description provided for @auth_verification_didnt_get_code.
   ///
   /// In en, this message translates to:
   /// **'Didn\'t get a code? '**
-  String get didntGetCode;
+  String get auth_verification_didnt_get_code;
 
-  /// No description provided for @clickToResend.
+  /// No description provided for @auth_verification_resend.
   ///
   /// In en, this message translates to:
   /// **'Click to resend'**
-  String get clickToResend;
+  String get auth_verification_resend;
 
-  /// No description provided for @didNotReceiveEmail.
+  /// No description provided for @auth_verification_did_not_receive.
   ///
   /// In en, this message translates to:
   /// **'Did not receive the email? Check your spam filter. or '**
-  String get didNotReceiveEmail;
+  String get auth_verification_did_not_receive;
 
-  /// No description provided for @tryAnotherEmail.
+  /// No description provided for @auth_verification_try_another_email.
   ///
   /// In en, this message translates to:
   /// **'try another email address'**
-  String get tryAnotherEmail;
+  String get auth_verification_try_another_email;
 
-  /// No description provided for @learnFlutterTitle.
+  /// No description provided for @common_field_email.
   ///
   /// In en, this message translates to:
-  /// **'Learn Flutter with comprehensive tutorials.'**
-  String get learnFlutterTitle;
+  /// **'Email'**
+  String get common_field_email;
 
-  /// No description provided for @learnFlutterSubtitle.
+  /// No description provided for @common_field_email_address.
   ///
   /// In en, this message translates to:
-  /// **'Step-by-step guides for building Flutter apps.'**
-  String get learnFlutterSubtitle;
+  /// **'Email Address'**
+  String get common_field_email_address;
 
-  /// No description provided for @learnFlutterDescription.
+  /// No description provided for @common_field_password.
   ///
   /// In en, this message translates to:
-  /// **'Get notifications for new tutorials and updates.'**
-  String get learnFlutterDescription;
+  /// **'Password'**
+  String get common_field_password;
 
-  /// No description provided for @joinCommunityTitle.
+  /// No description provided for @common_field_first_name.
   ///
   /// In en, this message translates to:
-  /// **'Join the Flutter community.'**
-  String get joinCommunityTitle;
+  /// **'First Name'**
+  String get common_field_first_name;
 
-  /// No description provided for @joinCommunitySubtitle.
+  /// No description provided for @common_field_last_name.
   ///
   /// In en, this message translates to:
-  /// **'Connect with other Flutter developers.'**
-  String get joinCommunitySubtitle;
+  /// **'Last Name'**
+  String get common_field_last_name;
 
-  /// No description provided for @joinCommunityDescription.
+  /// No description provided for @common_button_continue.
   ///
   /// In en, this message translates to:
-  /// **'Participate in community events and discussions.'**
-  String get joinCommunityDescription;
+  /// **'Continue'**
+  String get common_button_continue;
 
-  /// No description provided for @buildDeployTitle.
+  /// No description provided for @common_button_ok.
   ///
   /// In en, this message translates to:
-  /// **'Build and deploy Flutter apps easily.'**
-  String get buildDeployTitle;
+  /// **'OK'**
+  String get common_button_ok;
 
-  /// No description provided for @buildDeploySubtitle.
+  /// No description provided for @common_button_cancel.
   ///
   /// In en, this message translates to:
-  /// **'Access tools and resources for app development.'**
-  String get buildDeploySubtitle;
+  /// **'Cancel'**
+  String get common_button_cancel;
 
-  /// No description provided for @buildDeployDescription.
+  /// No description provided for @common_button_close.
   ///
   /// In en, this message translates to:
-  /// **'Deploy your apps to multiple platforms with ease.'**
-  String get buildDeployDescription;
+  /// **'Close'**
+  String get common_button_close;
 
-  /// Error message for password minimum length validation
+  /// No description provided for @common_button_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get common_button_back;
+
+  /// No description provided for @common_button_get_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get common_button_get_started;
+
+  /// No description provided for @common_button_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get common_button_logout;
+
+  /// No description provided for @common_button_start_learning.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Learning'**
+  String get common_button_start_learning;
+
+  /// No description provided for @common_button_load_more.
+  ///
+  /// In en, this message translates to:
+  /// **'Load More'**
+  String get common_button_load_more;
+
+  /// No description provided for @validation_required.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get validation_required;
+
+  /// No description provided for @validation_email_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get validation_email_required;
+
+  /// No description provided for @validation_password_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get validation_password_required;
+
+  /// No description provided for @validation_email_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter valid email address'**
+  String get validation_email_invalid;
+
+  /// Minimum length validation error
+  ///
+  /// In en, this message translates to:
+  /// **'This field must be at least {min} characters long'**
+  String validation_length_min(int min);
+
+  /// Maximum length validation error
+  ///
+  /// In en, this message translates to:
+  /// **'This field must be at most {max} characters long'**
+  String validation_length_max(int max);
+
+  /// Password minimum length validation
   ///
   /// In en, this message translates to:
   /// **'Password must be at least {minLength} characters'**
-  String passwordMinLengthValidation(String minLength);
+  String validation_password_min_length(String minLength);
 
-  /// No description provided for @passwordNumberValidation.
+  /// No description provided for @validation_password_number.
   ///
   /// In en, this message translates to:
   /// **'Password must contain at least one number'**
-  String get passwordNumberValidation;
+  String get validation_password_number;
 
-  /// No description provided for @passwordLowerCaseValidation.
+  /// No description provided for @validation_password_lowercase.
   ///
   /// In en, this message translates to:
   /// **'Password must contain at least one lowercase letter'**
-  String get passwordLowerCaseValidation;
+  String get validation_password_lowercase;
 
-  /// No description provided for @passwordUpperCaseValidation.
+  /// No description provided for @validation_password_uppercase.
   ///
   /// In en, this message translates to:
   /// **'Password must contain at least one uppercase letter'**
-  String get passwordUpperCaseValidation;
+  String get validation_password_uppercase;
 
-  /// No description provided for @passwordSpecialCharValidation.
+  /// No description provided for @validation_password_special_char.
   ///
   /// In en, this message translates to:
   /// **'Password must contain at least one special character'**
-  String get passwordSpecialCharValidation;
+  String get validation_password_special_char;
+
+  /// No description provided for @error_network_connection.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot connect. Please check your internet.'**
+  String get error_network_connection;
+
+  /// No description provided for @error_network_timeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timeout. Please try again.'**
+  String get error_network_timeout;
+
+  /// No description provided for @error_network_generic.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again.'**
+  String get error_network_generic;
+
+  /// No description provided for @error_auth_unauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired. Please login again.'**
+  String get error_auth_unauthorized;
+
+  /// No description provided for @error_system_internal.
+  ///
+  /// In en, this message translates to:
+  /// **'System error. Please try again later.'**
+  String get error_system_internal;
+
+  /// No description provided for @error_resource_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found.'**
+  String get error_resource_not_found;
+
+  /// No description provided for @error_generic.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get error_generic;
+
+  /// No description provided for @practice_question_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get practice_question_title;
+
+  /// Question counter with current and total
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current}/{total}'**
+  String practice_question_counter(int current, int total);
+
+  /// Practice progress with current and total
+  ///
+  /// In en, this message translates to:
+  /// **'{current}/{total} questions done'**
+  String practice_question_progress(int current, int total);
+
+  /// No description provided for @practice_question_select_answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select answer:'**
+  String get practice_question_select_answer;
+
+  /// No description provided for @practice_question_enter_answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter answer:'**
+  String get practice_question_enter_answer;
+
+  /// No description provided for @practice_question_answer_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your answer'**
+  String get practice_question_answer_hint;
+
+  /// No description provided for @practice_question_check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get practice_question_check;
+
+  /// No description provided for @practice_question_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Hint'**
+  String get practice_question_hint;
+
+  /// Skill label with skill name
+  ///
+  /// In en, this message translates to:
+  /// **'Skill: {skillName}'**
+  String practice_question_skill_label(String skillName);
+
+  /// No description provided for @practice_question_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Question not found'**
+  String get practice_question_not_found;
+
+  /// No description provided for @practice_question_load_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load question'**
+  String get practice_question_load_error;
+
+  /// No description provided for @practice_skill_selection_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Skill to Practice'**
+  String get practice_skill_selection_title;
+
+  /// No description provided for @practice_skill_selection_description.
+  ///
+  /// In en, this message translates to:
+  /// **'You can select one of the following skills to improve'**
+  String get practice_skill_selection_description;
+
+  /// No description provided for @practice_skill_selection_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a skill to start practicing. The system will create exercises suitable for your level.'**
+  String get practice_skill_selection_info;
+
+  /// No description provided for @practice_skill_selection_no_weak_skills.
+  ///
+  /// In en, this message translates to:
+  /// **'No weak skills. Great!'**
+  String get practice_skill_selection_no_weak_skills;
+
+  /// No description provided for @practice_skill_selection_load_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load skill list'**
+  String get practice_skill_selection_load_error;
+
+  /// No description provided for @practice_skill_selection_back_to_home.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get practice_skill_selection_back_to_home;
+
+  /// No description provided for @practice_skill_status_weak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get practice_skill_status_weak;
+
+  /// No description provided for @practice_skill_status_unstable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unstable'**
+  String get practice_skill_status_unstable;
+
+  /// No description provided for @practice_history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice History'**
+  String get practice_history_title;
+
+  /// No description provided for @practice_history_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No practice sessions yet'**
+  String get practice_history_empty_title;
+
+  /// No description provided for @practice_history_empty_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Start learning to see your history here'**
+  String get practice_history_empty_description;
+
+  /// No description provided for @practice_history_load_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load history'**
+  String get practice_history_load_error;
+
+  /// Number of exercises
+  ///
+  /// In en, this message translates to:
+  /// **'{count} exercises'**
+  String practice_card_exercises(int count);
+
+  /// Correct answers count
+  ///
+  /// In en, this message translates to:
+  /// **'Correct: {count}'**
+  String practice_card_correct(int count);
+
+  /// Incorrect answers count
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect: {count}'**
+  String practice_card_incorrect(int count);
+
+  /// Accuracy percentage
+  ///
+  /// In en, this message translates to:
+  /// **'{accuracy}%'**
+  String practice_card_accuracy(int accuracy);
+
+  /// Mastery change percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Mastery: {change}%'**
+  String practice_card_mastery(String change);
+
+  /// Positive mastery change
+  ///
+  /// In en, this message translates to:
+  /// **'Mastery: +{change}%'**
+  String practice_card_mastery_positive(int change);
+
+  /// Practice duration
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}'**
+  String practice_card_duration(String duration);
+
+  /// Duration in seconds only
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String practice_card_duration_seconds(int seconds);
+
+  /// Duration in minutes only
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}p'**
+  String practice_card_duration_minutes(int minutes);
+
+  /// Duration in minutes and seconds
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}p {seconds}s'**
+  String practice_card_duration_minutes_seconds(int minutes, int seconds);
+
+  /// Mastery level percentage
+  ///
+  /// In en, this message translates to:
+  /// **'Mastery: {level}%'**
+  String practice_history_mastery(int level);
+
+  /// Duration in seconds
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {seconds}s'**
+  String practice_history_duration(int seconds);
+
+  /// Difficulty label with level
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty: {level}'**
+  String difficulty_label(String level);
+
+  /// No description provided for @difficulty_easy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get difficulty_easy;
+
+  /// No description provided for @difficulty_medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get difficulty_medium;
+
+  /// No description provided for @difficulty_hard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get difficulty_hard;
+
+  /// No description provided for @difficulty_very_hard.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Hard'**
+  String get difficulty_very_hard;
+
+  /// No description provided for @difficulty_fair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get difficulty_fair;
+
+  /// No description provided for @learning_today_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Learning'**
+  String get learning_today_title;
+
+  /// Learning difficulty label
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty: {level}'**
+  String learning_difficulty_label(String level);
+
+  /// Estimated time in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'~{minutes} min'**
+  String learning_skill_estimated_time(int minutes);
 }
 
 class _AppLocalizationsDelegate
@@ -442,7 +746,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['ar', 'bn', 'en'].contains(locale.languageCode);
+      <String>['en', 'vi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -451,12 +755,10 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar':
-      return AppLocalizationsAr();
-    case 'bn':
-      return AppLocalizationsBn();
     case 'en':
       return AppLocalizationsEn();
+    case 'vi':
+      return AppLocalizationsVi();
   }
 
   throw FlutterError(

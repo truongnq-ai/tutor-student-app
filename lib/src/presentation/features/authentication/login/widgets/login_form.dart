@@ -28,7 +28,7 @@ class _LoginFormState extends State<_LoginForm> {
       children: [
         TextFormField(
           controller: widget.usernameController,
-          decoration: InputDecoration(hintText: 'Tên đăng nhập'),
+          decoration: InputDecoration(hintText: context.locale.common_field_email),
           validator: context.validator.apply([RequiredValidation()]),
         ),
         Gap(context.spacing.s16),
@@ -36,7 +36,7 @@ class _LoginFormState extends State<_LoginForm> {
           controller: widget.passwordController,
           obscureText: !_isPasswordVisible,
           decoration: InputDecoration(
-            hintText: context.locale.password,
+            hintText: context.locale.common_field_password,
             suffixIcon: GestureDetector(
               onTap: _togglePasswordVisibility,
               child: Icon(

@@ -5,9 +5,8 @@ import '../gen/l10n/app_localizations.dart';
 extension AppLocalizationExtension on AppLocalizations {
   String getLanguageName(String languageCode) {
     return switch (languageCode) {
-      'en' => english,
-      'bn' => bangla,
-      'ar' => arabic,
+      'vi' => language_vietnamese,
+      'en' => language_english,
       _ => languageCode,
     };
   }

@@ -28,23 +28,23 @@ class PasswordValidation extends Validation<String> {
         Localizations.localeOf(context).languageCode,
       ).format(minLength);
 
-      return context.locale.passwordMinLengthValidation(localizedNumber);
+      return context.locale.validation_password_min_length(localizedNumber);
     }
 
     if (number && !value.contains(RegExp(r'\d'))) {
-      return context.locale.passwordNumberValidation;
+      return context.locale.validation_password_number;
     }
 
     if (lowerCase && !value.contains(RegExp(r'[a-z]'))) {
-      return context.locale.passwordLowerCaseValidation;
+      return context.locale.validation_password_lowercase;
     }
 
     if (upperCase && !value.contains(RegExp(r'[A-Z]'))) {
-      return context.locale.passwordUpperCaseValidation;
+      return context.locale.validation_password_uppercase;
     }
 
     if (specialChar && !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return context.locale.passwordSpecialCharValidation;
+      return context.locale.validation_password_special_char;
     }
 
     return null;

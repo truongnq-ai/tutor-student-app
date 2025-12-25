@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -78,7 +79,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
           children: [
             if (widget.questionNumber != null && widget.totalQuestions != null)
               Text(
-                'Câu ${widget.questionNumber}/${widget.totalQuestions}',
+                context.locale.practice_question_counter(widget.questionNumber!, widget.totalQuestions!),
                 style: context.textStyle.bodySmall.copyWith(
                   color: context.color.text.secondary,
                 ),
@@ -120,7 +121,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Câu $questionNumber/$totalQuestions',
+                    context.locale.practice_QuestionCounter(questionNumber, totalQuestions),
                     style: context.textStyle.bodySmall,
                   ),
                   DifficultyBadge(difficulty: difficultyLevel),
@@ -130,7 +131,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
               LinearProgressWithLabel(
                 progress: progress,
                 height: 4,
-                label: '$questionNumber/$totalQuestions bài đã làm',
+                label: context.locale.practice_QuestionProgress(questionNumber, totalQuestions),
               ),
             ],
           ),
@@ -189,7 +190,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                       _showHintDialog(context, question.hints!.first);
                     },
                     icon: const Icon(Icons.lightbulb_outline),
-                    label: const Text('💡 Gợi ý'),
+                    label: Text(context.locale.practice_QuestionHint),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 44),
                     ),
@@ -216,7 +217,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
             children: [
               if (question.skillName != null)
                 Text(
-                  'Skill: ${question.skillName}',
+                  context.locale.practice_QuestionSkillLabel(question.skillName ?? ''),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -242,7 +243,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
-                      : const Text('Kiểm tra'),
+                      : Text(context.locale.practice_QuestionCheck),
                 ),
               ),
             ],
@@ -258,7 +259,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Chọn đáp án:',
+          context.locale.practice_QuestionSelectAnswer,
           style: context.textStyle.body.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -333,7 +334,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nhập đáp án:',
+          context.locale.practice_QuestionEnterAnswer,
           style: context.textStyle.body.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -342,7 +343,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
         TextField(
           controller: _answerController,
           decoration: InputDecoration(
-            hintText: 'Nhập đáp án của bạn',
+            hintText: context.locale.practice_QuestionAnswerHint,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -391,7 +392,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            ref.read(practiceSubmissionProvider).error?.toString() ?? 'Có lỗi xảy ra',
+            ref.read(practiceSubmissionProvider).error?.toString() ?? context.locale.error_Generic,
           ),
         ),
       );
@@ -402,12 +403,12 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('💡 Gợi ý'),
+        title: Text(context.locale.practice_QuestionHint),
         content: Text(hint),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Đóng'),
+            child: Text(context.locale.common_ButtonClose),
           ),
         ],
       ),
@@ -416,10 +417,10 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
 
   Widget _buildEmptyState(BuildContext context) {
     return EmptyStateWidget(
-      title: 'Không tìm thấy câu hỏi',
+      title: context.locale.practice_QuestionNotFound,
       icon: Icons.help_outline,
       onAction: () => context.pop(),
-      actionButtonText: 'Quay lại',
+      actionButtonText: context.locale.common_ButtonBack,
     );
   }
 
@@ -434,11 +435,11 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+      description = context.locale.error_NetworkGeneric;
     }
 
     return ErrorStateWidget(
-      title: 'Không thể tải câu hỏi',
+      title: context.locale.practice_QuestionLoadError,
       description: description ?? errorMessage,
       onRetry: () {
         if (widget.questionId != null) {
@@ -463,22 +464,22 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+      return context.locale.error_NetworkConnection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return 'Kết nối quá lâu. Vui lòng thử lại.';
+      return context.locale.error_NetworkTimeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+      return context.locale.error_AuthUnauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+      return context.locale.error_SystemInternal;
     }
     if (message.toLowerCase().contains('not found') ||
         message.toLowerCase().contains('404')) {
-      return 'Không tìm thấy câu hỏi.';
+      return context.locale.practice_QuestionNotFound;
     }
 
     // Return original message if no mapping found, but limit length

@@ -9,187 +9,378 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get english => 'English';
+  String get language_vietnamese => 'Tiếng Việt';
 
   @override
-  String get bangla => 'বাংলা';
+  String get language_english => 'English';
 
   @override
-  String get arabic => 'العربية';
+  String get navigation_home => 'Home';
 
   @override
-  String get home => 'Home';
+  String get navigation_profile => 'Profile';
 
   @override
-  String get profile => 'Profile';
+  String get auth_login_title => 'Login';
 
   @override
-  String get login => 'Login';
+  String get auth_login_button => 'Login';
 
   @override
-  String get createNewPassword => 'Create New password';
+  String get auth_login_remember_me => 'Remember me';
 
   @override
-  String get createNewPasswordHint =>
+  String get auth_login_forgot_password => 'Forgot password?';
+
+  @override
+  String get auth_signup_title => 'Sign up';
+
+  @override
+  String get auth_signup_button => 'Sign up';
+
+  @override
+  String get auth_signin_button => 'Sign in';
+
+  @override
+  String get auth_forgot_password_title => 'Forgot Password';
+
+  @override
+  String get auth_forgot_password_description =>
+      'Enter the email associated with your account and we\'ll send an email with instructions to reset your password.';
+
+  @override
+  String get auth_forgot_password_button => 'Send';
+
+  @override
+  String get auth_forgot_password_back_to_login => 'Back to login';
+
+  @override
+  String get auth_reset_password_title => 'Reset Password';
+
+  @override
+  String get auth_reset_password_new_password => 'New Password';
+
+  @override
+  String get auth_reset_password_confirm_password => 'Confirm Password';
+
+  @override
+  String get auth_reset_password_hint =>
       'Your new password must be different from previous used passwords.';
 
   @override
-  String get resetPassword => 'Reset Password';
+  String get auth_reset_password_button => 'Reset Password';
 
   @override
-  String get newPassword => 'New Password';
+  String get auth_reset_password_success => 'Password Changed Successfully';
 
   @override
-  String get passwordChangeSuccess => 'Password Changed Successfully';
+  String get auth_reset_password_success_message =>
+      'Your password has been changed successfully.';
 
   @override
-  String get emailRequired => 'Email is required';
+  String get auth_account_dont_have => 'Don\'t have an account? ';
 
   @override
-  String get passwordRequired => 'Password is required';
+  String get auth_account_already_have => 'Already have an account? ';
 
   @override
-  String get isRequired => 'This field is required';
+  String get auth_verification_check_mail => 'Check your mail';
 
   @override
-  String get validEmail => 'Please enter valid email address';
+  String auth_verification_enter_code(String email) {
+    return 'Please enter 4 digit code sent to your mail $email.';
+  }
 
   @override
-  String get enterAssociatedEmail =>
-      'Enter the email associated with your account and we’ll send an email with instructions to reset your password.';
+  String get auth_verification_didnt_get_code => 'Didn\'t get a code? ';
 
   @override
-  String minLengthValidation(int min) {
+  String get auth_verification_resend => 'Click to resend';
+
+  @override
+  String get auth_verification_did_not_receive =>
+      'Did not receive the email? Check your spam filter. or ';
+
+  @override
+  String get auth_verification_try_another_email => 'try another email address';
+
+  @override
+  String get common_field_email => 'Email';
+
+  @override
+  String get common_field_email_address => 'Email Address';
+
+  @override
+  String get common_field_password => 'Password';
+
+  @override
+  String get common_field_first_name => 'First Name';
+
+  @override
+  String get common_field_last_name => 'Last Name';
+
+  @override
+  String get common_button_continue => 'Continue';
+
+  @override
+  String get common_button_ok => 'OK';
+
+  @override
+  String get common_button_cancel => 'Cancel';
+
+  @override
+  String get common_button_close => 'Close';
+
+  @override
+  String get common_button_back => 'Back';
+
+  @override
+  String get common_button_get_started => 'Get Started';
+
+  @override
+  String get common_button_logout => 'Logout';
+
+  @override
+  String get common_button_start_learning => 'Start Learning';
+
+  @override
+  String get common_button_load_more => 'Load More';
+
+  @override
+  String get validation_required => 'This field is required';
+
+  @override
+  String get validation_email_required => 'Email is required';
+
+  @override
+  String get validation_password_required => 'Password is required';
+
+  @override
+  String get validation_email_invalid => 'Please enter valid email address';
+
+  @override
+  String validation_length_min(int min) {
     return 'This field must be at least $min characters long';
   }
 
   @override
-  String maxLengthValidation(int max) {
+  String validation_length_max(int max) {
     return 'This field must be at most $max characters long';
   }
 
   @override
-  String get yourPasswordChanged =>
-      'Your password has been changed successfully.';
-
-  @override
-  String get confirmPassword => 'Confirm Password';
-
-  @override
-  String get logout => 'Logout';
-
-  @override
-  String get getStarted => 'Get Started';
-
-  @override
-  String get rememberMe => 'Remember me';
-
-  @override
-  String get forgotPassword => 'Forgot password';
-
-  @override
-  String get backToLogin => 'Back to login';
-
-  @override
-  String get continueAction => 'Continue';
-
-  @override
-  String get signUp => 'Sign up';
-
-  @override
-  String get signIn => 'Sign in';
-
-  @override
-  String get email => 'Email';
-
-  @override
-  String get emailAddress => 'Email Address';
-
-  @override
-  String get password => 'Password';
-
-  @override
-  String get firstName => 'First Name';
-
-  @override
-  String get lastName => 'Last Name';
-
-  @override
-  String get dontHaveAccount => 'Don\'t have an account? ';
-
-  @override
-  String get alreadyHaveAccount => 'Already have an account? ';
-
-  @override
-  String get checkYourMail => 'Check your mail';
-
-  @override
-  String get enterVerificationCode =>
-      'Please enter 4 digit code sent to your mail hello**@gmail.com.';
-
-  @override
-  String get didntGetCode => 'Didn\'t get a code? ';
-
-  @override
-  String get clickToResend => 'Click to resend';
-
-  @override
-  String get didNotReceiveEmail =>
-      'Did not receive the email? Check your spam filter. or ';
-
-  @override
-  String get tryAnotherEmail => 'try another email address';
-
-  @override
-  String get learnFlutterTitle => 'Learn Flutter with comprehensive tutorials.';
-
-  @override
-  String get learnFlutterSubtitle =>
-      'Step-by-step guides for building Flutter apps.';
-
-  @override
-  String get learnFlutterDescription =>
-      'Get notifications for new tutorials and updates.';
-
-  @override
-  String get joinCommunityTitle => 'Join the Flutter community.';
-
-  @override
-  String get joinCommunitySubtitle => 'Connect with other Flutter developers.';
-
-  @override
-  String get joinCommunityDescription =>
-      'Participate in community events and discussions.';
-
-  @override
-  String get buildDeployTitle => 'Build and deploy Flutter apps easily.';
-
-  @override
-  String get buildDeploySubtitle =>
-      'Access tools and resources for app development.';
-
-  @override
-  String get buildDeployDescription =>
-      'Deploy your apps to multiple platforms with ease.';
-
-  @override
-  String passwordMinLengthValidation(String minLength) {
+  String validation_password_min_length(String minLength) {
     return 'Password must be at least $minLength characters';
   }
 
   @override
-  String get passwordNumberValidation =>
+  String get validation_password_number =>
       'Password must contain at least one number';
 
   @override
-  String get passwordLowerCaseValidation =>
+  String get validation_password_lowercase =>
       'Password must contain at least one lowercase letter';
 
   @override
-  String get passwordUpperCaseValidation =>
+  String get validation_password_uppercase =>
       'Password must contain at least one uppercase letter';
 
   @override
-  String get passwordSpecialCharValidation =>
+  String get validation_password_special_char =>
       'Password must contain at least one special character';
+
+  @override
+  String get error_network_connection =>
+      'Cannot connect. Please check your internet.';
+
+  @override
+  String get error_network_timeout => 'Connection timeout. Please try again.';
+
+  @override
+  String get error_network_generic =>
+      'Please check your internet connection and try again.';
+
+  @override
+  String get error_auth_unauthorized => 'Session expired. Please login again.';
+
+  @override
+  String get error_system_internal => 'System error. Please try again later.';
+
+  @override
+  String get error_resource_not_found => 'Not found.';
+
+  @override
+  String get error_generic => 'An error occurred';
+
+  @override
+  String get practice_question_title => 'Question';
+
+  @override
+  String practice_question_counter(int current, int total) {
+    return 'Question $current/$total';
+  }
+
+  @override
+  String practice_question_progress(int current, int total) {
+    return '$current/$total questions done';
+  }
+
+  @override
+  String get practice_question_select_answer => 'Select answer:';
+
+  @override
+  String get practice_question_enter_answer => 'Enter answer:';
+
+  @override
+  String get practice_question_answer_hint => 'Enter your answer';
+
+  @override
+  String get practice_question_check => 'Check';
+
+  @override
+  String get practice_question_hint => '💡 Hint';
+
+  @override
+  String practice_question_skill_label(String skillName) {
+    return 'Skill: $skillName';
+  }
+
+  @override
+  String get practice_question_not_found => 'Question not found';
+
+  @override
+  String get practice_question_load_error => 'Cannot load question';
+
+  @override
+  String get practice_skill_selection_title => 'Select Skill to Practice';
+
+  @override
+  String get practice_skill_selection_description =>
+      'You can select one of the following skills to improve';
+
+  @override
+  String get practice_skill_selection_info =>
+      'Select a skill to start practicing. The system will create exercises suitable for your level.';
+
+  @override
+  String get practice_skill_selection_no_weak_skills =>
+      'No weak skills. Great!';
+
+  @override
+  String get practice_skill_selection_load_error => 'Cannot load skill list';
+
+  @override
+  String get practice_skill_selection_back_to_home => 'Back to Home';
+
+  @override
+  String get practice_skill_status_weak => 'Weak';
+
+  @override
+  String get practice_skill_status_unstable => 'Unstable';
+
+  @override
+  String get practice_history_title => 'Practice History';
+
+  @override
+  String get practice_history_empty_title => 'No practice sessions yet';
+
+  @override
+  String get practice_history_empty_description =>
+      'Start learning to see your history here';
+
+  @override
+  String get practice_history_load_error => 'Cannot load history';
+
+  @override
+  String practice_card_exercises(int count) {
+    return '$count exercises';
+  }
+
+  @override
+  String practice_card_correct(int count) {
+    return 'Correct: $count';
+  }
+
+  @override
+  String practice_card_incorrect(int count) {
+    return 'Incorrect: $count';
+  }
+
+  @override
+  String practice_card_accuracy(int accuracy) {
+    return '$accuracy%';
+  }
+
+  @override
+  String practice_card_mastery(String change) {
+    return 'Mastery: $change%';
+  }
+
+  @override
+  String practice_card_mastery_positive(int change) {
+    return 'Mastery: +$change%';
+  }
+
+  @override
+  String practice_card_duration(String duration) {
+    return 'Duration: $duration';
+  }
+
+  @override
+  String practice_card_duration_seconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String practice_card_duration_minutes(int minutes) {
+    return '${minutes}p';
+  }
+
+  @override
+  String practice_card_duration_minutes_seconds(int minutes, int seconds) {
+    return '${minutes}p ${seconds}s';
+  }
+
+  @override
+  String practice_history_mastery(int level) {
+    return 'Mastery: $level%';
+  }
+
+  @override
+  String practice_history_duration(int seconds) {
+    return 'Duration: ${seconds}s';
+  }
+
+  @override
+  String difficulty_label(String level) {
+    return 'Difficulty: $level';
+  }
+
+  @override
+  String get difficulty_easy => 'Easy';
+
+  @override
+  String get difficulty_medium => 'Medium';
+
+  @override
+  String get difficulty_hard => 'Hard';
+
+  @override
+  String get difficulty_very_hard => 'Very Hard';
+
+  @override
+  String get difficulty_fair => 'Fair';
+
+  @override
+  String get learning_today_title => 'Today\'s Learning';
+
+  @override
+  String learning_difficulty_label(String level) {
+    return 'Difficulty: $level';
+  }
+
+  @override
+  String learning_skill_estimated_time(int minutes) {
+    return '~$minutes min';
+  }
 }

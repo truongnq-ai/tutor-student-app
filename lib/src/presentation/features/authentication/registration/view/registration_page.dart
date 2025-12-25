@@ -95,7 +95,7 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
     final state = ref.watch(registrationProvider);
 
     return Scaffold(
-      appBar: AppBar(title: HeadingSmallText(context.locale.signUp)),
+      appBar: AppBar(title: HeadingSmallText(context.locale.auth_signup_title)),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: context.padding.p16),
         child: Form(
@@ -135,7 +135,7 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 controller: passwordController,
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  hintText: context.locale.password,
+                  hintText: context.locale.common_field_password,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isPasswordVisible
@@ -189,11 +189,11 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 onPressed: state.isLoading ? null : _onRegister,
                 child: state.isLoading
                     ? const LoadingIndicator()
-                    : Text(context.locale.continueAction),
+                    : Text(context.locale.common_button_continue),
               ),
               LinkText(
-                text: context.locale.alreadyHaveAccount,
-                linkText: context.locale.signIn,
+                text: context.locale.auth_account_already_have,
+                linkText: context.locale.auth_signin_button,
                 onTap: () {
                   context.pushNamedAndRemoveUntil(Routes.login);
                 },

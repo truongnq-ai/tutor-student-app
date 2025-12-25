@@ -34,7 +34,7 @@ class _FormFooter extends ConsumerWidget {
                     return Checkbox(value: value, onChanged: _toggleRememberMe);
                   },
                 ),
-                Text(context.locale.rememberMe),
+                Text(context.locale.auth_login_remember_me),
               ],
             ),
           ),
@@ -44,7 +44,7 @@ class _FormFooter extends ConsumerWidget {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => _navigateToResetPassword(context),
-                child: Text(context.locale.forgotPassword),
+                child: Text(context.locale.auth_login_forgot_password),
               ),
             ),
           ),

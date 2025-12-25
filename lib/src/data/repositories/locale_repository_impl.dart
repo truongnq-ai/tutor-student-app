@@ -13,6 +13,6 @@ class LocaleRepositoryImpl extends LocaleRepository {
 
   @override
   Future<String> getLanguage() async {
-    return local.get<String>(CacheKey.language) ?? 'en';
+    return local.get<String>(CacheKey.language) ?? 'vi';
   }
 }

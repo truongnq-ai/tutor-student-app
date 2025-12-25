@@ -1,0 +1,319 @@
+{
+    "language_vietnamese": "Tiếng Việt",
+    "language_english": "English",
+    "navigation_home": "Trang chủ",
+    "navigation_profile": "Hồ sơ",
+    "auth_login_title": "Đăng nhập",
+    "auth_login_button": "Đăng nhập",
+    "auth_login_remember_me": "Ghi nhớ đăng nhập",
+    "auth_login_forgot_password": "Quên mật khẩu?",
+    "auth_signup_title": "Đăng ký",
+    "auth_signup_button": "Đăng ký",
+    "auth_signin_button": "Đăng nhập",
+    "auth_forgot_password_title": "Quên mật khẩu",
+    "auth_forgot_password_description": "Nhập email đã đăng ký và chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu.",
+    "auth_forgot_password_button": "Gửi",
+    "auth_forgot_password_back_to_login": "Quay lại đăng nhập",
+    "auth_reset_password_title": "Đặt lại mật khẩu",
+    "auth_reset_password_new_password": "Mật khẩu mới",
+    "auth_reset_password_confirm_password": "Xác nhận mật khẩu",
+    "auth_reset_password_hint": "Mật khẩu mới phải khác với các mật khẩu đã sử dụng trước đó.",
+    "auth_reset_password_button": "Đặt lại mật khẩu",
+    "auth_reset_password_success": "Mật khẩu đã được thay đổi thành công",
+    "auth_reset_password_success_message": "Mật khẩu của bạn đã được thay đổi thành công.",
+    "auth_account_dont_have": "Chưa có tài khoản? ",
+    "auth_account_already_have": "Đã có tài khoản? ",
+    "auth_verification_check_mail": "Kiểm tra email",
+    "auth_verification_enter_code": "Vui lòng nhập mã 4 chữ số đã gửi đến email {email}.",
+    "auth_verification_didnt_get_code": "Không nhận được mã? ",
+    "auth_verification_resend": "Nhấn để gửi lại",
+    "auth_verification_did_not_receive": "Không nhận được email? Kiểm tra thư mục spam. hoặc ",
+    "auth_verification_try_another_email": "thử email khác",
+    "common_field_email": "Email",
+    "common_field_email_address": "Địa chỉ email",
+    "common_field_password": "Mật khẩu",
+    "common_field_first_name": "Họ",
+    "common_field_last_name": "Tên",
+    "common_button_continue": "Tiếp tục",
+    "common_button_ok": "OK",
+    "common_button_cancel": "Huỷ",
+    "common_button_close": "Đóng",
+    "common_button_back": "Quay lại",
+    "common_button_get_started": "Bắt đầu",
+    "common_button_logout": "Đăng xuất",
+    "common_button_start_learning": "Bắt đầu học",
+    "common_button_load_more": "Tải thêm",
+    "validation_required": "Trường này là bắt buộc",
+    "validation_email_required": "Email là bắt buộc",
+    "validation_password_required": "Mật khẩu là bắt buộc",
+    "validation_email_invalid": "Vui lòng nhập địa chỉ email hợp lệ",
+    "validation_length_min": "Trường này phải có ít nhất {min} ký tự",
+    "validation_length_max": "Trường này phải có tối đa {max} ký tự",
+    "validation_password_min_length": "Mật khẩu phải có ít nhất {minLength} ký tự",
+    "validation_password_number": "Mật khẩu phải chứa ít nhất một chữ số",
+    "validation_password_lowercase": "Mật khẩu phải chứa ít nhất một chữ thường",
+    "validation_password_uppercase": "Mật khẩu phải chứa ít nhất một chữ hoa",
+    "validation_password_special_char": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+    "error_network_connection": "Không thể kết nối. Vui lòng kiểm tra internet.",
+    "error_network_timeout": "Kết nối quá lâu. Vui lòng thử lại.",
+    "error_network_generic": "Vui lòng kiểm tra kết nối internet và thử lại.",
+    "error_auth_unauthorized": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+    "error_system_internal": "Lỗi hệ thống. Vui lòng thử lại sau.",
+    "error_resource_not_found": "Không tìm thấy.",
+    "error_generic": "Có lỗi xảy ra",
+    "practice_question_title": "Câu hỏi",
+    "practice_question_counter": "Câu {current}/{total}",
+    "practice_question_progress": "{current}/{total} bài đã làm",
+    "practice_question_select_answer": "Chọn đáp án:",
+    "practice_question_enter_answer": "Nhập đáp án:",
+    "practice_question_answer_hint": "Nhập đáp án của bạn",
+    "practice_question_check": "Kiểm tra",
+    "practice_question_hint": "💡 Gợi ý",
+    "practice_question_skill_label": "Kỹ năng: {skillName}",
+    "practice_question_not_found": "Không tìm thấy câu hỏi",
+    "practice_question_load_error": "Không thể tải câu hỏi",
+    "practice_skill_selection_title": "Chọn kỹ năng để luyện tập",
+    "practice_skill_selection_description": "Bạn có thể chọn một trong các kỹ năng sau để cải thiện",
+    "practice_skill_selection_info": "Chọn một kỹ năng để bắt đầu luyện tập. Hệ thống sẽ tạo bài tập phù hợp với trình độ của bạn.",
+    "practice_skill_selection_no_weak_skills": "Không có skill yếu. Tuyệt vời!",
+    "practice_skill_selection_load_error": "Không thể tải danh sách kỹ năng",
+    "practice_skill_selection_back_to_home": "Về trang chủ",
+    "practice_skill_status_weak": "Yếu",
+    "practice_skill_status_unstable": "Chưa vững",
+    "practice_history_title": "Lịch sử luyện tập",
+    "practice_history_empty_title": "Bạn chưa có bài luyện tập nào",
+    "practice_history_empty_description": "Hãy bắt đầu học để xem lịch sử ở đây",
+    "practice_history_load_error": "Không thể tải lịch sử",
+    "practice_card_exercises": "{count} bài",
+    "practice_card_correct": "Đúng: {count}",
+    "practice_card_incorrect": "Sai: {count}",
+    "practice_card_accuracy": "{accuracy}%",
+    "practice_card_mastery": "Mastery: {change}%",
+    "practice_card_mastery_positive": "Mastery: +{change}%",
+    "practice_card_duration": "Thời gian: {duration}",
+    "practice_card_duration_seconds": "{seconds}s",
+    "practice_card_duration_minutes": "{minutes}p",
+    "practice_card_duration_minutes_seconds": "{minutes}p {seconds}s",
+    "practice_history_mastery": "Mastery: {level}%",
+    "practice_history_duration": "Thời gian: {seconds}s",
+    "difficulty_label": "Độ khó: {level}",
+    "difficulty_easy": "Dễ",
+    "difficulty_medium": "Trung bình",
+    "difficulty_hard": "Khó",
+    "difficulty_very_hard": "Rất khó",
+    "difficulty_fair": "Khá",
+    "learning_today_title": "Học hôm nay",
+    "learning_difficulty_label": "Độ khó: {level}",
+    "learning_skill_estimated_time": "~{minutes} phút",
+    "@@locale": "vi",
+    "@auth_verification_enter_code": {
+        "description": "Verification code instruction with email placeholder",
+        "placeholders": {
+            "email": {
+                "type": "String",
+                "example": "hello**@gmail.com"
+            }
+        }
+    },
+    "@validation_length_min": {
+        "description": "Minimum length validation error",
+        "placeholders": {
+            "min": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "@validation_length_max": {
+        "description": "Maximum length validation error",
+        "placeholders": {
+            "max": {
+                "type": "int",
+                "example": "20"
+            }
+        }
+    },
+    "@validation_password_min_length": {
+        "description": "Password minimum length validation",
+        "placeholders": {
+            "minLength": {
+                "type": "String",
+                "example": "8"
+            }
+        }
+    },
+    "@practice_question_counter": {
+        "description": "Question counter with current and total",
+        "placeholders": {
+            "current": {
+                "type": "int",
+                "example": "1"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_question_progress": {
+        "description": "Practice progress with current and total",
+        "placeholders": {
+            "current": {
+                "type": "int",
+                "example": "1"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_question_skill_label": {
+        "description": "Skill label with skill name",
+        "placeholders": {
+            "skillName": {
+                "type": "String",
+                "example": "Phép cộng"
+            }
+        }
+    },
+    "@practice_card_exercises": {
+        "description": "Number of exercises",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_card_correct": {
+        "description": "Correct answers count",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "8"
+            }
+        }
+    },
+    "@practice_card_incorrect": {
+        "description": "Incorrect answers count",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "@practice_card_accuracy": {
+        "description": "Accuracy percentage",
+        "placeholders": {
+            "accuracy": {
+                "type": "int",
+                "example": "80"
+            }
+        }
+    },
+    "@practice_card_mastery": {
+        "description": "Mastery change percentage",
+        "placeholders": {
+            "change": {
+                "type": "String",
+                "example": "+5"
+            }
+        }
+    },
+    "@practice_card_mastery_positive": {
+        "description": "Positive mastery change",
+        "placeholders": {
+            "change": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "@practice_card_duration": {
+        "description": "Practice duration",
+        "placeholders": {
+            "duration": {
+                "type": "String",
+                "example": "5p 30s"
+            }
+        }
+    },
+    "@practice_card_duration_seconds": {
+        "description": "Duration in seconds only",
+        "placeholders": {
+            "seconds": {
+                "type": "int",
+                "example": "30"
+            }
+        }
+    },
+    "@practice_card_duration_minutes": {
+        "description": "Duration in minutes only",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "@practice_card_duration_minutes_seconds": {
+        "description": "Duration in minutes and seconds",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "5"
+            },
+            "seconds": {
+                "type": "int",
+                "example": "30"
+            }
+        }
+    },
+    "@practice_history_mastery": {
+        "description": "Mastery level percentage",
+        "placeholders": {
+            "level": {
+                "type": "int",
+                "example": "75"
+            }
+        }
+    },
+    "@practice_history_duration": {
+        "description": "Duration in seconds",
+        "placeholders": {
+            "seconds": {
+                "type": "int",
+                "example": "120"
+            }
+        }
+    },
+    "@difficulty_label": {
+        "description": "Difficulty label with level",
+        "placeholders": {
+            "level": {
+                "type": "String",
+                "example": "Dễ"
+            }
+        }
+    },
+    "@learning_difficulty_label": {
+        "description": "Learning difficulty label",
+        "placeholders": {
+            "level": {
+                "type": "String",
+                "example": "Dễ"
+            }
+        }
+    },
+    "@learning_skill_estimated_time": {
+        "description": "Estimated time in minutes",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "15"
+            }
+        }
+    }
+}

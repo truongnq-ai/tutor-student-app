@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/weak_skill_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
@@ -31,12 +32,12 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Chọn kỹ năng để luyện tập'),
+        title: HeadingSmallText(context.locale.practice_SkillSelectionTitle),
       ),
       body: weakSkillsState.when(
         data: (weakSkills) {
           if (weakSkills.isEmpty) {
-            return _buildEmptyState(context, 'Không có skill yếu. Tuyệt vời!');
+            return _buildEmptyState(context, context.locale.practice_SkillSelectionNoWeakSkills);
           }
           return _buildContent(context, weakSkills);
         },
@@ -54,7 +55,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Bạn có thể chọn một trong các kỹ năng sau để cải thiện',
+            context.locale.practice_SkillSelectionDescription,
             style: context.textStyle.body.copyWith(
               color: context.color.text.secondary,
             ),
@@ -67,9 +68,11 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                 child: SkillCard(
                   skillName: skill.skillName,
                   masteryLevel: skill.masteryLevel,
-                  status: skill.status == 'weak' ? 'Yếu' : 'Chưa vững',
+                  status: skill.status == 'weak' 
+                      ? context.locale.practice_SkillStatusWeak 
+                      : context.locale.practice_SkillStatusUnstable,
                   questionCount: skill.questionCount,
-                  estimatedTime: '~${skill.estimatedTimeMinutes} phút',
+                  estimatedTime: context.locale.learning_SkillEstimatedTime(skill.estimatedTimeMinutes),
                   isSelected: _selectedSkillId == skill.skillId,
                   isPriority: skill.isPriority,
                   onTap: () {
@@ -94,7 +97,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                   Gap(context.spacing.s12),
                   Expanded(
                     child: Text(
-                      'Chọn một kỹ năng để bắt đầu luyện tập. Hệ thống sẽ tạo bài tập phù hợp với trình độ của bạn.',
+                      context.locale.practice_SkillSelectionInfo,
                       style: context.textStyle.bodySmall.copyWith(
                         color: const Color(0xFF2196F3),
                       ),
@@ -138,7 +141,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
             padding: EdgeInsets.symmetric(vertical: context.padding.p12),
             minimumSize: const Size(0, 56),
           ),
-          child: const Text('Bắt đầu học'),
+          child: Text(context.locale.common_ButtonStartLearning),
         ),
       ),
     );
@@ -150,7 +153,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
       icon: Icons.check_circle_outline,
       iconColor: const Color(0xFF4CAF50),
       onAction: () => context.go(Routes.todayLearningPlan),
-      actionButtonText: 'Về trang chủ',
+      actionButtonText: context.locale.practice_SkillSelectionBackToHome,
     );
   }
 
@@ -165,11 +168,11 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+      description = context.locale.error_NetworkGeneric;
     }
 
     return ErrorStateWidget(
-      title: 'Không thể tải danh sách kỹ năng',
+      title: context.locale.practice_SkillSelectionLoadError,
       description: description ?? errorMessage,
       onRetry: () {
         ref.read(weakSkillsProvider.notifier).refresh();
@@ -189,18 +192,18 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+      return context.locale.error_NetworkConnection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return 'Kết nối quá lâu. Vui lòng thử lại.';
+      return context.locale.error_NetworkTimeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+      return context.locale.error_AuthUnauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+      return context.locale.error_SystemInternal;
     }
 
     // Return original message if no mapping found, but limit length

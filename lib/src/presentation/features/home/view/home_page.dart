@@ -42,7 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(context.locale.home),
+            Text(context.locale.navigation_home),
             Gap(context.spacing.s16),
             FilledButton(
               onPressed: () {
@@ -50,7 +50,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               },
               child: state.isLoading
                   ? const LoadingIndicator()
-                  : Text(context.locale.logout),
+                  : Text(context.locale.common_button_logout),
             ),
           ],
         ),

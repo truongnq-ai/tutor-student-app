@@ -11,7 +11,7 @@ class EmailValidation extends Validation<String> {
     if (value == null) return null;
 
     if (!emailRegex.hasMatch(value)) {
-      return context.locale.validEmail;
+      return context.locale.validation_email_invalid;
     }
 
     return null;

@@ -31,11 +31,11 @@ class _NavigationShellState extends State<NavigationShell> {
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
-            label: context.locale.home,
+            label: context.locale.navigation_home,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
-            label: context.locale.profile,
+            label: context.locale.navigation_profile,
           ),
         ],
       ),

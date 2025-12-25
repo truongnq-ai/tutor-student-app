@@ -168,15 +168,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 onPressed: state.isLoading ? null : _onLogin,
                 child: state.isLoading
                     ? const LoadingIndicator()
-                    : Text(context.locale.login),
+                    : Text(context.locale.auth_login_button),
               ),
               Gap(context.spacing.s16),
               // OAuth buttons
               _buildOAuthSection(),
               Gap(context.spacing.s16),
               LinkText(
-                text: context.locale.dontHaveAccount,
-                linkText: context.locale.signUp,
+                text: context.locale.auth_account_dont_have,
+                linkText: context.locale.auth_signup_button,
                 onTap: () {
                   context.pushNamed(Routes.registration);
                 },

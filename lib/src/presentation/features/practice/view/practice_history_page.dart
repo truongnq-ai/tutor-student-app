@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/widgets/error_state_widget.dart';
@@ -39,7 +40,7 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Lịch sử luyện tập'),
+        title: HeadingSmallText(context.locale.practice_HistoryTitle),
       ),
       body: historyState.when(
         data: (data) {
@@ -87,7 +88,7 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
                           pageSize: _pageSize,
                         );
                   },
-                  child: const Text('Tải thêm'),
+                  child: Text(context.locale.common_ButtonLoadMore),
                 ),
               ),
             );
@@ -146,12 +147,12 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
           children: [
             if (masteryLevel != null)
               Text(
-                'Mastery: $masteryLevel%',
+                context.locale.practice_HistoryMastery(masteryLevel!),
                 style: context.textStyle.bodySmall,
               ),
             if (durationSec != null)
               Text(
-                'Thời gian: ${durationSec}s',
+                context.locale.practice_HistoryDuration(durationSec!),
                 style: context.textStyle.bodySmall,
               ),
           ],
@@ -166,14 +167,14 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
 
   Widget _buildEmptyState(BuildContext context) {
     return EmptyStateWidget(
-      title: 'Bạn chưa có bài luyện tập nào',
-      description: 'Hãy bắt đầu học để xem lịch sử ở đây',
+      title: context.locale.practice_HistoryEmptyTitle,
+      description: context.locale.practice_HistoryEmptyDescription,
       icon: Icons.history,
       onAction: () {
         // Navigate to skill selection or home
         // This would need to be implemented based on navigation structure
       },
-      actionButtonText: 'Bắt đầu học',
+      actionButtonText: context.locale.common_ButtonStartLearning,
     );
   }
 
@@ -188,11 +189,11 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+      description = context.locale.error_NetworkGeneric;
     }
 
     return ErrorStateWidget(
-      title: 'Không thể tải lịch sử',
+      title: context.locale.practice_HistoryLoadError,
       description: description ?? errorMessage,
       onRetry: () {
         ref.read(practiceHistoryProvider.notifier).loadHistory(
@@ -215,18 +216,18 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+      return context.locale.error_NetworkConnection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return 'Kết nối quá lâu. Vui lòng thử lại.';
+      return context.locale.error_NetworkTimeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+      return context.locale.error_AuthUnauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+      return context.locale.error_SystemInternal;
     }
 
     // Return original message if no mapping found, but limit length

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
 
 class PracticeCard extends StatelessWidget {
@@ -80,27 +81,27 @@ class PracticeCard extends StatelessWidget {
                 children: [
                   _buildStatChip(
                     context,
-                    '$totalCount bài',
+                    context.locale.practice_CardExercises(totalCount),
                     Icons.assignment,
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    'Đúng: $correctCount',
+                    context.locale.practice_CardCorrect(correctCount),
                     Icons.check,
                     color: const Color(0xFF4CAF50),
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    'Sai: ${totalCount - correctCount}',
+                    context.locale.practice_CardIncorrect(totalCount - correctCount),
                     Icons.close,
                     color: const Color(0xFFF44336),
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    '$accuracy%',
+                    context.locale.practice_CardAccuracy(accuracy),
                     Icons.bar_chart,
                   ),
                 ],
@@ -109,8 +110,8 @@ class PracticeCard extends StatelessWidget {
                 Gap(context.spacing.s8),
                 Text(
                   masteryChange! > 0
-                      ? 'Mastery: +$masteryChange%'
-                      : 'Mastery: $masteryChange%',
+                      ? context.locale.practice_CardMasteryPositive(masteryChange!)
+                      : context.locale.practice_CardMastery('$masteryChange'),
                   style: context.textStyle.bodySmall.copyWith(
                     color: masteryChange! > 0
                         ? const Color(0xFF4CAF50)
@@ -122,7 +123,7 @@ class PracticeCard extends StatelessWidget {
               if (durationSec != null) ...[
                 Gap(context.spacing.s4),
                 Text(
-                  'Thời gian: ${_formatDuration(durationSec!)}',
+                  context.locale.practice_CardDuration(_formatDuration(durationSec!)),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -172,13 +173,13 @@ class PracticeCard extends StatelessWidget {
 
   String _formatDuration(int seconds) {
     if (seconds < 60) {
-      return '${seconds}s';
+      return context.locale.practice_CardDurationSeconds(seconds);
     } else {
       final minutes = seconds ~/ 60;
       final remainingSeconds = seconds % 60;
       return remainingSeconds > 0
-          ? '${minutes}p ${remainingSeconds}s'
-          : '${minutes}p';
+          ? context.locale.practice_CardDurationMinutesSeconds(minutes, remainingSeconds)
+          : context.locale.practice_CardDurationMinutes(minutes);
     }
   }
 }
