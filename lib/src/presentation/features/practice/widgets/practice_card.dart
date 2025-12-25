@@ -81,27 +81,27 @@ class PracticeCard extends StatelessWidget {
                 children: [
                   _buildStatChip(
                     context,
-                    context.locale.practice_CardExercises(totalCount),
+                    context.locale.practice_card_exercises(totalCount),
                     Icons.assignment,
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    context.locale.practice_CardCorrect(correctCount),
+                    context.locale.practice_card_correct(correctCount),
                     Icons.check,
                     color: const Color(0xFF4CAF50),
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    context.locale.practice_CardIncorrect(totalCount - correctCount),
+                    context.locale.practice_card_incorrect(totalCount - correctCount),
                     Icons.close,
                     color: const Color(0xFFF44336),
                   ),
                   Gap(context.spacing.s8),
                   _buildStatChip(
                     context,
-                    context.locale.practice_CardAccuracy(accuracy),
+                    context.locale.practice_card_accuracy(accuracy),
                     Icons.bar_chart,
                   ),
                 ],
@@ -110,8 +110,8 @@ class PracticeCard extends StatelessWidget {
                 Gap(context.spacing.s8),
                 Text(
                   masteryChange! > 0
-                      ? context.locale.practice_CardMasteryPositive(masteryChange!)
-                      : context.locale.practice_CardMastery('$masteryChange'),
+                      ? context.locale.practice_card_mastery_positive(masteryChange!)
+                      : context.locale.practice_card_mastery('$masteryChange'),
                   style: context.textStyle.bodySmall.copyWith(
                     color: masteryChange! > 0
                         ? const Color(0xFF4CAF50)
@@ -123,7 +123,7 @@ class PracticeCard extends StatelessWidget {
               if (durationSec != null) ...[
                 Gap(context.spacing.s4),
                 Text(
-                  context.locale.practice_CardDuration(_formatDuration(context, durationSec!)),
+                  context.locale.practice_card_duration(_formatDuration(context, durationSec!)),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -173,13 +173,13 @@ class PracticeCard extends StatelessWidget {
 
   String _formatDuration(BuildContext context, int seconds) {
     if (seconds < 60) {
-      return context.locale.practice_CardDurationSeconds(seconds);
+      return context.locale.practice_card_duration_seconds(seconds);
     } else {
       final minutes = seconds ~/ 60;
       final remainingSeconds = seconds % 60;
       return remainingSeconds > 0
-          ? context.locale.practice_CardDurationMinutesSeconds(minutes, remainingSeconds)
-          : context.locale.practice_CardDurationMinutes(minutes);
+          ? context.locale.practice_card_duration_minutes_seconds(minutes, remainingSeconds)
+          : context.locale.practice_card_duration_minutes(minutes);
     }
   }
 }

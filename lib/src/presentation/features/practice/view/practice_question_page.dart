@@ -121,7 +121,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    context.locale.practice_QuestionCounter(questionNumber, totalQuestions),
+                    context.locale.practice_question_counter(questionNumber, totalQuestions),
                     style: context.textStyle.bodySmall,
                   ),
                   DifficultyBadge(difficulty: difficultyLevel),
@@ -131,7 +131,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
               LinearProgressWithLabel(
                 progress: progress,
                 height: 4,
-                label: context.locale.practice_QuestionProgress(questionNumber, totalQuestions),
+                label: context.locale.practice_question_progress(questionNumber, totalQuestions),
               ),
             ],
           ),
@@ -190,7 +190,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                       _showHintDialog(context, question.hints!.first);
                     },
                     icon: const Icon(Icons.lightbulb_outline),
-                    label: Text(context.locale.practice_QuestionHint),
+                    label: Text(context.locale.practice_question_hint),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 44),
                     ),
@@ -217,7 +217,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
             children: [
               if (question.skillName != null)
                 Text(
-                  context.locale.practice_QuestionSkillLabel(question.skillName ?? ''),
+                  context.locale.practice_question_skill_label(question.skillName ?? ''),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -243,7 +243,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
-                      : Text(context.locale.practice_QuestionCheck),
+                      : Text(context.locale.practice_question_check),
                 ),
               ),
             ],
@@ -259,7 +259,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          context.locale.practice_QuestionSelectAnswer,
+          context.locale.practice_question_select_answer,
           style: context.textStyle.body.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -334,7 +334,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          context.locale.practice_QuestionEnterAnswer,
+          context.locale.practice_question_enter_answer,
           style: context.textStyle.body.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -343,7 +343,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
         TextField(
           controller: _answerController,
           decoration: InputDecoration(
-            hintText: context.locale.practice_QuestionAnswerHint,
+            hintText: context.locale.practice_question_answer_hint,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -392,7 +392,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            ref.read(practiceSubmissionProvider).error?.toString() ?? context.locale.error_Generic,
+            ref.read(practiceSubmissionProvider).error?.toString() ?? context.locale.error_generic,
           ),
         ),
       );
@@ -403,12 +403,12 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(context.locale.practice_QuestionHint),
+        title: Text(context.locale.practice_question_hint),
         content: Text(hint),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.locale.common_ButtonClose),
+            child: Text(context.locale.common_button_close),
           ),
         ],
       ),
@@ -417,10 +417,10 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
 
   Widget _buildEmptyState(BuildContext context) {
     return EmptyStateWidget(
-      title: context.locale.practice_QuestionNotFound,
+      title: context.locale.practice_question_not_found,
       icon: Icons.help_outline,
       onAction: () => context.pop(),
-      actionButtonText: context.locale.common_ButtonBack,
+      actionButtonText: context.locale.common_button_back,
     );
   }
 
@@ -435,11 +435,11 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = context.locale.error_NetworkGeneric;
+      description = context.locale.error_network_generic;
     }
 
     return ErrorStateWidget(
-      title: context.locale.practice_QuestionLoadError,
+      title: context.locale.practice_question_load_error,
       description: description ?? errorMessage,
       onRetry: () {
         if (widget.questionId != null) {
@@ -464,22 +464,22 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return context.locale.error_NetworkConnection;
+      return context.locale.error_network_connection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return context.locale.error_NetworkTimeout;
+      return context.locale.error_network_timeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return context.locale.error_AuthUnauthorized;
+      return context.locale.error_auth_unauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return context.locale.error_SystemInternal;
+      return context.locale.error_system_internal;
     }
     if (message.toLowerCase().contains('not found') ||
         message.toLowerCase().contains('404')) {
-      return context.locale.practice_QuestionNotFound;
+      return context.locale.practice_question_not_found;
     }
 
     // Return original message if no mapping found, but limit length

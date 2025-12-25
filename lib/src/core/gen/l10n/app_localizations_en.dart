@@ -383,4 +383,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String learning_skill_estimated_time(int minutes) {
     return '~$minutes min';
   }
+
+  @override
+  String get auth_reset_password_create_new => 'Create New Password';
+
+  @override
+  String get auth_verification_enter_code_label => 'Enter verification code';
+
+  @override
+  String get auth_forgot_password_enter_associated_email =>
+      'Enter the email associated with your account';
+
+  @override
+  String get onboarding_learn_flutter_title => 'Learn Flutter';
+
+  @override
+  String get onboarding_learn_flutter_subtitle => 'Build amazing apps';
+
+  @override
+  String get onboarding_learn_flutter_description =>
+      'Learn Flutter and build beautiful, fast apps for multiple platforms.';
+
+  @override
+  String get onboarding_join_community_title => 'Join Community';
+
+  @override
+  String get onboarding_join_community_subtitle => 'Connect with developers';
+
+  @override
+  String get onboarding_join_community_description =>
+      'Join our community of developers and share your knowledge.';
+
+  @override
+  String get onboarding_build_deploy_title => 'Build & Deploy';
+
+  @override
+  String get onboarding_build_deploy_subtitle => 'Ship your apps';
+
+  @override
+  String get onboarding_build_deploy_description =>
+      'Build and deploy your apps to production with ease.';
 }

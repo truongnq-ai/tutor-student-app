@@ -315,5 +315,17 @@
                 "example": "15"
             }
         }
-    }
+    },
+    "auth_reset_password_create_new": "Create New Password",
+    "auth_verification_enter_code_label": "Enter verification code",
+    "auth_forgot_password_enter_associated_email": "Enter the email associated with your account",
+    "onboarding_learn_flutter_title": "Learn Flutter",
+    "onboarding_learn_flutter_subtitle": "Build amazing apps",
+    "onboarding_learn_flutter_description": "Learn Flutter and build beautiful, fast apps for multiple platforms.",
+    "onboarding_join_community_title": "Join Community",
+    "onboarding_join_community_subtitle": "Connect with developers",
+    "onboarding_join_community_description": "Join our community of developers and share your knowledge.",
+    "onboarding_build_deploy_title": "Build & Deploy",
+    "onboarding_build_deploy_subtitle": "Ship your apps",
+    "onboarding_build_deploy_description": "Build and deploy your apps to production with ease."
 }

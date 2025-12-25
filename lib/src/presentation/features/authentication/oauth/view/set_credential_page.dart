@@ -134,7 +134,7 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                 controller: passwordController,
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  hintText: context.locale.password,
+                  hintText: context.locale.common_field_password,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isPasswordVisible
@@ -188,7 +188,7 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                 onPressed: _isLoading ? null : _onSubmit,
                 child: _isLoading
                     ? const LoadingIndicator()
-                    : Text(context.locale.continueAction),
+                    : Text(context.locale.common_button_continue),
               ),
             ],
           ),

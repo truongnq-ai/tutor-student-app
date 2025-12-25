@@ -386,4 +386,44 @@ class AppLocalizationsVi extends AppLocalizations {
   String learning_skill_estimated_time(int minutes) {
     return '~$minutes phút';
   }
+
+  @override
+  String get auth_reset_password_create_new => 'Tạo mật khẩu mới';
+
+  @override
+  String get auth_verification_enter_code_label => 'Nhập mã xác minh';
+
+  @override
+  String get auth_forgot_password_enter_associated_email =>
+      'Nhập email đã đăng ký';
+
+  @override
+  String get onboarding_learn_flutter_title => 'Học Flutter';
+
+  @override
+  String get onboarding_learn_flutter_subtitle => 'Xây dựng ứng dụng tuyệt vời';
+
+  @override
+  String get onboarding_learn_flutter_description =>
+      'Học Flutter và xây dựng ứng dụng đẹp, nhanh cho nhiều nền tảng.';
+
+  @override
+  String get onboarding_join_community_title => 'Tham gia cộng đồng';
+
+  @override
+  String get onboarding_join_community_subtitle => 'Kết nối với nhà phát triển';
+
+  @override
+  String get onboarding_join_community_description =>
+      'Tham gia cộng đồng nhà phát triển và chia sẻ kiến thức của bạn.';
+
+  @override
+  String get onboarding_build_deploy_title => 'Xây dựng & Triển khai';
+
+  @override
+  String get onboarding_build_deploy_subtitle => 'Phát hành ứng dụng';
+
+  @override
+  String get onboarding_build_deploy_description =>
+      'Xây dựng và triển khai ứng dụng của bạn lên production một cách dễ dàng.';
 }

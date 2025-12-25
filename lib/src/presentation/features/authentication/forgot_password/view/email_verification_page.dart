@@ -14,7 +14,7 @@ class EmailVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: HeadingSmallText(context.locale.checkYourMail)),
+      appBar: AppBar(title: HeadingSmallText(context.locale.auth_verification_check_mail)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -24,24 +24,24 @@ class EmailVerificationPage extends StatelessWidget {
                 Gap(context.spacing.s24),
                 FlutterLogo(size: context.spacing.s200),
                 Gap(context.spacing.s24),
-                HeadingLargeText(context.locale.checkYourMail),
+                HeadingLargeText(context.locale.auth_verification_check_mail),
                 Gap(context.spacing.s8),
                 BodyMediumText.secondary(
-                  context.locale.enterVerificationCode,
+                  context.locale.auth_verification_enter_code_label,
                   textAlign: TextAlign.center,
                 ),
                 Gap(context.spacing.s32),
                 const _OTPField(),
                 LinkText(
-                  text: context.locale.didntGetCode,
-                  linkText: context.locale.clickToResend,
+                  text: context.locale.auth_verification_didnt_get_code,
+                  linkText: context.locale.auth_verification_resend,
                   onTap: () {
                     //TODO: Implement this
                   },
                 ),
                 LinkText(
-                  text: context.locale.didNotReceiveEmail,
-                  linkText: context.locale.tryAnotherEmail,
+                  text: context.locale.auth_verification_did_not_receive,
+                  linkText: context.locale.auth_verification_try_another_email,
                   onTap: () {
                     context.pushReplacementNamed(Routes.resetPassword);
                   },

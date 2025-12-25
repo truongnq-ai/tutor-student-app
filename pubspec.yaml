@@ -36,6 +36,7 @@ dependencies:
   shimmer: ^3.0.0
   # State management
   flutter_riverpod: ^2.5.1
+  equatable: ^2.0.5
   # Navigation
   go_router: ^17.0.1
   # Cache & Database

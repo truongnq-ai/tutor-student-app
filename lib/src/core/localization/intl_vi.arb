@@ -315,5 +315,17 @@
                 "example": "15"
             }
         }
-    }
+    },
+    "auth_reset_password_create_new": "Tạo mật khẩu mới",
+    "auth_verification_enter_code_label": "Nhập mã xác minh",
+    "auth_forgot_password_enter_associated_email": "Nhập email đã đăng ký",
+    "onboarding_learn_flutter_title": "Học Flutter",
+    "onboarding_learn_flutter_subtitle": "Xây dựng ứng dụng tuyệt vời",
+    "onboarding_learn_flutter_description": "Học Flutter và xây dựng ứng dụng đẹp, nhanh cho nhiều nền tảng.",
+    "onboarding_join_community_title": "Tham gia cộng đồng",
+    "onboarding_join_community_subtitle": "Kết nối với nhà phát triển",
+    "onboarding_join_community_description": "Tham gia cộng đồng nhà phát triển và chia sẻ kiến thức của bạn.",
+    "onboarding_build_deploy_title": "Xây dựng & Triển khai",
+    "onboarding_build_deploy_subtitle": "Phát hành ứng dụng",
+    "onboarding_build_deploy_description": "Xây dựng và triển khai ứng dụng của bạn lên production một cách dễ dàng."
 }

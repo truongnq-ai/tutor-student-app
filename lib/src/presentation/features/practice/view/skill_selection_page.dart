@@ -32,12 +32,12 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: HeadingSmallText(context.locale.practice_SkillSelectionTitle),
+        title: HeadingSmallText(context.locale.practice_skill_selection_title),
       ),
       body: weakSkillsState.when(
         data: (weakSkills) {
           if (weakSkills.isEmpty) {
-            return _buildEmptyState(context, context.locale.practice_SkillSelectionNoWeakSkills);
+            return _buildEmptyState(context, context.locale.practice_skill_selection_no_weak_skills);
           }
           return _buildContent(context, weakSkills);
         },
@@ -55,7 +55,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.locale.practice_SkillSelectionDescription,
+            context.locale.practice_skill_selection_description,
             style: context.textStyle.body.copyWith(
               color: context.color.text.secondary,
             ),
@@ -69,10 +69,10 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                   skillName: skill.skillName,
                   masteryLevel: skill.masteryLevel,
                   status: skill.status == 'weak' 
-                      ? context.locale.practice_SkillStatusWeak 
-                      : context.locale.practice_SkillStatusUnstable,
+                      ? context.locale.practice_skill_status_weak 
+                      : context.locale.practice_skill_status_unstable,
                   questionCount: skill.questionCount,
-                  estimatedTime: context.locale.learning_SkillEstimatedTime(skill.estimatedTimeMinutes),
+                  estimatedTime: context.locale.learning_skill_estimated_time(skill.estimatedTimeMinutes),
                   isSelected: _selectedSkillId == skill.skillId,
                   isPriority: skill.isPriority,
                   onTap: () {
@@ -97,7 +97,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                   Gap(context.spacing.s12),
                   Expanded(
                     child: Text(
-                      context.locale.practice_SkillSelectionInfo,
+                      context.locale.practice_skill_selection_info,
                       style: context.textStyle.bodySmall.copyWith(
                         color: const Color(0xFF2196F3),
                       ),
@@ -141,7 +141,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
             padding: EdgeInsets.symmetric(vertical: context.padding.p12),
             minimumSize: const Size(0, 56),
           ),
-          child: Text(context.locale.common_ButtonStartLearning),
+          child: Text(context.locale.common_button_start_learning),
         ),
       ),
     );
@@ -153,7 +153,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
       icon: Icons.check_circle_outline,
       iconColor: const Color(0xFF4CAF50),
       onAction: () => context.go(Routes.todayLearningPlan),
-      actionButtonText: context.locale.practice_SkillSelectionBackToHome,
+      actionButtonText: context.locale.practice_skill_selection_back_to_home,
     );
   }
 
@@ -168,11 +168,11 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = context.locale.error_NetworkGeneric;
+      description = context.locale.error_network_generic;
     }
 
     return ErrorStateWidget(
-      title: context.locale.practice_SkillSelectionLoadError,
+      title: context.locale.practice_skill_selection_load_error,
       description: description ?? errorMessage,
       onRetry: () {
         ref.read(weakSkillsProvider.notifier).refresh();
@@ -192,18 +192,18 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return context.locale.error_NetworkConnection;
+      return context.locale.error_network_connection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return context.locale.error_NetworkTimeout;
+      return context.locale.error_network_timeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return context.locale.error_AuthUnauthorized;
+      return context.locale.error_auth_unauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return context.locale.error_SystemInternal;
+      return context.locale.error_system_internal;
     }
 
     // Return original message if no mapping found, but limit length

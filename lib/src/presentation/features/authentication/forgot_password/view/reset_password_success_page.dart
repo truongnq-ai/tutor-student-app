@@ -35,12 +35,12 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                 ),
                 Gap(context.spacing.s24),
                 HeadingLargeText(
-                  context.locale.passwordChangeSuccess,
+                  context.locale.auth_reset_password_success,
                   textAlign: TextAlign.center,
                 ),
                 Gap(context.spacing.s8),
                 BodyMediumText.secondary(
-                  context.locale.yourPasswordChanged,
+                  context.locale.auth_reset_password_success_message,
                   textAlign: TextAlign.center,
                 ),
                 Gap(context.spacing.s32),
@@ -48,7 +48,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                   onPressed: () {
                     context.pop();
                   },
-                  child: Text(context.locale.backToLogin),
+                  child: Text(context.locale.auth_forgot_password_back_to_login),
                 ),
               ],
             ),

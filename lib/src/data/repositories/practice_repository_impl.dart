@@ -78,9 +78,9 @@ final class PracticeRepositoryImpl extends PracticeRepository {
   }) async {
     try {
       final response = await practiceService.getPracticeHistory(
-        page: page,
-        pageSize: pageSize,
-        skillId: skillId,
+        page,
+        pageSize,
+        skillId,
       );
 
       final responseJson = response.data;
@@ -112,6 +112,53 @@ final class PracticeRepositoryImpl extends PracticeRepository {
       return ResponseObject.error(
         errorCode: '5001',
         errorDetail: 'Failed to get practice history: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<ResponseObject<SessionInfoEntity>> getSessionInfo(String sessionId) async {
+    try {
+      final response = await practiceService.getSessionInfo(sessionId);
+
+      final responseJson = response.data;
+      if (responseJson == null) {
+        return ResponseObject.error(
+          errorCode: '5001',
+          errorDetail: 'Invalid response format',
+        );
+      }
+
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
+
+      final responseData = ResponseObject<Map<String, dynamic>>.fromJson(
+        responseMap,
+        (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+      );
+
+      if (!responseData.isSuccess) {
+        return ResponseObject.error(
+          errorCode: responseData.errorCode ?? '5001',
+          errorDetail: responseData.errorDetail ?? 'Failed to get session info',
+        );
+      }
+
+      final sessionData = responseData.data;
+      if (sessionData == null) {
+        return ResponseObject.error(
+          errorCode: '5001',
+          errorDetail: 'No data in response',
+        );
+      }
+
+      final sessionInfo = SessionInfoModel.fromJson(sessionData);
+      return ResponseObject.success(sessionInfo);
+    } catch (e) {
+      return ResponseObject.error(
+        errorCode: '5001',
+        errorDetail: 'Failed to get session info: ${e.toString()}',
       );
     }
   }

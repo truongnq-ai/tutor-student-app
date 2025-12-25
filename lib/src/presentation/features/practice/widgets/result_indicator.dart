@@ -56,7 +56,7 @@ class ResultIndicator extends StatelessWidget {
               encouragement!,
               style: context.textStyle.body.copyWith(
                 fontStyle: FontStyle.italic,
-                color: context.color.textSecondary,
+                color: context.color.text.secondary,
               ),
               textAlign: TextAlign.center,
             ),

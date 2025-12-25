@@ -106,7 +106,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage>
                     onPressed: () {
                       context.goNamed(Routes.login);
                     },
-                    child: Text(context.locale.getStarted),
+                    child: Text(context.locale.common_button_get_started),
                   ),
                 ),
               ],

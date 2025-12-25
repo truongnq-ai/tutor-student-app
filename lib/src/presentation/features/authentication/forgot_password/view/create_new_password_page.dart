@@ -13,7 +13,7 @@ class CreateNewPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: HeadingSmallText(context.locale.createNewPassword)),
+      appBar: AppBar(title: HeadingSmallText(context.locale.auth_reset_password_create_new)),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: context.padding.p16),
@@ -21,7 +21,7 @@ class CreateNewPasswordPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gap(context.spacing.s16),
-              BodyMediumText.secondary(context.locale.createNewPasswordHint),
+              BodyMediumText.secondary(context.locale.auth_reset_password_hint),
               Gap(context.spacing.s16),
               const _Form(),
               Gap(context.spacing.s32),
@@ -29,7 +29,7 @@ class CreateNewPasswordPage extends StatelessWidget {
                 onPressed: () {
                   context.pushReplacementNamed(Routes.resetPasswordSuccess);
                 },
-                child: Text(context.locale.resetPassword),
+                child: Text(context.locale.auth_reset_password_button),
               ),
             ],
           ),
@@ -56,7 +56,7 @@ class _FormState extends State<_Form> {
         TextFormField(
           obscureText: _isObscure,
           decoration: InputDecoration(
-            hintText: context.locale.newPassword,
+            hintText: context.locale.auth_reset_password_new_password,
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -70,7 +70,7 @@ class _FormState extends State<_Form> {
         Gap(context.spacing.s16),
         TextFormField(
           decoration: InputDecoration(
-            hintText: context.locale.confirmPassword,
+            hintText: context.locale.auth_reset_password_confirm_password,
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {

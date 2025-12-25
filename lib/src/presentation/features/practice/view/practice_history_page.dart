@@ -40,7 +40,7 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: HeadingSmallText(context.locale.practice_HistoryTitle),
+        title: HeadingSmallText(context.locale.practice_history_title),
       ),
       body: historyState.when(
         data: (data) {
@@ -88,7 +88,7 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
                           pageSize: _pageSize,
                         );
                   },
-                  child: Text(context.locale.common_ButtonLoadMore),
+                  child: Text(context.locale.common_button_load_more),
                 ),
               ),
             );
@@ -147,12 +147,12 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
           children: [
             if (masteryLevel != null)
               Text(
-                context.locale.practice_HistoryMastery(masteryLevel!),
+                context.locale.practice_history_mastery(masteryLevel!),
                 style: context.textStyle.bodySmall,
               ),
             if (durationSec != null)
               Text(
-                context.locale.practice_HistoryDuration(durationSec!),
+                context.locale.practice_history_duration(durationSec!),
                 style: context.textStyle.bodySmall,
               ),
           ],
@@ -167,14 +167,14 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
 
   Widget _buildEmptyState(BuildContext context) {
     return EmptyStateWidget(
-      title: context.locale.practice_HistoryEmptyTitle,
-      description: context.locale.practice_HistoryEmptyDescription,
+      title: context.locale.practice_history_empty_title,
+      description: context.locale.practice_history_empty_description,
       icon: Icons.history,
       onAction: () {
         // Navigate to skill selection or home
         // This would need to be implemented based on navigation structure
       },
-      actionButtonText: context.locale.common_ButtonStartLearning,
+      actionButtonText: context.locale.common_button_start_learning,
     );
   }
 
@@ -189,11 +189,11 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = context.locale.error_NetworkGeneric;
+      description = context.locale.error_network_generic;
     }
 
     return ErrorStateWidget(
-      title: context.locale.practice_HistoryLoadError,
+      title: context.locale.practice_history_load_error,
       description: description ?? errorMessage,
       onRetry: () {
         ref.read(practiceHistoryProvider.notifier).loadHistory(
@@ -216,18 +216,18 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return context.locale.error_NetworkConnection;
+      return context.locale.error_network_connection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return context.locale.error_NetworkTimeout;
+      return context.locale.error_network_timeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return context.locale.error_AuthUnauthorized;
+      return context.locale.error_auth_unauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return context.locale.error_SystemInternal;
+      return context.locale.error_system_internal;
     }
 
     // Return original message if no mapping found, but limit length

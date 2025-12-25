@@ -733,6 +733,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'~{minutes} min'**
   String learning_skill_estimated_time(int minutes);
+
+  /// No description provided for @auth_reset_password_create_new.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Password'**
+  String get auth_reset_password_create_new;
+
+  /// No description provided for @auth_verification_enter_code_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter verification code'**
+  String get auth_verification_enter_code_label;
+
+  /// No description provided for @auth_forgot_password_enter_associated_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email associated with your account'**
+  String get auth_forgot_password_enter_associated_email;
+
+  /// No description provided for @onboarding_learn_flutter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn Flutter'**
+  String get onboarding_learn_flutter_title;
+
+  /// No description provided for @onboarding_learn_flutter_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build amazing apps'**
+  String get onboarding_learn_flutter_subtitle;
+
+  /// No description provided for @onboarding_learn_flutter_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn Flutter and build beautiful, fast apps for multiple platforms.'**
+  String get onboarding_learn_flutter_description;
+
+  /// No description provided for @onboarding_join_community_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Join Community'**
+  String get onboarding_join_community_title;
+
+  /// No description provided for @onboarding_join_community_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect with developers'**
+  String get onboarding_join_community_subtitle;
+
+  /// No description provided for @onboarding_join_community_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Join our community of developers and share your knowledge.'**
+  String get onboarding_join_community_description;
+
+  /// No description provided for @onboarding_build_deploy_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Build & Deploy'**
+  String get onboarding_build_deploy_title;
+
+  /// No description provided for @onboarding_build_deploy_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ship your apps'**
+  String get onboarding_build_deploy_subtitle;
+
+  /// No description provided for @onboarding_build_deploy_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Build and deploy your apps to production with ease.'**
+  String get onboarding_build_deploy_description;
 }
 
 class _AppLocalizationsDelegate

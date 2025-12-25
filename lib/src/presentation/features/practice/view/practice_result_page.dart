@@ -16,11 +16,17 @@ import '../widgets/result_indicator.dart';
 class PracticeResultPage extends ConsumerStatefulWidget {
   final String questionId;
   final bool isCorrect;
+  final int? questionNumber;
+  final int? totalQuestions;
+  final String? sessionId;
 
   const PracticeResultPage({
     super.key,
     required this.questionId,
     required this.isCorrect,
+    this.questionNumber,
+    this.totalQuestions,
+    this.sessionId,
   });
 
   @override
@@ -103,7 +109,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                         Text(
                           'Giải thích: ${_getExplanation(question.problemText!, question.finalAnswer!)}',
                           style: context.textStyle.bodySmall.copyWith(
-                            color: context.color.textSecondary,
+                            color: context.color.text.secondary,
                           ),
                         ),
                       ],
@@ -180,13 +186,13 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Đã làm: $completedQuestions/$totalQuestions bài',
+                      'Đã làm: ${widget.questionNumber ?? 1}/${widget.totalQuestions ?? 8} bài',
                       style: context.textStyle.body,
                     ),
                     Text(
-                      'Tiến độ: ${(progress * 100).toStringAsFixed(1)}%',
+                      'Tiến độ: ${((widget.questionNumber ?? 1) / (widget.totalQuestions ?? 8) * 100).toStringAsFixed(1)}%',
                       style: context.textStyle.bodySmall.copyWith(
-                        color: context.color.textSecondary,
+                        color: context.color.text.secondary,
                       ),
                     ),
                   ],
@@ -208,9 +214,9 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                   if (questionNumber >= totalQuestions) {
                     // Navigate to session complete
                     // Calculate session stats from all questions in session
-                    final sessionQuestions = ref.read(questionSessionProvider(sessionId: widget.sessionId ?? '').notifier).state.value ?? [];
-                    final correctCount = sessionQuestions.where((q) => q.isCorrect == true).length;
-                    final wrongCount = sessionQuestions.length - correctCount;
+                    // TODO: Get session questions from provider when available
+                    final correctCount = widget.isCorrect ? 1 : 0;
+                    final wrongCount = widget.isCorrect ? 0 : 1;
                     
                     context.pushReplacement(
                       '${Routes.practiceSessionComplete}?'
