@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../domain/entities/weak_skill_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/loading_indicator.dart';
+import '../../../core/widgets/empty_state_widget.dart';
+import '../../../core/widgets/error_state_widget.dart';
+import '../../../core/widgets/skeleton/skeleton_list.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/weak_skills_provider.dart';
 import '../widgets/skill_card.dart';
@@ -38,7 +40,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
           }
           return _buildContent(context, weakSkills);
         },
-        loading: () => const Center(child: LoadingIndicator()),
+        loading: () => const SkeletonList(itemCount: 3, itemHeight: 100),
         error: (error, stackTrace) => _buildErrorState(context, error),
       ),
       bottomNavigationBar: _buildBottomButton(context),
@@ -54,7 +56,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
           Text(
             'Bạn có thể chọn một trong các kỹ năng sau để cải thiện',
             style: context.textStyle.body.copyWith(
-              color: context.color.textSecondary,
+              color: context.color.text.secondary,
             ),
           ),
           Gap(context.spacing.s24),
@@ -143,63 +145,69 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
   }
 
   Widget _buildEmptyState(BuildContext context, String message) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.check_circle_outline, size: 64, color: Color(0xFF4CAF50)),
-            Gap(context.spacing.s16),
-            Text(
-              message,
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () => context.go(Routes.todayLearningPlan),
-              child: const Text('Về trang chủ'),
-            ),
-          ],
-        ),
-      ),
+    return EmptyStateWidget(
+      title: message,
+      icon: Icons.check_circle_outline,
+      iconColor: const Color(0xFF4CAF50),
+      onAction: () => context.go(Routes.todayLearningPlan),
+      actionButtonText: 'Về trang chủ',
     );
   }
 
   Widget _buildErrorState(BuildContext context, Object error) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Color(0xFFF44336)),
-            Gap(context.spacing.s16),
-            Text(
-              'Không thể tải danh sách kỹ năng',
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s8),
-            Text(
-              error.toString(),
-              style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () {
-                ref.read(weakSkillsProvider.notifier).refresh();
-              },
-              child: const Text('Thử lại'),
-            ),
-          ],
-        ),
-      ),
+    // Extract user-friendly error message
+    String errorMessage = _getUserFriendlyErrorMessage(error);
+    String? description;
+
+    // Check if it's a network error
+    final errorString = error.toString().toLowerCase();
+    if (errorString.contains('network') ||
+        errorString.contains('connection') ||
+        errorString.contains('timeout') ||
+        errorString.contains('socket')) {
+      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+    }
+
+    return ErrorStateWidget(
+      title: 'Không thể tải danh sách kỹ năng',
+      description: description ?? errorMessage,
+      onRetry: () {
+        ref.read(weakSkillsProvider.notifier).refresh();
+      },
     );
+  }
+
+  String _getUserFriendlyErrorMessage(Object error) {
+    final errorString = error.toString();
+    
+    // Remove technical prefixes
+    String message = errorString
+        .replaceFirst('Exception: ', '')
+        .replaceFirst('Error: ', '')
+        .trim();
+
+    // Map common error patterns to user-friendly messages
+    if (message.toLowerCase().contains('network') ||
+        message.toLowerCase().contains('connection')) {
+      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+    }
+    if (message.toLowerCase().contains('timeout')) {
+      return 'Kết nối quá lâu. Vui lòng thử lại.';
+    }
+    if (message.toLowerCase().contains('401') ||
+        message.toLowerCase().contains('unauthorized')) {
+      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+    }
+    if (message.toLowerCase().contains('500') ||
+        message.toLowerCase().contains('internal')) {
+      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+    }
+
+    // Return original message if no mapping found, but limit length
+    if (message.length > 100) {
+      message = '${message.substring(0, 100)}...';
+    }
+    return message;
   }
 }
 

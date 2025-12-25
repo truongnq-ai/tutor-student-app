@@ -5,10 +5,15 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/empty_state_widget.dart';
+import '../../../core/widgets/error_state_widget.dart';
 import '../../../core/widgets/loading_indicator.dart';
+import '../../../core/widgets/skeleton/skeleton_question.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../../learning/widgets/progress_indicator.dart';
 import '../riverpod/practice_provider.dart';
 import '../riverpod/question_provider.dart';
+import '../widgets/difficulty_badge.dart';
 
 class PracticeQuestionPage extends ConsumerStatefulWidget {
   final String? questionId;
@@ -75,7 +80,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
               Text(
                 'Câu ${widget.questionNumber}/${widget.totalQuestions}',
                 style: context.textStyle.bodySmall.copyWith(
-                  color: context.color.textSecondary,
+                  color: context.color.text.secondary,
                 ),
               ),
           ],
@@ -88,7 +93,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
           }
           return _buildContent(context, question);
         },
-        loading: () => const Center(child: LoadingIndicator()),
+        loading: () => const SkeletonQuestion(),
         error: (error, stackTrace) => _buildErrorState(context, error),
       ),
     );
@@ -115,18 +120,17 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$questionNumber/$totalQuestions bài đã làm',
+                    'Câu $questionNumber/$totalQuestions',
                     style: context.textStyle.bodySmall,
                   ),
-                  _buildDifficultyBadge(context, difficultyLevel),
+                  DifficultyBadge(difficulty: difficultyLevel),
                 ],
               ),
               Gap(context.spacing.s8),
-              LinearProgressIndicator(
-                value: progress,
-                minHeight: 4,
-                backgroundColor: const Color(0xFFE0E0E0),
-                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
+              LinearProgressWithLabel(
+                progress: progress,
+                height: 4,
+                label: '$questionNumber/$totalQuestions bài đã làm',
               ),
             ],
           ),
@@ -214,22 +218,30 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
                 Text(
                   'Skill: ${question.skillName}',
                   style: context.textStyle.bodySmall.copyWith(
-                    color: context.color.textSecondary,
+                    color: context.color.text.secondary,
                   ),
                 ),
               Gap(context.spacing.s8),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: _selectedAnswer != null || _answerController.text.isNotEmpty
-                      ? () => _onSubmitAnswer(context, question)
-                      : null,
+                  onPressed: (ref.watch(practiceSubmissionProvider).isLoading ||
+                          (_selectedAnswer == null && _answerController.text.isEmpty))
+                      ? null
+                      : () => _onSubmitAnswer(context, question),
                   style: FilledButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                     minimumSize: const Size(0, 56),
                   ),
                   child: ref.watch(practiceSubmissionProvider).isLoading
-                      ? const LoadingIndicator()
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
                       : const Text('Kiểm tra'),
                 ),
               ),
@@ -240,44 +252,6 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     );
   }
 
-  Widget _buildDifficultyBadge(BuildContext context, int difficulty) {
-    final (text, color) = _getDifficultyInfo(difficulty);
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: context.padding.p12,
-        vertical: context.padding.p8,
-      ),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color, width: 1),
-      ),
-      child: Text(
-        'Độ khó: $text',
-        style: context.textStyle.bodySmall.copyWith(
-          color: color,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  (String, Color) _getDifficultyInfo(int difficulty) {
-    switch (difficulty) {
-      case 1:
-        return ('Dễ', const Color(0xFF4CAF50));
-      case 2:
-        return ('Trung bình', const Color(0xFF2196F3));
-      case 3:
-        return ('Trung bình', const Color(0xFFFF9800));
-      case 4:
-        return ('Khó', const Color(0xFFFF9800));
-      case 5:
-        return ('Rất khó', const Color(0xFFF44336));
-      default:
-        return ('Trung bình', const Color(0xFFFF9800));
-    }
-  }
 
   Widget _buildMultipleChoiceOptions(BuildContext context, List<String> options) {
     return Column(
@@ -441,65 +415,77 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.help_outline, size: 64, color: Color(0xFFBDBDBD)),
-            Gap(context.spacing.s16),
-            Text(
-              'Không tìm thấy câu hỏi',
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () => context.pop(),
-              child: const Text('Quay lại'),
-            ),
-          ],
-        ),
-      ),
+    return EmptyStateWidget(
+      title: 'Không tìm thấy câu hỏi',
+      icon: Icons.help_outline,
+      onAction: () => context.pop(),
+      actionButtonText: 'Quay lại',
     );
   }
 
   Widget _buildErrorState(BuildContext context, Object error) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Color(0xFFF44336)),
-            Gap(context.spacing.s16),
-            Text(
-              'Không thể tải câu hỏi',
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s8),
-            Text(
-              error.toString(),
-              style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () {
-                if (widget.questionId != null) {
-                  ref.read(currentQuestionProvider.notifier).loadQuestion(widget.questionId!);
-                }
-              },
-              child: const Text('Thử lại'),
-            ),
-          ],
-        ),
-      ),
+    // Extract user-friendly error message
+    String errorMessage = _getUserFriendlyErrorMessage(error);
+    String? description;
+
+    // Check if it's a network error
+    final errorString = error.toString().toLowerCase();
+    if (errorString.contains('network') ||
+        errorString.contains('connection') ||
+        errorString.contains('timeout') ||
+        errorString.contains('socket')) {
+      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+    }
+
+    return ErrorStateWidget(
+      title: 'Không thể tải câu hỏi',
+      description: description ?? errorMessage,
+      onRetry: () {
+        if (widget.questionId != null) {
+          ref.read(currentQuestionProvider.notifier).loadQuestion(widget.questionId!);
+        } else if (widget.skillId != null) {
+          // Try to reload from skill
+          // This would need to be implemented in the provider
+        }
+      },
     );
+  }
+
+  String _getUserFriendlyErrorMessage(Object error) {
+    final errorString = error.toString();
+    
+    // Remove technical prefixes
+    String message = errorString
+        .replaceFirst('Exception: ', '')
+        .replaceFirst('Error: ', '')
+        .trim();
+
+    // Map common error patterns to user-friendly messages
+    if (message.toLowerCase().contains('network') ||
+        message.toLowerCase().contains('connection')) {
+      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+    }
+    if (message.toLowerCase().contains('timeout')) {
+      return 'Kết nối quá lâu. Vui lòng thử lại.';
+    }
+    if (message.toLowerCase().contains('401') ||
+        message.toLowerCase().contains('unauthorized')) {
+      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+    }
+    if (message.toLowerCase().contains('500') ||
+        message.toLowerCase().contains('internal')) {
+      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+    }
+    if (message.toLowerCase().contains('not found') ||
+        message.toLowerCase().contains('404')) {
+      return 'Không tìm thấy câu hỏi.';
+    }
+
+    // Return original message if no mapping found, but limit length
+    if (message.length > 100) {
+      message = '${message.substring(0, 100)}...';
+    }
+    return message;
   }
 }
 

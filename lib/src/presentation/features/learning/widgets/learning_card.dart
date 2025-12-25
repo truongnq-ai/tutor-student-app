@@ -50,7 +50,7 @@ class LearningCard extends StatelessWidget {
               Text(
                 recommendedSkill!.recommendationReason!,
                 style: context.textStyle.bodySmall.copyWith(
-                  color: context.color.textSecondary,
+                  color: context.color.text.secondary,
                 ),
               ),
               Gap(context.spacing.s16),

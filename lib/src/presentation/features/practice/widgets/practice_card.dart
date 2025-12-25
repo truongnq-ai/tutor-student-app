@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 class PracticeCard extends StatelessWidget {
   final String skillName;
@@ -59,7 +58,7 @@ class PracticeCard extends StatelessWidget {
                   Text(
                     dateFormat.format(createdAt),
                     style: context.textStyle.bodySmall.copyWith(
-                      color: context.color.textSecondary,
+                      color: context.color.text.secondary,
                     ),
                   ),
                   Icon(
@@ -72,7 +71,7 @@ class PracticeCard extends StatelessWidget {
               Gap(context.spacing.s8),
               Text(
                 skillName,
-                style: context.textStyle.body.copyWith(
+                style: context.textStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -125,7 +124,7 @@ class PracticeCard extends StatelessWidget {
                 Text(
                   'Thời gian: ${_formatDuration(durationSec!)}',
                   style: context.textStyle.bodySmall.copyWith(
-                    color: context.color.textSecondary,
+                    color: context.color.text.secondary,
                   ),
                 ),
               ],
@@ -148,7 +147,7 @@ class PracticeCard extends StatelessWidget {
         vertical: context.padding.p4,
       ),
       decoration: BoxDecoration(
-        color: (color ?? context.color.textSecondary).withOpacity(0.1),
+        color: (color ?? context.color.text.secondary).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -157,13 +156,13 @@ class PracticeCard extends StatelessWidget {
           Icon(
             icon,
             size: 14,
-            color: color ?? context.color.textSecondary,
+            color: color ?? context.color.text.secondary,
           ),
           Gap(context.spacing.s4),
           Text(
             label,
             style: context.textStyle.bodySmall.copyWith(
-              color: color ?? context.color.textSecondary,
+              color: color ?? context.color.text.secondary,
             ),
           ),
         ],

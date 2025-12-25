@@ -6,9 +6,13 @@ import 'package:intl/intl.dart';
 
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/loading_indicator.dart';
+import '../../../core/widgets/empty_state_widget.dart';
+import '../../../core/widgets/error_state_widget.dart';
+import '../../../core/widgets/skeleton/skeleton_list.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/learning_plan_provider.dart';
+import '../widgets/learning_card.dart';
+import '../widgets/progress_indicator.dart';
 
 class TodayLearningPlanPage extends ConsumerStatefulWidget {
   const TodayLearningPlanPage({super.key});
@@ -42,7 +46,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
             Text(
               dateFormat.format(now),
               style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
+                color: context.color.text.secondary,
               ),
             ),
           ],
@@ -55,7 +59,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
           }
           return _buildContent(context, learningPlan);
         },
-        loading: () => const Center(child: LoadingIndicator()),
+        loading: () => const SkeletonList(itemCount: 3, itemHeight: 200),
         error: (error, stackTrace) => _buildErrorState(context, error),
       ),
     );
@@ -76,7 +80,16 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
 
           // Main Learning Card
           if (recommendedSkill != null) ...[
-            _buildLearningCard(context, recommendedSkill),
+            LearningCard(
+              recommendedSkill: recommendedSkill,
+              onStartLearning: () {
+                if (recommendedSkill.skillId != null) {
+                  context.push(
+                    '${Routes.practiceQuestion}?skillId=${recommendedSkill.skillId}',
+                  );
+                }
+              },
+            ),
             Gap(context.spacing.s24),
           ],
 
@@ -103,26 +116,10 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
             // Circular Progress
             Row(
               children: [
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        value: overallMastery / 100,
-                        strokeWidth: 8,
-                        backgroundColor: const Color(0xFFE0E0E0),
-                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
-                      ),
-                      Text(
-                        '${overallMastery.toInt()}%',
-                        style: context.textStyle.headingSmall.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                CircularProgressWithLabel(
+                  progress: overallMastery / 100,
+                  size: 80,
+                  strokeWidth: 8,
                 ),
                 Gap(context.spacing.s16),
                 Expanded(
@@ -161,65 +158,6 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
     );
   }
 
-  Widget _buildLearningCard(BuildContext context, recommendedSkill) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const HeadingSmallText('Học hôm nay'),
-            Gap(context.spacing.s16),
-            if (recommendedSkill.skillName != null) ...[
-              Text(
-                recommendedSkill.skillName!,
-                style: context.textStyle.headingSmall.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Gap(context.spacing.s8),
-            ],
-            // Mastery level (if available)
-            if (recommendedSkill.difficultyLevel != null) ...[
-              Text(
-                'Độ khó: ${_getDifficultyText(recommendedSkill.difficultyLevel!)}',
-                style: context.textStyle.bodySmall,
-              ),
-              Gap(context.spacing.s8),
-            ],
-            if (recommendedSkill.recommendationReason != null) ...[
-              Text(
-                recommendedSkill.recommendationReason!,
-                style: context.textStyle.bodySmall.copyWith(
-                  color: context.color.textSecondary,
-                ),
-              ),
-              Gap(context.spacing.s16),
-            ],
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () {
-                  // Navigate to practice question screen
-                  if (recommendedSkill.skillId != null) {
-                    context.push(
-                      '${Routes.practiceQuestion}?skillId=${recommendedSkill.skillId}',
-                    );
-                  }
-                },
-                style: FilledButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: context.padding.p12),
-                  minimumSize: const Size(0, 48),
-                ),
-                child: const Text('Bắt đầu học'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildWeekProgressSection(BuildContext context) {
     return Card(
@@ -244,7 +182,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
             Text(
               '42 bài đã làm',
               style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
+                color: context.color.text.secondary,
               ),
             ),
           ],
@@ -254,90 +192,72 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.school_outlined, size: 64, color: Color(0xFFBDBDBD)),
-            Gap(context.spacing.s16),
-            Text(
-              'Chưa có lộ trình hôm nay',
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s8),
-            Text(
-              'Hãy bắt đầu học để xem lộ trình của bạn!',
-              style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () {
-                ref.read(learningPlanProvider.notifier).loadTodayPlan();
-              },
-              child: const Text('Bắt đầu học'),
-            ),
-          ],
-        ),
-      ),
+    return EmptyStateWidget(
+      title: 'Chưa có lộ trình hôm nay',
+      description: 'Hãy bắt đầu học để xem lộ trình của bạn!',
+      icon: Icons.school_outlined,
+      onAction: () {
+        ref.read(learningPlanProvider.notifier).loadTodayPlan();
+      },
+      actionButtonText: 'Bắt đầu học',
     );
   }
 
   Widget _buildErrorState(BuildContext context, Object error) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(context.padding.p24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Color(0xFFF44336)),
-            Gap(context.spacing.s16),
-            Text(
-              'Không thể tải lộ trình học tập',
-              style: context.textStyle.headingSmall,
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s8),
-            Text(
-              error.toString(),
-              style: context.textStyle.bodySmall.copyWith(
-                color: context.color.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Gap(context.spacing.s24),
-            FilledButton(
-              onPressed: () {
-                ref.read(learningPlanProvider.notifier).loadTodayPlan();
-              },
-              child: const Text('Thử lại'),
-            ),
-          ],
-        ),
-      ),
+    // Extract user-friendly error message
+    String errorMessage = _getUserFriendlyErrorMessage(error);
+    String? description;
+
+    // Check if it's a network error
+    final errorString = error.toString().toLowerCase();
+    if (errorString.contains('network') ||
+        errorString.contains('connection') ||
+        errorString.contains('timeout') ||
+        errorString.contains('socket')) {
+      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+    }
+
+    return ErrorStateWidget(
+      title: 'Không thể tải lộ trình học tập',
+      description: description ?? errorMessage,
+      onRetry: () {
+        ref.read(learningPlanProvider.notifier).loadTodayPlan();
+      },
     );
   }
 
-  String _getDifficultyText(int difficulty) {
-    switch (difficulty) {
-      case 1:
-        return 'Dễ';
-      case 2:
-        return 'Trung bình';
-      case 3:
-        return 'Khá';
-      case 4:
-        return 'Khó';
-      case 5:
-        return 'Rất khó';
-      default:
-        return 'Trung bình';
+  String _getUserFriendlyErrorMessage(Object error) {
+    final errorString = error.toString();
+    
+    // Remove technical prefixes
+    String message = errorString
+        .replaceFirst('Exception: ', '')
+        .replaceFirst('Error: ', '')
+        .trim();
+
+    // Map common error patterns to user-friendly messages
+    if (message.toLowerCase().contains('network') ||
+        message.toLowerCase().contains('connection')) {
+      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
     }
+    if (message.toLowerCase().contains('timeout')) {
+      return 'Kết nối quá lâu. Vui lòng thử lại.';
+    }
+    if (message.toLowerCase().contains('401') ||
+        message.toLowerCase().contains('unauthorized')) {
+      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+    }
+    if (message.toLowerCase().contains('500') ||
+        message.toLowerCase().contains('internal')) {
+      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+    }
+
+    // Return original message if no mapping found, but limit length
+    if (message.length > 100) {
+      message = '${message.substring(0, 100)}...';
+    }
+    return message;
   }
+
 }
 
