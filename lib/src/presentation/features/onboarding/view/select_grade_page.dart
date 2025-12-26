@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -63,7 +64,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Chọn lớp học'),
+        title: HeadingSmallText(context.locale.onboarding_select_grade_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -81,7 +82,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                     Gap(context.spacing.s32),
                     // Header
                     Text(
-                      'Bạn đang học lớp mấy?',
+                      context.locale.onboarding_select_grade_header,
                       style: context.textStyle.headingLarge.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -135,7 +136,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     ),
                                     child: Text(
-                                      'Thử lại',
+                                      context.locale.onboarding_select_grade_button_retry,
                                       style: context.textStyle.bodyMedium.copyWith(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -155,8 +156,8 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                     // Grade selection cards
                     _GradeCard(
                       grade: 6,
-                      title: 'Lớp 6',
-                      description: 'Chương trình Toán lớp 6',
+                      title: context.locale.onboarding_grade_6_title,
+                      description: context.locale.onboarding_grade_6_description,
                       icon: Icons.school,
                       isSelected: selectedGrade == 6,
                       onTap: () {
@@ -166,8 +167,8 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                     Gap(context.spacing.s16),
                     _GradeCard(
                       grade: 7,
-                      title: 'Lớp 7',
-                      description: 'Chương trình Toán lớp 7',
+                      title: context.locale.onboarding_grade_7_title,
+                      description: context.locale.onboarding_grade_7_description,
                       icon: Icons.school,
                       isSelected: selectedGrade == 7,
                       onTap: () {
@@ -213,7 +214,7 @@ class _SelectGradePageState extends ConsumerState<SelectGradePage> {
                   child: isLoading
                       ? const LoadingIndicator()
                       : Text(
-                          'Tiếp tục',
+                          context.locale.common_button_continue,
                           style: context.textStyle.bodyLarge.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

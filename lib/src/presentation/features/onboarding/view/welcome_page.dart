@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
@@ -57,7 +58,7 @@ class WelcomePage extends ConsumerWidget {
                 Gap(context.spacing.s32),
                 // Title
                 Text(
-                  'Chào mừng đến với Tutor!',
+                  context.locale.onboarding_welcome_title,
                   textAlign: TextAlign.center,
                   style: context.textStyle.headingLarge.copyWith(
                     fontSize: 24,
@@ -69,7 +70,7 @@ class WelcomePage extends ConsumerWidget {
                 Gap(context.spacing.s16),
                 // Subtitle
                 Text(
-                  'Gia sư Toán AI cá nhân hoá cho bạn',
+                  context.locale.onboarding_welcome_subtitle,
                   textAlign: TextAlign.center,
                   style: context.textStyle.bodyLarge.copyWith(
                     fontSize: 16,
@@ -101,7 +102,7 @@ class WelcomePage extends ConsumerWidget {
                       ),
                       const Gap(8),
                       Text(
-                        'Dùng thử miễn phí 7 ngày - Đầy đủ tính năng',
+                        context.locale.onboarding_welcome_trial_badge,
                         style: context.textStyle.bodyMedium.copyWith(
                           fontSize: 14,
                           color: const Color(0xFFFF9800),
@@ -130,7 +131,7 @@ class WelcomePage extends ConsumerWidget {
                       elevation: 2,
                     ),
                     child: Text(
-                      'Dùng thử ngay',
+                      context.locale.onboarding_welcome_button_try_now,
                       style: context.textStyle.bodyLarge.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -161,7 +162,7 @@ class WelcomePage extends ConsumerWidget {
                       ),
                     ),
                     child: Text(
-                      'Tìm hiểu thêm',
+                      context.locale.onboarding_welcome_button_learn_more,
                       style: context.textStyle.bodyLarge.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -173,8 +174,8 @@ class WelcomePage extends ConsumerWidget {
                 Gap(context.spacing.s32),
                 // Footer link
                 LinkText(
-                  text: 'Đã có tài khoản? ',
-                  linkText: 'Đăng nhập',
+                  text: context.locale.onboarding_welcome_already_have_account,
+                  linkText: context.locale.onboarding_welcome_login_link,
                   onTap: () {
                     context.go(Routes.authEntry);
                   },

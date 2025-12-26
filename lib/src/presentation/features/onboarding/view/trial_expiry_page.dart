@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -88,11 +89,11 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
             if (errorMessage.contains('quá nhiều yêu cầu') || 
                 errorMessage.contains('Rate limit')) {
               setState(() {
-                _errorMessage = '⚠️ Bạn đã gửi quá 3 lần hôm nay. Vui lòng thử lại vào ngày mai.';
+                _errorMessage = context.locale.onboarding_trial_expiry_error_rate_limit;
               });
             } else if (errorMessage.contains('tìm thấy trial')) {
               setState(() {
-                _errorMessage = 'Không tìm thấy trial. Vui lòng thử lại.';
+                _errorMessage = context.locale.onboarding_trial_expiry_error_trial_not_found;
               });
             } else {
               setState(() {
@@ -105,15 +106,15 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
     });
   }
 
-  String? _validatePhone(String? value) {
+  String? _validatePhone(BuildContext context, String? value) {
     if (value == null || value.isEmpty) {
-      return 'Vui lòng nhập số điện thoại phụ huynh';
+      return context.locale.onboarding_trial_expiry_phone_validation_required;
     }
 
     // Vietnamese phone number format: 10 digits, starts with 0
     final phoneRegex = RegExp(r'^0[0-9]{9}$');
     if (!phoneRegex.hasMatch(value)) {
-      return 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam (10 số).';
+      return context.locale.onboarding_trial_expiry_phone_validation_format;
     }
 
     return null;
@@ -127,7 +128,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF9E6), // Warm yellow
       appBar: AppBar(
-        title: const HeadingSmallText('Liên kết phụ huynh'),
+        title: HeadingSmallText(context.locale.onboarding_trial_expiry_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -170,7 +171,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
               Gap(context.spacing.s32),
               // Title
               Text(
-                'Thời gian dùng thử đã kết thúc!',
+                context.locale.onboarding_trial_expiry_header,
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(
                   fontSize: 24,
@@ -182,7 +183,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
               Gap(context.spacing.s16),
               // Description
               Text(
-                'Bạn đã hoàn thành 7 ngày dùng thử. Để tiếp tục học, bạn cần liên kết với tài khoản phụ huynh',
+                context.locale.onboarding_trial_expiry_description,
                 textAlign: TextAlign.center,
                 style: context.textStyle.bodyLarge.copyWith(
                   fontSize: 16,
@@ -209,7 +210,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bạn đã làm được:',
+                      context.locale.onboarding_trial_expiry_achievement_title,
                       style: context.textStyle.bodyMedium.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -224,21 +225,21 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                           child: _AchievementItem(
                             icon: '📚',
                             value: '$_totalExercises',
-                            label: 'bài tập',
+                            label: context.locale.onboarding_trial_expiry_achievement_exercises,
                           ),
                         ),
                         Expanded(
                           child: _AchievementItem(
                             icon: '🎯',
                             value: '$_skillsLearned',
-                            label: 'skill đã học',
+                            label: context.locale.onboarding_trial_expiry_achievement_skills,
                           ),
                         ),
                         Expanded(
                           child: _AchievementItem(
                             icon: '🔥',
                             value: '$_streakDays',
-                            label: 'ngày liên tiếp',
+                            label: context.locale.onboarding_trial_expiry_achievement_streak,
                           ),
                         ),
                       ],
@@ -269,7 +270,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                     Gap(context.spacing.s8),
                     Expanded(
                       child: Text(
-                        'Dữ liệu học tập của bạn sẽ được giữ lại khi liên kết',
+                        context.locale.onboarding_trial_expiry_note,
                         style: context.textStyle.bodyMedium.copyWith(
                           fontSize: 14,
                           height: 1.43, // 20px / 14px
@@ -290,9 +291,9 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                   LengthLimitingTextInputFormatter(10),
                 ],
                 decoration: InputDecoration(
-                  labelText: 'Nhập số điện thoại phụ huynh',
-                  hintText: '0912345678',
-                  helperText: 'Ví dụ: 0912345678',
+                  labelText: context.locale.onboarding_trial_expiry_phone_label,
+                  hintText: context.locale.onboarding_trial_expiry_phone_hint,
+                  helperText: context.locale.onboarding_trial_expiry_phone_helper,
                   prefixIcon: const Icon(Icons.phone),
                   errorText: _errorMessage,
                   border: OutlineInputBorder(
@@ -303,7 +304,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                     vertical: context.padding.p14,
                   ),
                 ),
-                validator: _validatePhone,
+                validator: (value) => _validatePhone(context, value),
                 onChanged: (_) {
                   if (_errorMessage != null) {
                     setState(() => _errorMessage = null);
@@ -364,7 +365,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                   child: isLoading
                       ? const LoadingIndicator()
                       : Text(
-                          'Gửi mã OTP',
+                          context.locale.onboarding_trial_expiry_button_send_otp,
                           style: context.textStyle.bodyLarge.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -377,7 +378,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
               // Footer note
               Center(
                 child: Text(
-                  'Mã OTP sẽ được gửi đến số điện thoại của phụ huynh',
+                  context.locale.onboarding_trial_expiry_footer_note,
                   textAlign: TextAlign.center,
                   style: context.textStyle.bodySmall.copyWith(
                     fontSize: 12,
@@ -393,7 +394,7 @@ class _TrialExpiryPageState extends ConsumerState<TrialExpiryPage> {
                     // Navigate to link token flow (if implemented)
                   },
                   child: Text(
-                    'Hoặc nhận mã liên kết',
+                    context.locale.onboarding_trial_expiry_alternative_link,
                     style: context.textStyle.bodyMedium.copyWith(
                       fontSize: 14,
                       color: const Color(0xFF2196F3),

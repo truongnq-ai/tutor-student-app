@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../riverpod/trial_provider.dart';
@@ -51,11 +52,11 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
     }
   }
 
-  void _copyToClipboard(String text, String label) {
+  void _copyToClipboard(BuildContext context, String text, String label) {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Đã sao chép $label'),
+        content: Text(context.locale.onboarding_linking_success_copy_success(label)),
         duration: const Duration(seconds: 2),
         backgroundColor: const Color(0xFF4CAF50),
       ),
@@ -74,7 +75,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               Gap(context.spacing.s48),
               // Success icon
               Semantics(
-                label: 'Liên kết thành công',
+                label: context.locale.onboarding_linking_success_title,
                 child: Container(
                   width: 64,
                   height: 64,
@@ -92,7 +93,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               Gap(context.spacing.s24),
               // Title
               Text(
-                'Liên kết thành công!',
+                context.locale.onboarding_linking_success_title,
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(
                   fontSize: 24,
@@ -104,7 +105,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               Gap(context.spacing.s16),
               // Description
               Text(
-                'Tài khoản của bạn đã được liên kết với phụ huynh. Dữ liệu học tập trong 7 ngày dùng thử đã được giữ lại.',
+                context.locale.onboarding_linking_success_description,
                 textAlign: TextAlign.center,
                 style: context.textStyle.bodyLarge.copyWith(
                   fontSize: 16,
@@ -128,7 +129,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '✅ Dữ liệu đã được lưu:',
+                      context.locale.onboarding_linking_success_data_saved_title,
                       style: context.textStyle.bodyMedium.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -143,21 +144,21 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                           child: _DataItem(
                             icon: '📚',
                             value: '$_totalExercises',
-                            label: 'bài tập',
+                            label: context.locale.onboarding_linking_success_data_exercises,
                           ),
                         ),
                         Expanded(
                           child: _DataItem(
                             icon: '🎯',
                             value: '$_skillsLearned',
-                            label: 'skill',
+                            label: context.locale.onboarding_linking_success_data_skills,
                           ),
                         ),
                         Expanded(
                           child: _DataItem(
                             icon: '🔥',
                             value: '$_streakDays',
-                            label: 'ngày',
+                            label: context.locale.onboarding_linking_success_data_days,
                           ),
                         ),
                       ],
@@ -168,7 +169,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
               Gap(context.spacing.s24),
               // Information card
               Semantics(
-                label: 'Thông tin đăng nhập cho phụ huynh',
+                label: context.locale.onboarding_linking_success_parent_info_title,
                 child: Container(
                   padding: EdgeInsets.all(context.padding.p16),
                   decoration: BoxDecoration(
@@ -183,7 +184,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Thông tin đăng nhập cho phụ huynh:',
+                        context.locale.onboarding_linking_success_parent_info_title,
                       style: context.textStyle.bodyMedium.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -195,22 +196,30 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                       // Username
                       if (_username != null && _username!.isNotEmpty)
                         _InfoField(
-                          label: 'Tên đăng nhập:',
+                          label: context.locale.onboarding_linking_success_parent_username_label,
                           value: _username!,
-                          onCopy: () => _copyToClipboard(_username!, 'tên đăng nhập'),
+                          onCopy: () => _copyToClipboard(
+                            context,
+                            _username!,
+                            context.locale.onboarding_linking_success_parent_username_label.replaceFirst(': ', ''),
+                          ),
                         ),
                       if (_username != null && _username!.isNotEmpty)
                         Gap(context.spacing.s12),
                       // Password
                       if (_password != null && _password!.isNotEmpty) ...[
                         _InfoField(
-                          label: 'Mật khẩu:',
+                          label: context.locale.onboarding_linking_success_parent_password_label,
                           value: _password!,
-                          onCopy: () => _copyToClipboard(_password!, 'mật khẩu'),
+                          onCopy: () => _copyToClipboard(
+                            context,
+                            _password!,
+                            context.locale.onboarding_linking_success_parent_password_label.replaceFirst(': ', ''),
+                          ),
                         ),
                         Gap(context.spacing.s8),
                         Text(
-                          'Mật khẩu tạm thời, vui lòng đổi sau khi đăng nhập',
+                          context.locale.onboarding_linking_success_parent_password_note,
                           style: context.textStyle.bodySmall.copyWith(
                             fontSize: 12,
                             height: 1.33, // 16px / 12px
@@ -223,9 +232,13 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                       // Dashboard link
                       if (_dashboardLink != null && _dashboardLink!.isNotEmpty)
                         _InfoField(
-                          label: 'Truy cập dashboard:',
+                          label: context.locale.onboarding_linking_success_parent_dashboard_label,
                           value: _dashboardLink!,
-                          onCopy: () => _copyToClipboard(_dashboardLink!, 'liên kết'),
+                          onCopy: () => _copyToClipboard(
+                            context,
+                            _dashboardLink!,
+                            context.locale.onboarding_linking_success_parent_dashboard_label.replaceFirst(': ', ''),
+                          ),
                           isLink: true,
                         ),
                     ],
@@ -251,7 +264,7 @@ class _LinkingSuccessPageState extends ConsumerState<LinkingSuccessPage> {
                     elevation: 2,
                   ),
                   child: Text(
-                    'Hoàn tất',
+                    context.locale.onboarding_linking_success_button_complete,
                     style: context.textStyle.bodyLarge.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -368,8 +381,8 @@ class _InfoField extends StatelessWidget {
               ),
             ),
             Gap(context.spacing.s8),
-            Semantics(
-              label: 'Sao chép $label',
+              Semantics(
+              label: context.locale.onboarding_linking_success_copy_success(label),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(

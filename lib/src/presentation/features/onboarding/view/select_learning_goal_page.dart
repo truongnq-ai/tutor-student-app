@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -76,7 +77,7 @@ class _SelectLearningGoalPageState
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Mục tiêu học tập'),
+        title: HeadingSmallText(context.locale.onboarding_select_goal_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -94,7 +95,7 @@ class _SelectLearningGoalPageState
                     Gap(context.spacing.s32),
                     // Header
                     Text(
-                      'Mục tiêu học tập của bạn là gì?',
+                      context.locale.onboarding_select_goal_header,
                       style: context.textStyle.headingLarge.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -148,7 +149,7 @@ class _SelectLearningGoalPageState
                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     ),
                                     child: Text(
-                                      'Thử lại',
+                                      context.locale.onboarding_select_goal_button_retry,
                                       style: context.textStyle.bodyMedium.copyWith(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -168,8 +169,8 @@ class _SelectLearningGoalPageState
                     // Learning goal cards
                     _LearningGoalCard(
                       goalId: 'follow_curriculum',
-                      title: 'Học theo chương',
-                      description: 'Học đúng tiến độ chương trình',
+                      title: context.locale.onboarding_goal_follow_curriculum_title,
+                      description: context.locale.onboarding_goal_follow_curriculum_description,
                       icon: Icons.menu_book,
                       isSelected: _selectedGoals.contains('follow_curriculum'),
                       onTap: () => _toggleGoal('follow_curriculum'),
@@ -177,8 +178,8 @@ class _SelectLearningGoalPageState
                     Gap(context.spacing.s12),
                     _LearningGoalCard(
                       goalId: 'strengthen_weakness',
-                      title: 'Củng cố kiến thức còn yếu',
-                      description: 'Tập trung vào phần bạn chưa vững',
+                      title: context.locale.onboarding_goal_strengthen_weakness_title,
+                      description: context.locale.onboarding_goal_strengthen_weakness_description,
                       icon: Icons.track_changes,
                       isSelected:
                           _selectedGoals.contains('strengthen_weakness'),
@@ -187,8 +188,8 @@ class _SelectLearningGoalPageState
                     Gap(context.spacing.s12),
                     _LearningGoalCard(
                       goalId: 'exam_preparation',
-                      title: 'Ôn tập cho bài kiểm tra',
-                      description: 'Chuẩn bị cho kỳ thi sắp tới',
+                      title: context.locale.onboarding_goal_exam_preparation_title,
+                      description: context.locale.onboarding_goal_exam_preparation_description,
                       icon: Icons.calendar_today,
                       isSelected: _selectedGoals.contains('exam_preparation'),
                       onTap: () => _toggleGoal('exam_preparation'),
@@ -233,7 +234,7 @@ class _SelectLearningGoalPageState
                   child: isLoading
                       ? const LoadingIndicator()
                       : Text(
-                          'Bắt đầu học',
+                          context.locale.onboarding_select_goal_button_start,
                           style: context.textStyle.bodyLarge.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -352,7 +353,9 @@ class _LearningGoalCard extends StatelessWidget {
                 top: 0,
                 right: 0,
                 child: Semantics(
-                  label: isSelected ? 'Đã chọn' : 'Chưa chọn',
+                  label: isSelected
+                      ? context.locale.onboarding_select_goal_semantics_selected
+                      : context.locale.onboarding_select_goal_semantics_not_selected,
                   child: Container(
                     width: 24,
                     height: 24,

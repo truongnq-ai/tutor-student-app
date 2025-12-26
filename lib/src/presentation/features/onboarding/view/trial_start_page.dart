@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
@@ -55,7 +56,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Bắt đầu dùng thử'),
+        title: HeadingSmallText(context.locale.onboarding_trial_start_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -108,7 +109,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             child: Text(
-                              'Thử lại',
+                              context.locale.onboarding_trial_start_button_retry,
                               style: context.textStyle.bodyMedium.copyWith(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -153,7 +154,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
             Gap(context.spacing.s32),
             // Title
             Text(
-              'Bắt đầu dùng thử miễn phí!',
+              context.locale.onboarding_trial_start_header,
               textAlign: TextAlign.center,
               style: context.textStyle.headingLarge.copyWith(
                 fontSize: 24,
@@ -165,7 +166,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
             Gap(context.spacing.s16),
             // Description
             Text(
-              'Bạn có 7 ngày để trải nghiệm đầy đủ tính năng của Tutor',
+              context.locale.onboarding_trial_start_description,
               textAlign: TextAlign.center,
               style: context.textStyle.bodyLarge.copyWith(
                 fontSize: 16,
@@ -193,22 +194,22 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                 children: [
                   _FeatureItem(
                     icon: '✅',
-                    text: 'Giải bài Toán không giới hạn (3-5 lượt/ngày)',
+                    text: context.locale.onboarding_trial_feature_unlimited_math,
                   ),
                   Gap(context.spacing.s12),
                   _FeatureItem(
                     icon: '✅',
-                    text: 'Lộ trình học hằng ngày',
+                    text: context.locale.onboarding_trial_feature_daily_plan,
                   ),
                   Gap(context.spacing.s12),
                   _FeatureItem(
                     icon: '✅',
-                    text: 'Luyện tập cá nhân hoá',
+                    text: context.locale.onboarding_trial_feature_personalized_practice,
                   ),
                   Gap(context.spacing.s12),
                   _FeatureItem(
                     icon: '✅',
-                    text: 'Mini test kiểm tra kiến thức',
+                    text: context.locale.onboarding_trial_feature_mini_test,
                   ),
                 ],
               ),
@@ -232,7 +233,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Thông tin dùng thử',
+                    context.locale.onboarding_trial_info_title,
                     style: context.textStyle.headingMedium.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -242,17 +243,17 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                   ),
                   Gap(context.spacing.s16),
                   _InfoRow(
-                    label: 'Thời gian:',
-                    value: '7 ngày',
+                    label: context.locale.onboarding_trial_info_duration_label,
+                    value: context.locale.onboarding_trial_info_duration_value,
                   ),
                   Gap(context.spacing.s8),
                   _InfoRow(
-                    label: 'Bắt đầu:',
+                    label: context.locale.onboarding_trial_info_start_label,
                     value: '${now.day}/${now.month}/${now.year}',
                   ),
                   Gap(context.spacing.s8),
                   _InfoRow(
-                    label: 'Kết thúc:',
+                    label: context.locale.onboarding_trial_info_end_label,
                     value: '${endDate.day}/${endDate.month}/${endDate.year}',
                   ),
                 ],
@@ -281,7 +282,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                   Gap(context.spacing.s8),
                   Expanded(
                     child: Text(
-                      'Dữ liệu học tập sẽ được lưu lại khi bạn liên kết với phụ huynh',
+                      context.locale.onboarding_trial_info_note,
                       style: context.textStyle.bodyMedium.copyWith(
                         fontSize: 14,
                         color: const Color(0xFF212121),
@@ -310,7 +311,7 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
                 child: isLoading
                     ? const LoadingIndicator()
                     : Text(
-                        'Bắt đầu',
+                        context.locale.onboarding_trial_start_button,
                         style: context.textStyle.bodyLarge.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -323,8 +324,8 @@ class _TrialStartPageState extends ConsumerState<TrialStartPage> {
             // Link "Đã có tài khoản? Đăng nhập"
             Center(
               child: LinkText(
-                text: 'Đã có tài khoản? ',
-                linkText: 'Đăng nhập',
+                text: context.locale.onboarding_trial_start_already_have_account,
+                linkText: context.locale.onboarding_trial_start_login_link,
                 onTap: () {
                   context.go(Routes.authEntry);
                 },

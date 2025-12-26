@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../domain/entities/session_info_entity.dart';
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/error_state_widget.dart';
@@ -34,7 +35,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
   Widget build(BuildContext context) {
     final sessionId = widget.sessionId ?? '';
     if (sessionId.isEmpty) {
-      return _buildErrorState(context, 'Session ID không hợp lệ');
+      return _buildErrorState(context, context.locale.practice_session_error_invalid_id);
     }
 
     final sessionInfoState = ref.watch(sessionInfoProvider(sessionId: sessionId));
@@ -42,12 +43,12 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Tiếp tục luyện tập'),
+        title: HeadingSmallText(context.locale.practice_session_resume_title),
       ),
       body: sessionInfoState.when(
         data: (sessionInfo) {
           if (sessionInfo == null) {
-            return _buildErrorState(context, 'Không tìm thấy session');
+            return _buildErrorState(context, context.locale.practice_session_error_not_found);
           }
           return _buildContent(context, sessionInfo);
         },
@@ -86,7 +87,10 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                     Gap(context.spacing.s16),
                   ],
                   Text(
-                    'Đã làm: ${sessionInfo.completedQuestions}/${sessionInfo.totalQuestions} bài',
+                    context.locale.practice_session_progress_done(
+                      sessionInfo.completedQuestions,
+                      sessionInfo.totalQuestions,
+                    ),
                     style: context.textStyle.body.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -107,7 +111,9 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                         ),
                         Gap(context.spacing.s8),
                         Text(
-                          'Bắt đầu: ${dateFormat.format(sessionInfo.startedAt!)}',
+                          context.locale.practice_session_started_at(
+                            dateFormat.format(sessionInfo.startedAt!),
+                          ),
                           style: context.textStyle.bodySmall.copyWith(
                             color: context.color.text.secondary,
                           ),
@@ -126,7 +132,9 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                         ),
                         Gap(context.spacing.s8),
                         Text(
-                          'Lần cuối: ${dateFormat.format(sessionInfo.lastActivityAt!)}',
+                          context.locale.practice_session_last_activity(
+                            dateFormat.format(sessionInfo.lastActivityAt!),
+                          ),
                           style: context.textStyle.bodySmall.copyWith(
                             color: context.color.text.secondary,
                           ),
@@ -150,7 +158,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Mastery hiện tại:',
+                      context.locale.practice_session_current_mastery,
                       style: context.textStyle.body,
                     ),
                     Text(
@@ -180,7 +188,9 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                   padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                   minimumSize: const Size(0, 56),
                 ),
-                child: Text('Tiếp tục từ câu $nextQuestionNumber'),
+                child: Text(
+                  context.locale.practice_session_continue_from_question(nextQuestionNumber),
+                ),
               ),
             ),
 
@@ -193,7 +203,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                   _showRestartConfirmation(context, sessionInfo);
                 },
                 icon: const Icon(Icons.refresh),
-                label: const Text('Bắt đầu lại từ đầu'),
+                label: Text(context.locale.practice_session_restart_from_beginning),
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                   minimumSize: const Size(0, 48),
@@ -211,7 +221,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                   _showDiscardConfirmation(context, sessionInfo);
                 },
                 child: Text(
-                  'Bỏ session này',
+                  context.locale.practice_session_discard_session,
                   style: context.textStyle.bodySmall.copyWith(
                     color: const Color(0xFFF44336),
                   ),
@@ -226,7 +236,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
 
   Widget _buildErrorState(BuildContext context, Object error) {
     // Extract user-friendly error message
-    String errorMessage = _getUserFriendlyErrorMessage(error);
+    String errorMessage = _getUserFriendlyErrorMessage(context, error);
     String? description;
 
     // Check if it's a network error or session expired
@@ -235,15 +245,15 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
         errorString.contains('connection') ||
         errorString.contains('timeout') ||
         errorString.contains('socket')) {
-      description = 'Vui lòng kiểm tra kết nối internet và thử lại.';
+      description = context.locale.error_network_generic;
     } else if (errorString.contains('expired') ||
         errorString.contains('not found') ||
         errorString.contains('404')) {
-      description = 'Session đã hết hạn hoặc không tồn tại. Bắt đầu session mới?';
+      description = context.locale.practice_session_error_expired_message;
     }
 
     return ErrorStateWidget(
-      title: 'Không thể tải thông tin session',
+      title: context.locale.practice_session_error_load_failed,
       description: description ?? errorMessage,
       onRetry: () {
         final sessionId = widget.sessionId ?? '';
@@ -254,7 +264,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
     );
   }
 
-  String _getUserFriendlyErrorMessage(Object error) {
+  String _getUserFriendlyErrorMessage(BuildContext context, Object error) {
     final errorString = error.toString();
     
     // Remove technical prefixes
@@ -266,23 +276,23 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
     // Map common error patterns to user-friendly messages
     if (message.toLowerCase().contains('network') ||
         message.toLowerCase().contains('connection')) {
-      return 'Không thể kết nối. Vui lòng kiểm tra internet.';
+      return context.locale.error_network_connection;
     }
     if (message.toLowerCase().contains('timeout')) {
-      return 'Kết nối quá lâu. Vui lòng thử lại.';
+      return context.locale.error_network_timeout;
     }
     if (message.toLowerCase().contains('401') ||
         message.toLowerCase().contains('unauthorized')) {
-      return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+      return context.locale.error_auth_unauthorized;
     }
     if (message.toLowerCase().contains('500') ||
         message.toLowerCase().contains('internal')) {
-      return 'Lỗi hệ thống. Vui lòng thử lại sau.';
+      return context.locale.error_system_internal;
     }
     if (message.toLowerCase().contains('expired') ||
         message.toLowerCase().contains('not found') ||
         message.toLowerCase().contains('404')) {
-      return 'Session đã hết hạn hoặc không tồn tại.';
+      return context.locale.practice_session_error_expired;
     }
 
     // Return original message if no mapping found, but limit length
@@ -308,14 +318,14 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Bắt đầu lại'),
-        content: const Text(
-          'Bạn có chắc muốn bắt đầu lại từ đầu? Tiến độ hiện tại sẽ bị mất.',
+        title: Text(context.locale.practice_session_restart_dialog_title),
+        content: Text(
+          context.locale.practice_session_restart_dialog_message,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: Text(context.locale.common_button_cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -325,7 +335,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
                 '${Routes.practiceQuestion}?skillId=${sessionInfo.skillId}&questionNumber=1&totalQuestions=${sessionInfo.totalQuestions}',
               );
             },
-            child: const Text('Bắt đầu lại'),
+            child: Text(context.locale.practice_session_restart_dialog_button),
           ),
         ],
       ),
@@ -336,14 +346,14 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Bỏ session'),
-        content: const Text(
-          'Bạn có chắc muốn bỏ session này? Tiến độ sẽ bị mất.',
+        title: Text(context.locale.practice_session_discard_dialog_title),
+        content: Text(
+          context.locale.practice_session_discard_dialog_message,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: Text(context.locale.common_button_cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -355,7 +365,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
             style: FilledButton.styleFrom(
               backgroundColor: const Color(0xFFF44336),
             ),
-            child: const Text('Bỏ session'),
+            child: Text(context.locale.practice_session_discard_dialog_button),
           ),
         ],
       ),

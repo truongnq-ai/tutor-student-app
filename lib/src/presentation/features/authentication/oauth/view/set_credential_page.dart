@@ -64,7 +64,7 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
             context.pushReplacementNamed(Routes.trialStart);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Đặt thông tin đăng nhập thành công.'),
+                content: Text(context.locale.auth_set_credential_success_message),
                 backgroundColor: Theme.of(context).colorScheme.primary,
               ),
             );
@@ -87,7 +87,9 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
           setState(() => _isLoading = false);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Có lỗi xảy ra: ${e.toString()}'),
+              content: Text(
+                context.locale.auth_set_credential_error_generic(e.toString()),
+              ),
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
@@ -99,7 +101,9 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const HeadingSmallText('Đặt thông tin đăng nhập')),
+      appBar: AppBar(
+        title: HeadingSmallText(context.locale.auth_set_credential_title),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: context.padding.p16),
         child: Form(
@@ -111,20 +115,22 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
               FlutterLogo(size: context.spacing.s100),
               Gap(context.spacing.s32),
               Text(
-                'Vui lòng đặt tên đăng nhập và mật khẩu để hoàn tất đăng ký',
+                context.locale.auth_set_credential_description,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Gap(context.spacing.s32),
               TextFormField(
                 controller: usernameController,
-                decoration: const InputDecoration(hintText: 'Tên đăng nhập'),
+                decoration: InputDecoration(
+                  hintText: context.locale.auth_registration_field_username,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tên đăng nhập';
+                    return context.locale.auth_registration_validation_username_required;
                   }
                   if (!RegExp(r'^[a-zA-Z0-9]+$', caseSensitive: false).hasMatch(value)) {
-                    return 'Tên đăng nhập chỉ được dùng chữ và số, không phân biệt hoa/thường';
+                    return context.locale.auth_registration_validation_username_format;
                   }
                   return null;
                 },
@@ -148,10 +154,10 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mật khẩu';
+                    return context.locale.validation_password_required;
                   }
                   if (value.length < 8) {
-                    return 'Mật khẩu phải có ít nhất 8 ký tự';
+                    return context.locale.validation_password_min_length('8');
                   }
                   return null;
                 },
@@ -161,7 +167,7 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                 controller: confirmPasswordController,
                 obscureText: !_isConfirmPasswordVisible,
                 decoration: InputDecoration(
-                  hintText: 'Xác nhận mật khẩu',
+                  hintText: context.locale.auth_registration_field_confirm_password,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isConfirmPasswordVisible
@@ -175,10 +181,10 @@ class _SetCredentialPageState extends ConsumerState<SetCredentialPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng xác nhận mật khẩu';
+                    return context.locale.auth_registration_validation_confirm_password_required;
                   }
                   if (value != passwordController.text) {
-                    return 'Mật khẩu không khớp';
+                    return context.locale.auth_registration_validation_password_mismatch;
                   }
                   return null;
                 },

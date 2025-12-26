@@ -15,7 +15,9 @@
     "auth_forgot_password_description": "Enter the email associated with your account and we'll send an email with instructions to reset your password.",
     "auth_forgot_password_button": "Send",
     "auth_forgot_password_back_to_login": "Back to login",
+    "auth_forgot_password_enter_associated_email": "Enter the email associated with your account",
     "auth_reset_password_title": "Reset Password",
+    "auth_reset_password_create_new": "Create New Password",
     "auth_reset_password_new_password": "New Password",
     "auth_reset_password_confirm_password": "Confirm Password",
     "auth_reset_password_hint": "Your new password must be different from previous used passwords.",
@@ -24,17 +26,29 @@
     "auth_reset_password_success_message": "Your password has been changed successfully.",
     "auth_account_dont_have": "Don't have an account? ",
     "auth_account_already_have": "Already have an account? ",
+    "auth_entry_title": "Choose Login Method",
+    "auth_entry_divider_or": "Or",
+    "auth_entry_manual_button": "Manual Login / Sign Up",
+    "auth_entry_no_account": "Don't have an account? ",
+    "auth_entry_manual_signup": "Manual Sign Up",
+    "auth_login_error_invalid_credentials": "Username or password is incorrect. Please try again.",
+    "auth_oauth_error_student_not_found": "Student information not found",
+    "auth_registration_success_message": "Registration successful. Start your free trial!",
+    "auth_registration_field_full_name": "Full Name",
+    "auth_registration_field_username": "Username",
+    "auth_registration_field_confirm_password": "Confirm Password",
+    "auth_registration_validation_full_name_required": "Please enter your full name",
+    "auth_registration_validation_username_required": "Please enter username",
+    "auth_registration_validation_username_format": "Username can only contain letters and numbers, case insensitive",
+    "auth_registration_validation_confirm_password_required": "Please confirm password",
+    "auth_registration_validation_password_mismatch": "Passwords do not match",
+    "auth_set_credential_title": "Set Login Credentials",
+    "auth_set_credential_description": "Please set username and password to complete registration",
+    "auth_set_credential_success_message": "Login credentials set successfully.",
+    "auth_set_credential_error_generic": "An error occurred: {error}",
     "auth_verification_check_mail": "Check your mail",
     "auth_verification_enter_code": "Please enter 4 digit code sent to your mail {email}.",
-    "@auth_verification_enter_code": {
-        "description": "Verification code instruction with email placeholder",
-        "placeholders": {
-            "email": {
-                "type": "String",
-                "example": "hello**@gmail.com"
-            }
-        }
-    },
+    "auth_verification_enter_code_label": "Enter verification code",
     "auth_verification_didnt_get_code": "Didn't get a code? ",
     "auth_verification_resend": "Click to resend",
     "auth_verification_did_not_receive": "Did not receive the email? Check your spam filter. or ",
@@ -55,38 +69,11 @@
     "common_button_load_more": "Load More",
     "validation_required": "This field is required",
     "validation_email_required": "Email is required",
-    "validation_password_required": "Password is required",
     "validation_email_invalid": "Please enter valid email address",
+    "validation_password_required": "Password is required",
     "validation_length_min": "This field must be at least {min} characters long",
-    "@validation_length_min": {
-        "description": "Minimum length validation error",
-        "placeholders": {
-            "min": {
-                "type": "int",
-                "example": "3"
-            }
-        }
-    },
     "validation_length_max": "This field must be at most {max} characters long",
-    "@validation_length_max": {
-        "description": "Maximum length validation error",
-        "placeholders": {
-            "max": {
-                "type": "int",
-                "example": "20"
-            }
-        }
-    },
     "validation_password_min_length": "Password must be at least {minLength} characters",
-    "@validation_password_min_length": {
-        "description": "Password minimum length validation",
-        "placeholders": {
-            "minLength": {
-                "type": "String",
-                "example": "8"
-            }
-        }
-    },
     "validation_password_number": "Password must contain at least one number",
     "validation_password_lowercase": "Password must contain at least one lowercase letter",
     "validation_password_uppercase": "Password must contain at least one uppercase letter",
@@ -100,48 +87,13 @@
     "error_generic": "An error occurred",
     "practice_question_title": "Question",
     "practice_question_counter": "Question {current}/{total}",
-    "@practice_question_counter": {
-        "description": "Question counter with current and total",
-        "placeholders": {
-            "current": {
-                "type": "int",
-                "example": "1"
-            },
-            "total": {
-                "type": "int",
-                "example": "10"
-            }
-        }
-    },
     "practice_question_progress": "{current}/{total} questions done",
-    "@practice_question_progress": {
-        "description": "Practice progress with current and total",
-        "placeholders": {
-            "current": {
-                "type": "int",
-                "example": "1"
-            },
-            "total": {
-                "type": "int",
-                "example": "10"
-            }
-        }
-    },
     "practice_question_select_answer": "Select answer:",
     "practice_question_enter_answer": "Enter answer:",
     "practice_question_answer_hint": "Enter your answer",
     "practice_question_check": "Check",
     "practice_question_hint": "💡 Hint",
     "practice_question_skill_label": "Skill: {skillName}",
-    "@practice_question_skill_label": {
-        "description": "Skill label with skill name",
-        "placeholders": {
-            "skillName": {
-                "type": "String",
-                "example": "Addition"
-            }
-        }
-    },
     "practice_question_not_found": "Question not found",
     "practice_question_load_error": "Cannot load question",
     "practice_skill_selection_title": "Select Skill to Practice",
@@ -157,6 +109,116 @@
     "practice_history_empty_description": "Start learning to see your history here",
     "practice_history_load_error": "Cannot load history",
     "practice_card_exercises": "{count} exercises",
+    "practice_card_correct": "Correct: {count}",
+    "practice_card_incorrect": "Incorrect: {count}",
+    "practice_card_accuracy": "{accuracy}%",
+    "practice_card_mastery": "Mastery: {change}%",
+    "practice_card_mastery_positive": "Mastery: +{change}%",
+    "practice_card_duration": "Duration: {duration}",
+    "practice_card_duration_seconds": "{seconds}s",
+    "practice_card_duration_minutes": "{minutes}p",
+    "practice_card_duration_minutes_seconds": "{minutes}p {seconds}s",
+    "practice_history_mastery": "Mastery: {level}%",
+    "practice_history_duration": "Duration: {seconds}s",
+    "difficulty_label": "Difficulty: {level}",
+    "difficulty_easy": "Easy",
+    "difficulty_medium": "Medium",
+    "difficulty_hard": "Hard",
+    "difficulty_very_hard": "Very Hard",
+    "difficulty_fair": "Fair",
+    "learning_today_title": "Today's Learning",
+    "learning_difficulty_label": "Difficulty: {level}",
+    "learning_skill_estimated_time": "~{minutes} min",
+    "learning_plan_today_title": "Today's Learning Plan",
+    "learning_plan_progress_overview_title": "Progress Overview",
+    "learning_plan_week_progress_title": "Week Progress",
+    "learning_plan_stat_total_skills": "Total Skills",
+    "learning_plan_stat_mastered_skills": "Mastered Skills",
+    "learning_plan_week_streak": "{days} days streak",
+    "learning_plan_week_exercises_done": "{count} exercises done",
+    "learning_plan_empty_title": "No learning plan today",
+    "learning_plan_empty_description": "Start learning to see your plan!",
+    "learning_plan_error_load_failed": "Cannot load learning plan",
+    "@auth_verification_enter_code": {
+        "description": "Verification code instruction with email placeholder",
+        "placeholders": {
+            "email": {
+                "type": "String",
+                "example": "hello**@gmail.com"
+            }
+        }
+    },
+    "@auth_set_credential_error_generic": {
+        "description": "Generic error message with error details",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Network error"
+            }
+        }
+    },
+    "@validation_length_min": {
+        "description": "Minimum length validation error",
+        "placeholders": {
+            "min": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "@validation_length_max": {
+        "description": "Maximum length validation error",
+        "placeholders": {
+            "max": {
+                "type": "int",
+                "example": "20"
+            }
+        }
+    },
+    "@validation_password_min_length": {
+        "description": "Password minimum length validation",
+        "placeholders": {
+            "minLength": {
+                "type": "String",
+                "example": "8"
+            }
+        }
+    },
+    "@practice_question_counter": {
+        "description": "Question counter with current and total",
+        "placeholders": {
+            "current": {
+                "type": "int",
+                "example": "1"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_question_progress": {
+        "description": "Practice progress with current and total",
+        "placeholders": {
+            "current": {
+                "type": "int",
+                "example": "1"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_question_skill_label": {
+        "description": "Skill label with skill name",
+        "placeholders": {
+            "skillName": {
+                "type": "String",
+                "example": "Addition"
+            }
+        }
+    },
     "@practice_card_exercises": {
         "description": "Number of exercises",
         "placeholders": {
@@ -166,7 +228,6 @@
             }
         }
     },
-    "practice_card_correct": "Correct: {count}",
     "@practice_card_correct": {
         "description": "Correct answers count",
         "placeholders": {
@@ -176,7 +237,6 @@
             }
         }
     },
-    "practice_card_incorrect": "Incorrect: {count}",
     "@practice_card_incorrect": {
         "description": "Incorrect answers count",
         "placeholders": {
@@ -186,7 +246,6 @@
             }
         }
     },
-    "practice_card_accuracy": "{accuracy}%",
     "@practice_card_accuracy": {
         "description": "Accuracy percentage",
         "placeholders": {
@@ -196,7 +255,6 @@
             }
         }
     },
-    "practice_card_mastery": "Mastery: {change}%",
     "@practice_card_mastery": {
         "description": "Mastery change percentage",
         "placeholders": {
@@ -206,7 +264,6 @@
             }
         }
     },
-    "practice_card_mastery_positive": "Mastery: +{change}%",
     "@practice_card_mastery_positive": {
         "description": "Positive mastery change",
         "placeholders": {
@@ -216,7 +273,6 @@
             }
         }
     },
-    "practice_card_duration": "Duration: {duration}",
     "@practice_card_duration": {
         "description": "Practice duration",
         "placeholders": {
@@ -226,7 +282,6 @@
             }
         }
     },
-    "practice_card_duration_seconds": "{seconds}s",
     "@practice_card_duration_seconds": {
         "description": "Duration in seconds only",
         "placeholders": {
@@ -236,7 +291,6 @@
             }
         }
     },
-    "practice_card_duration_minutes": "{minutes}p",
     "@practice_card_duration_minutes": {
         "description": "Duration in minutes only",
         "placeholders": {
@@ -246,7 +300,6 @@
             }
         }
     },
-    "practice_card_duration_minutes_seconds": "{minutes}p {seconds}s",
     "@practice_card_duration_minutes_seconds": {
         "description": "Duration in minutes and seconds",
         "placeholders": {
@@ -260,7 +313,6 @@
             }
         }
     },
-    "practice_history_mastery": "Mastery: {level}%",
     "@practice_history_mastery": {
         "description": "Mastery level percentage",
         "placeholders": {
@@ -270,7 +322,6 @@
             }
         }
     },
-    "practice_history_duration": "Duration: {seconds}s",
     "@practice_history_duration": {
         "description": "Duration in seconds",
         "placeholders": {
@@ -280,7 +331,6 @@
             }
         }
     },
-    "difficulty_label": "Difficulty: {level}",
     "@difficulty_label": {
         "description": "Difficulty label with level",
         "placeholders": {
@@ -290,13 +340,6 @@
             }
         }
     },
-    "difficulty_easy": "Easy",
-    "difficulty_medium": "Medium",
-    "difficulty_hard": "Hard",
-    "difficulty_very_hard": "Very Hard",
-    "difficulty_fair": "Fair",
-    "learning_today_title": "Today's Learning",
-    "learning_difficulty_label": "Difficulty: {level}",
     "@learning_difficulty_label": {
         "description": "Learning difficulty label",
         "placeholders": {
@@ -306,7 +349,6 @@
             }
         }
     },
-    "learning_skill_estimated_time": "~{minutes} min",
     "@learning_skill_estimated_time": {
         "description": "Estimated time in minutes",
         "placeholders": {
@@ -316,9 +358,278 @@
             }
         }
     },
-    "auth_reset_password_create_new": "Create New Password",
-    "auth_verification_enter_code_label": "Enter verification code",
-    "auth_forgot_password_enter_associated_email": "Enter the email associated with your account",
+    "@learning_plan_week_streak": {
+        "description": "Week streak with number of days",
+        "placeholders": {
+            "days": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "@learning_plan_week_exercises_done": {
+        "description": "Number of exercises done this week",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "42"
+            }
+        }
+    },
+    "@practice_session_progress_done": {
+        "description": "Session progress with completed and total questions",
+        "placeholders": {
+            "completed": {
+                "type": "int",
+                "example": "5"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_session_started_at": {
+        "description": "Session start time",
+        "placeholders": {
+            "date": {
+                "type": "String",
+                "example": "01/01/2024 10:00"
+            }
+        }
+    },
+    "@practice_session_last_activity": {
+        "description": "Last activity time",
+        "placeholders": {
+            "date": {
+                "type": "String",
+                "example": "01/01/2024 10:30"
+            }
+        }
+    },
+    "@practice_session_continue_from_question": {
+        "description": "Continue from question number",
+        "placeholders": {
+            "questionNumber": {
+                "type": "int",
+                "example": "6"
+            }
+        }
+    },
+    "@practice_session_complete_mastery_increase": {
+        "description": "Mastery increase display",
+        "placeholders": {
+            "previous": {
+                "type": "int",
+                "example": "45"
+            },
+            "current": {
+                "type": "int",
+                "example": "52"
+            },
+            "change": {
+                "type": "int",
+                "example": "7"
+            }
+        }
+    },
+    "@practice_session_complete_stat_questions_done": {
+        "description": "Total questions done",
+        "placeholders": {
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_session_complete_stat_correct": {
+        "description": "Correct answers count",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "8"
+            }
+        }
+    },
+    "@practice_session_complete_stat_incorrect": {
+        "description": "Incorrect answers count",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "@practice_session_complete_stat_accuracy": {
+        "description": "Accuracy percentage",
+        "placeholders": {
+            "accuracy": {
+                "type": "int",
+                "example": "80"
+            }
+        }
+    },
+    "@practice_session_recommendation_more_practice": {
+        "description": "Recommendation for more practice",
+        "placeholders": {
+            "remaining": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "@practice_result_correct_answer": {
+        "description": "Correct answer display",
+        "placeholders": {
+            "answer": {
+                "type": "String",
+                "example": "5/6"
+            }
+        }
+    },
+    "@practice_result_explanation_label": {
+        "description": "Explanation label",
+        "placeholders": {
+            "explanation": {
+                "type": "String",
+                "example": "Find GCD of numerator and denominator"
+            }
+        }
+    },
+    "@practice_result_progress_done": {
+        "description": "Practice result progress",
+        "placeholders": {
+            "current": {
+                "type": "int",
+                "example": "5"
+            },
+            "total": {
+                "type": "int",
+                "example": "10"
+            }
+        }
+    },
+    "@practice_result_progress_percentage": {
+        "description": "Progress percentage",
+        "placeholders": {
+            "percentage": {
+                "type": "String",
+                "example": "50.0"
+            }
+        }
+    },
+    "@practice_result_explanation_dialog_answer_label": {
+        "description": "Answer label in explanation dialog",
+        "placeholders": {
+            "answer": {
+                "type": "String",
+                "example": "5/6"
+            }
+        }
+    },
+    "@onboarding_trial_status_days_remaining": {
+        "description": "Days remaining in trial",
+        "placeholders": {
+            "days": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "@onboarding_trial_status_progress_label": {
+        "description": "Trial progress with used and total days",
+        "placeholders": {
+            "used": {
+                "type": "int",
+                "example": "2"
+            },
+            "total": {
+                "type": "int",
+                "example": "7"
+            }
+        }
+    },
+    "@onboarding_trial_status_warning_message": {
+        "description": "Warning message with days remaining",
+        "placeholders": {
+            "days": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "@onboarding_otp_verification_description": {
+        "description": "OTP verification description with phone number",
+        "placeholders": {
+            "phone": {
+                "type": "String",
+                "example": "0912345678"
+            }
+        }
+    },
+    "@onboarding_otp_verification_input_label": {
+        "description": "OTP input box label with index",
+        "placeholders": {
+            "index": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "@onboarding_otp_verification_timer_label": {
+        "description": "OTP timer label with time",
+        "placeholders": {
+            "time": {
+                "type": "String",
+                "example": "4:30"
+            }
+        }
+    },
+    "@onboarding_otp_verification_timer_remaining": {
+        "description": "OTP timer remaining with time",
+        "placeholders": {
+            "time": {
+                "type": "String",
+                "example": "4:30"
+            }
+        }
+    },
+    "@onboarding_otp_verification_button_resend_cooldown": {
+        "description": "Resend OTP button with cooldown seconds",
+        "placeholders": {
+            "seconds": {
+                "type": "int",
+                "example": "45"
+            }
+        }
+    },
+    "@onboarding_otp_verification_error_cooldown": {
+        "description": "OTP resend cooldown error with seconds",
+        "placeholders": {
+            "seconds": {
+                "type": "int",
+                "example": "45"
+            }
+        }
+    },
+    "@onboarding_linking_success_copy_success": {
+        "description": "Copy success message with label",
+        "placeholders": {
+            "label": {
+                "type": "String",
+                "example": "username"
+            }
+        }
+    },
+    "@onboarding_otp_error_resend_cooldown": {
+        "description": "OTP resend cooldown error with seconds",
+        "placeholders": {
+            "seconds": {
+                "type": "int",
+                "example": "45"
+            }
+        }
+    },
     "onboarding_learn_flutter_title": "Learn Flutter",
     "onboarding_learn_flutter_subtitle": "Build amazing apps",
     "onboarding_learn_flutter_description": "Learn Flutter and build beautiful, fast apps for multiple platforms.",
@@ -327,5 +638,184 @@
     "onboarding_join_community_description": "Join our community of developers and share your knowledge.",
     "onboarding_build_deploy_title": "Build & Deploy",
     "onboarding_build_deploy_subtitle": "Ship your apps",
-    "onboarding_build_deploy_description": "Build and deploy your apps to production with ease."
+    "onboarding_build_deploy_description": "Build and deploy your apps to production with ease.",
+    "onboarding_welcome_title": "Welcome to Tutor!",
+    "onboarding_welcome_subtitle": "Personalized AI Math Tutor for you",
+    "onboarding_welcome_trial_badge": "Free 7-day trial - Full features",
+    "onboarding_welcome_button_try_now": "Try Now",
+    "onboarding_welcome_button_learn_more": "Learn More",
+    "onboarding_welcome_already_have_account": "Already have an account? ",
+    "onboarding_welcome_login_link": "Login",
+    "onboarding_select_grade_title": "Select Grade",
+    "onboarding_select_grade_header": "What grade are you in?",
+    "onboarding_select_grade_button_retry": "Retry",
+    "onboarding_grade_6_title": "Grade 6",
+    "onboarding_grade_6_description": "Grade 6 Math Program",
+    "onboarding_grade_7_title": "Grade 7",
+    "onboarding_grade_7_description": "Grade 7 Math Program",
+    "onboarding_select_goal_title": "Learning Goals",
+    "onboarding_select_goal_header": "What are your learning goals?",
+    "onboarding_select_goal_button_start": "Start Learning",
+    "onboarding_select_goal_button_retry": "Retry",
+    "onboarding_select_goal_semantics_selected": "Selected",
+    "onboarding_select_goal_semantics_not_selected": "Not selected",
+    "onboarding_goal_follow_curriculum_title": "Follow Curriculum",
+    "onboarding_goal_follow_curriculum_description": "Learn at the right pace",
+    "onboarding_goal_strengthen_weakness_title": "Strengthen Weak Areas",
+    "onboarding_goal_strengthen_weakness_description": "Focus on areas you're not confident in",
+    "onboarding_goal_exam_preparation_title": "Exam Preparation",
+    "onboarding_goal_exam_preparation_description": "Prepare for upcoming exams",
+    "onboarding_trial_start_title": "Start Trial",
+    "onboarding_trial_start_header": "Start your free trial!",
+    "onboarding_trial_start_description": "You have 7 days to experience all Tutor features",
+    "onboarding_trial_start_button": "Start",
+    "onboarding_trial_start_button_retry": "Retry",
+    "onboarding_trial_start_already_have_account": "Already have an account? ",
+    "onboarding_trial_start_login_link": "Login",
+    "onboarding_trial_feature_unlimited_math": "Unlimited Math problems (3-5 times/day)",
+    "onboarding_trial_feature_daily_plan": "Daily learning plan",
+    "onboarding_trial_feature_personalized_practice": "Personalized practice",
+    "onboarding_trial_feature_mini_test": "Mini test to check knowledge",
+    "onboarding_trial_info_title": "Trial Information",
+    "onboarding_trial_info_duration_label": "Duration:",
+    "onboarding_trial_info_duration_value": "7 days",
+    "onboarding_trial_info_start_label": "Start:",
+    "onboarding_trial_info_end_label": "End:",
+    "onboarding_trial_info_note": "Learning data will be saved when you link with parent",
+    "onboarding_trial_status_title": "Trial Status",
+    "onboarding_trial_status_days_remaining": "{days} days remaining",
+    "onboarding_trial_status_start_label": "Start:",
+    "onboarding_trial_status_end_label": "End:",
+    "onboarding_trial_status_progress_label": "Used: {used}/{total} days",
+    "onboarding_trial_status_stats_title": "Usage Statistics",
+    "onboarding_trial_status_stats_solves_today": "Solves today:",
+    "onboarding_trial_status_stats_total_exercises": "Total exercises done:",
+    "onboarding_trial_status_stats_skills_learned": "Skills learned:",
+    "onboarding_trial_status_features_title": "You have access to:",
+    "onboarding_trial_status_feature_unlimited_math": "Math problems (3-5 times/day)",
+    "onboarding_trial_status_feature_daily_plan": "Daily learning plan",
+    "onboarding_trial_status_feature_personalized_practice": "Personalized practice",
+    "onboarding_trial_status_feature_mini_test": "Mini test",
+    "onboarding_trial_status_warning_message": "{days} days left. Link with parent to continue learning!",
+    "onboarding_trial_status_button_link_parent": "Link with Parent",
+    "onboarding_trial_status_button_continue_learning": "Continue Learning",
+    "onboarding_trial_status_button_retry": "Retry",
+    "onboarding_trial_status_error_expired": "Trial expired",
+    "onboarding_trial_status_error_not_found": "Trial not found",
+    "onboarding_trial_status_error_generic": "An error occurred",
+    "onboarding_trial_expiry_title": "Link Parent",
+    "onboarding_trial_expiry_header": "Trial period has ended!",
+    "onboarding_trial_expiry_description": "You've completed 7 days of trial. To continue learning, you need to link with parent account",
+    "onboarding_trial_expiry_achievement_title": "You've accomplished:",
+    "onboarding_trial_expiry_achievement_exercises": "exercises",
+    "onboarding_trial_expiry_achievement_skills": "skills learned",
+    "onboarding_trial_expiry_achievement_streak": "days streak",
+    "onboarding_trial_expiry_note": "Your learning data will be preserved when linked",
+    "onboarding_trial_expiry_phone_label": "Enter parent phone number",
+    "onboarding_trial_expiry_phone_hint": "0912345678",
+    "onboarding_trial_expiry_phone_helper": "Example: 0912345678",
+    "onboarding_trial_expiry_phone_validation_required": "Please enter parent phone number",
+    "onboarding_trial_expiry_phone_validation_format": "Invalid phone number. Please enter Vietnamese phone number (10 digits).",
+    "onboarding_trial_expiry_button_send_otp": "Send OTP",
+    "onboarding_trial_expiry_footer_note": "OTP code will be sent to parent's phone number",
+    "onboarding_trial_expiry_alternative_link": "Or receive link code",
+    "onboarding_trial_expiry_error_rate_limit": "⚠️ You've sent more than 3 times today. Please try again tomorrow.",
+    "onboarding_trial_expiry_error_trial_not_found": "Trial not found. Please try again.",
+    "onboarding_otp_verification_title": "Enter OTP Code",
+    "onboarding_otp_verification_description": "OTP code has been sent to {phone}. Please ask parent for the code.",
+    "onboarding_otp_verification_input_label": "OTP input box {index}",
+    "onboarding_otp_verification_timer_label": "Time remaining: {time}",
+    "onboarding_otp_verification_timer_expired": "OTP code has expired. Please resend code.",
+    "onboarding_otp_verification_timer_remaining": "Remaining: {time}",
+    "onboarding_otp_verification_button_confirm": "Confirm",
+    "onboarding_otp_verification_button_resend": "Resend OTP Code",
+    "onboarding_otp_verification_button_resend_cooldown": "Resend OTP Code (in {seconds} seconds)",
+    "onboarding_otp_verification_success_resend": "OTP code resent",
+    "onboarding_otp_verification_error_cooldown": "Please wait {seconds} seconds before requesting OTP again.",
+    "onboarding_linking_success_title": "Linking Successful!",
+    "onboarding_linking_success_description": "Your account has been linked with parent. Learning data from 7-day trial has been preserved.",
+    "onboarding_linking_success_data_saved_title": "✅ Data saved:",
+    "onboarding_linking_success_data_exercises": "exercises",
+    "onboarding_linking_success_data_skills": "skills",
+    "onboarding_linking_success_data_days": "days",
+    "onboarding_linking_success_parent_info_title": "Login information for parent:",
+    "onboarding_linking_success_parent_username_label": "Username:",
+    "onboarding_linking_success_parent_password_label": "Password:",
+    "onboarding_linking_success_parent_password_note": "Temporary password, please change after login",
+    "onboarding_linking_success_parent_dashboard_label": "Access dashboard:",
+    "onboarding_linking_success_button_complete": "Complete",
+    "onboarding_linking_success_copy_success": "Copied {label}",
+    "onboarding_otp_error_phone_invalid": "Invalid phone number. Please enter Vietnamese phone number (10 digits).",
+    "onboarding_otp_error_send_failed": "Cannot send OTP code. Please try again.",
+    "onboarding_otp_error_rate_limit": "You've sent too many requests. Maximum 3 times per day. Please try again tomorrow.",
+    "onboarding_otp_error_trial_not_found": "Trial not found. Please start trial first.",
+    "onboarding_otp_error_missing_parameter": "Missing required information. Please try again.",
+    "onboarding_otp_error_verify_invalid": "OTP code must have 6 digits.",
+    "onboarding_otp_error_verify_failed": "OTP code is incorrect. Please try again.",
+    "onboarding_otp_error_resend_cooldown": "Please wait {seconds} seconds before requesting OTP again.",
+    "profile_title": "Profile",
+    "profile_menu_personal_info": "Personal Information",
+    "profile_menu_trial_status": "Trial Status",
+    "profile_menu_trial_status_warning": "Less than 2 days remaining",
+    "profile_menu_settings": "Settings",
+    "profile_menu_logout": "Logout",
+    "core_widget_error_retry_default": "Retry",
+    "core_widget_empty_action_default": "Start",
+    "practice_session_resume_title": "Continue Practice",
+    "practice_session_current_mastery": "Current Mastery:",
+    "practice_session_progress_done": "Done: {completed}/{total} questions",
+    "practice_session_started_at": "Started: {date}",
+    "practice_session_last_activity": "Last activity: {date}",
+    "practice_session_continue_from_question": "Continue from question {questionNumber}",
+    "practice_session_restart_from_beginning": "Restart from beginning",
+    "practice_session_discard_session": "Discard session",
+    "practice_session_restart_dialog_title": "Restart",
+    "practice_session_restart_dialog_message": "Are you sure you want to restart from the beginning? Current progress will be lost.",
+    "practice_session_restart_dialog_button": "Restart",
+    "practice_session_discard_dialog_title": "Discard Session",
+    "practice_session_discard_dialog_message": "Are you sure you want to discard this session? Progress will be lost.",
+    "practice_session_discard_dialog_button": "Discard",
+    "practice_session_error_invalid_id": "Invalid session ID",
+    "practice_session_error_not_found": "Session not found",
+    "practice_session_error_load_failed": "Cannot load session information",
+    "practice_session_error_expired_message": "Session has expired or does not exist. Start a new session?",
+    "practice_session_error_expired": "Session has expired or does not exist.",
+    "practice_session_complete_title": "Complete",
+    "practice_session_complete_message": "Session completed!",
+    "practice_session_complete_mastery_increase": "Mastery increased: {previous}% → {current}% (+{change}%)",
+    "practice_session_complete_improvement_message": "You've improved a lot!",
+    "practice_session_complete_progress_saved": "Progress has been saved. You can continue later!",
+    "practice_session_complete_stat_questions_done": "{total}/{total} questions done",
+    "practice_session_complete_stat_correct": "Correct: {count} questions",
+    "practice_session_complete_stat_incorrect": "Incorrect: {count} questions",
+    "practice_session_complete_stat_accuracy": "Accuracy: {accuracy}%",
+    "practice_session_skill_status_mastered": "Mastered",
+    "practice_session_skill_status_improving": "Improving",
+    "practice_session_skill_status_unstable": "Unstable",
+    "practice_session_skill_status_weak": "Weak",
+    "practice_session_recommendation_ready_mini_test": "🎯 Ready for Mini Test!",
+    "practice_session_recommendation_do_mini_test": "You've done enough! Take the Mini Test to check your knowledge",
+    "practice_session_recommendation_more_practice": "Do {remaining} more questions to reach 70%",
+    "practice_session_complete_action_mini_test": "Take Mini Test",
+    "practice_session_complete_action_more_practice": "More Practice",
+    "practice_session_complete_action_review": "Review Answers",
+    "practice_session_complete_action_home": "Back to Home",
+    "practice_result_title": "Result",
+    "practice_result_correct": "Correct!",
+    "practice_result_incorrect": "Incorrect",
+    "practice_result_encouragement_correct": "Great!",
+    "practice_result_encouragement_incorrect": "That's okay, you've learned something!",
+    "practice_result_correct_answer": "Correct answer: {answer}",
+    "practice_result_explanation_label": "Explanation: {explanation}",
+    "practice_result_progress_done": "Done: {current}/{total} questions",
+    "practice_result_progress_percentage": "Progress: {percentage}%",
+    "practice_result_difficulty_increase_notification": "🎉 Difficulty will increase in the next question!",
+    "practice_result_difficulty_decrease_notification": "💡 Difficulty will decrease to help you understand better",
+    "practice_result_warning_check_steps": "⚠️ Note: Please check your solution steps again",
+    "practice_result_action_next_question": "Next Question",
+    "practice_result_action_pause": "Pause",
+    "practice_result_action_review_explanation": "Review Explanation",
+    "practice_result_explanation_dialog_title": "Explanation",
+    "practice_result_explanation_dialog_answer_label": "Answer: {answer}",
+    "practice_result_explanation_generic": "Please review the solution steps in the explanation section."
 }

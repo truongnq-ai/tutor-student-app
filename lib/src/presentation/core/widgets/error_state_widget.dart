@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../theme/theme.dart';
 import 'text/typography.dart';
 
@@ -16,7 +17,7 @@ class ErrorStateWidget extends StatelessWidget {
     this.onRetry,
     this.icon,
     this.iconSize = 64,
-    this.retryButtonText = 'Thử lại',
+    this.retryButtonText,
   });
 
   /// Error title (e.g., "Không thể kết nối")
@@ -34,8 +35,8 @@ class ErrorStateWidget extends StatelessWidget {
   /// Icon size. Defaults to 64.
   final double iconSize;
 
-  /// Retry button text. Defaults to "Thử lại".
-  final String retryButtonText;
+  /// Retry button text. Defaults to localized "Retry".
+  final String? retryButtonText;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class ErrorStateWidget extends StatelessWidget {
               Gap(context.spacing.s24),
               FilledButton(
                 onPressed: onRetry,
-                child: Text(retryButtonText),
+                child: Text(retryButtonText ?? context.locale.core_widget_error_retry_default),
               ),
             ],
           ],

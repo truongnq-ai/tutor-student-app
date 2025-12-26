@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/link_text.dart';
@@ -65,7 +66,7 @@ class AuthEntryPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Chọn cách đăng nhập'),
+        title: HeadingSmallText(context.locale.auth_entry_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -82,7 +83,7 @@ class AuthEntryPage extends ConsumerWidget {
               Gap(context.spacing.s48),
               // Header
               Text(
-                'Chọn cách đăng nhập',
+                context.locale.auth_entry_title,
                 textAlign: TextAlign.center,
                 style: context.textStyle.headingLarge.copyWith(
                   fontSize: 24,
@@ -116,7 +117,7 @@ class AuthEntryPage extends ConsumerWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: context.padding.p8),
                     child: Text(
-                      'Hoặc',
+                      context.locale.auth_entry_divider_or,
                       style: context.textStyle.bodySmall.copyWith(
                         fontSize: 14,
                         height: 1.43, // 20px / 14px
@@ -150,7 +151,7 @@ class AuthEntryPage extends ConsumerWidget {
                     ),
                   ),
                   child: Text(
-                    'Đăng nhập / Đăng ký thủ công',
+                    context.locale.auth_entry_manual_button,
                     style: context.textStyle.bodyLarge.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -162,8 +163,8 @@ class AuthEntryPage extends ConsumerWidget {
               Gap(context.spacing.s32),
               // Footer
               LinkText(
-                text: 'Bạn chưa có tài khoản? ',
-                linkText: 'Đăng ký thủ công',
+                text: context.locale.auth_entry_no_account,
+                linkText: context.locale.auth_entry_manual_signup,
                 onTap: () {
                   context.pushNamed(Routes.registration);
                 },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../theme/theme.dart';
 import 'text/typography.dart';
 
@@ -83,7 +84,7 @@ class EmptyStateWidget extends StatelessWidget {
               else
                 FilledButton(
                   onPressed: onAction,
-                  child: Text(actionButtonText ?? 'Bắt đầu'),
+                  child: Text(actionButtonText ?? context.locale.core_widget_empty_action_default),
                 ),
             ],
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/text/typography.dart';
 
@@ -134,7 +135,7 @@ class SkillCard extends StatelessWidget {
                       children: [
                         if (questionCount != null) ...[
                           Text(
-                            '$questionCount bài tập',
+                            '$questionCount ${context.locale.onboarding_trial_expiry_achievement_exercises}',
                             style: context.textStyle.bodySmall,
                           ),
                           if (estimatedTime != null) ...[

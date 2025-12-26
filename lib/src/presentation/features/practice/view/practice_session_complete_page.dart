@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/text/typography.dart';
@@ -100,7 +101,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const HeadingSmallText('Hoàn thành'),
+        title: HeadingSmallText(context.locale.practice_session_complete_title),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(context.padding.p16),
@@ -129,7 +130,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
             // Title
             Center(
               child: Text(
-                'Hoàn thành session!',
+                context.locale.practice_session_complete_message,
                 style: context.textStyle.headingLarge.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -152,7 +153,11 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Mastery tăng: ${_previousMastery}% → ${_currentMastery}% (+$masteryChange%)',
+                        context.locale.practice_session_complete_mastery_increase(
+                          _previousMastery!,
+                          _currentMastery!,
+                          masteryChange,
+                        ),
                         style: context.textStyle.body.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -165,7 +170,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                       ),
                       Gap(context.spacing.s8),
                       Text(
-                        'Bạn đã cải thiện rất nhiều!',
+                        context.locale.practice_session_complete_improvement_message,
                         style: context.textStyle.bodySmall.copyWith(
                           color: const Color(0xFF4CAF50),
                           fontStyle: FontStyle.italic,
@@ -210,7 +215,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                                 ),
                               ),
                               child: Text(
-                                _getSkillStatus(masteryLevel),
+                                _getSkillStatus(context, masteryLevel),
                                 style: context.textStyle.bodySmall.copyWith(
                                   color: const Color(0xFFFF9800),
                                   fontWeight: FontWeight.w600,
@@ -241,7 +246,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                     Gap(context.spacing.s12),
                     Expanded(
                       child: Text(
-                        'Tiến độ đã được lưu. Bạn có thể tiếp tục sau!',
+                        context.locale.practice_session_complete_progress_saved,
                         style: context.textStyle.bodySmall.copyWith(
                           color: const Color(0xFF4CAF50),
                         ),
@@ -283,7 +288,9 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                   minimumSize: const Size(0, 56),
                 ),
                 child: Text(
-                  masteryLevel >= 70 ? 'Làm Mini Test' : 'Làm thêm bài',
+                  masteryLevel >= 70
+                      ? context.locale.practice_session_complete_action_mini_test
+                      : context.locale.practice_session_complete_action_more_practice,
                 ),
               ),
             ),
@@ -300,7 +307,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                   padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                   minimumSize: const Size(0, 48),
                 ),
-                child: const Text('Về trang chủ'),
+                child: Text(context.locale.practice_session_complete_action_home),
               ),
             ),
 
@@ -317,7 +324,7 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
                     padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                     minimumSize: const Size(0, 48),
                   ),
-                  child: const Text('Xem lại bài làm'),
+                  child: Text(context.locale.practice_session_complete_action_review),
                 ),
               ),
             ],
@@ -338,25 +345,25 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
       children: [
         _buildStatCard(
           context,
-          '${_totalQuestions ?? 0}/${_totalQuestions ?? 0} câu đã làm',
+          context.locale.practice_session_complete_stat_questions_done(_totalQuestions ?? 0),
           Icons.checklist,
           const Color(0xFF2196F3),
         ),
         _buildStatCard(
           context,
-          'Đúng: ${_correctCount ?? 0} câu',
+          context.locale.practice_session_complete_stat_correct(_correctCount ?? 0),
           Icons.check_circle,
           const Color(0xFF4CAF50),
         ),
         _buildStatCard(
           context,
-          'Sai: ${_wrongCount ?? 0} câu',
+          context.locale.practice_session_complete_stat_incorrect(_wrongCount ?? 0),
           Icons.cancel,
           const Color(0xFFF44336),
         ),
         _buildStatCard(
           context,
-          'Tỉ lệ: $accuracy%',
+          context.locale.practice_session_complete_stat_accuracy(accuracy),
           Icons.bar_chart,
           const Color(0xFFFF9800),
         ),
@@ -397,16 +404,16 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
     Color color;
 
     if (masteryLevel >= 70) {
-      recommendation = '🎯 Sẵn sàng cho Mini Test!';
+      recommendation = context.locale.practice_session_recommendation_ready_mini_test;
       icon = Icons.quiz;
       color = const Color(0xFF4CAF50);
     } else if (masteryLevel < 70 && (_totalQuestions ?? 0) >= 8) {
-      recommendation = 'Bạn đã làm đủ bài! Hãy làm Mini Test để kiểm tra kiến thức';
+      recommendation = context.locale.practice_session_recommendation_do_mini_test;
       icon = Icons.quiz;
       color = const Color(0xFF2196F3);
     } else {
       final remaining = (70 - masteryLevel) ~/ 5;
-      recommendation = 'Làm thêm $remaining bài để đạt 70%';
+      recommendation = context.locale.practice_session_recommendation_more_practice(remaining);
       icon = Icons.school;
       color = const Color(0xFFFF9800);
     }
@@ -434,15 +441,15 @@ class _PracticeSessionCompletePageState extends ConsumerState<PracticeSessionCom
     );
   }
 
-  String _getSkillStatus(int mastery) {
+  String _getSkillStatus(BuildContext context, int mastery) {
     if (mastery >= 90) {
-      return 'Thành thạo';
+      return context.locale.practice_session_skill_status_mastered;
     } else if (mastery >= 70) {
-      return 'Đang cải thiện';
+      return context.locale.practice_session_skill_status_improving;
     } else if (mastery >= 40) {
-      return 'Chưa vững';
+      return context.locale.practice_session_skill_status_unstable;
     } else {
-      return 'Yếu';
+      return context.locale.practice_session_skill_status_weak;
     }
   }
 }

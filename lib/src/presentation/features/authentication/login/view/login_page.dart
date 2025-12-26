@@ -49,7 +49,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   errorMessage.contains('password') ||
                   errorMessage.contains('incorrect') ||
                   errorMessage.contains('invalid')
-              ? 'Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.'
+              ? context.locale.auth_login_error_invalid_credentials
               : errorMessage;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -77,7 +77,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Không tìm thấy thông tin học sinh'),
+                  content: Text(context.locale.auth_oauth_error_student_not_found),
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
@@ -200,7 +200,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: context.padding.p8),
               child: Text(
-                'Hoặc',
+                context.locale.auth_entry_divider_or,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),

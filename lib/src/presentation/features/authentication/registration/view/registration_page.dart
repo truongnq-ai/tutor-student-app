@@ -39,13 +39,13 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
           context.pushReplacementNamed(Routes.trialStart);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Đăng ký thành công. Bắt đầu dùng thử miễn phí!'),
+              content: Text(context.locale.auth_registration_success_message),
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
           );
         case AsyncError(:final error):
           // Extract user-friendly error message
-          String errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại.';
+          String errorMessage = context.locale.error_generic;
           
           if (error is Exception) {
             final errorString = error.toString();
@@ -108,10 +108,12 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
               Gap(context.spacing.s80),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(hintText: 'Họ và tên'),
+                decoration: InputDecoration(
+                  hintText: context.locale.auth_registration_field_full_name,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập họ và tên';
+                    return context.locale.auth_registration_validation_full_name_required;
                   }
                   return null;
                 },
@@ -119,13 +121,15 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
               Gap(context.spacing.s16),
               TextFormField(
                 controller: usernameController,
-                decoration: InputDecoration(hintText: 'Tên đăng nhập'),
+                decoration: InputDecoration(
+                  hintText: context.locale.auth_registration_field_username,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tên đăng nhập';
+                    return context.locale.auth_registration_validation_username_required;
                   }
                   if (!RegExp(r'^[a-zA-Z0-9]+$', caseSensitive: false).hasMatch(value)) {
-                    return 'Tên đăng nhập chỉ được dùng chữ và số, không phân biệt hoa/thường';
+                    return context.locale.auth_registration_validation_username_format;
                   }
                   return null;
                 },
@@ -149,10 +153,10 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mật khẩu';
+                    return context.locale.validation_password_required;
                   }
                   if (value.length < 8) {
-                    return 'Mật khẩu phải có ít nhất 8 ký tự';
+                    return context.locale.validation_password_min_length('8');
                   }
                   return null;
                 },
@@ -162,7 +166,7 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 controller: confirmPasswordController,
                 obscureText: !_isConfirmPasswordVisible,
                 decoration: InputDecoration(
-                  hintText: 'Xác nhận mật khẩu',
+                  hintText: context.locale.auth_registration_field_confirm_password,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isConfirmPasswordVisible
@@ -176,10 +180,10 @@ class _RegistrationPageState extends ConsumerState<RegistrationPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng xác nhận mật khẩu';
+                    return context.locale.auth_registration_validation_confirm_password_required;
                   }
                   if (value != passwordController.text) {
-                    return 'Mật khẩu không khớp';
+                    return context.locale.auth_registration_validation_password_mismatch;
                   }
                   return null;
                 },

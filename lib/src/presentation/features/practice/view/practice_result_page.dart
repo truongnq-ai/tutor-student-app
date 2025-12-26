@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -72,7 +73,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const HeadingSmallText('Kết quả'),
+        title: HeadingSmallText(context.locale.practice_result_title),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(context.padding.p16),
@@ -82,10 +83,12 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
             // Result Indicator
             ResultIndicator(
               isCorrect: widget.isCorrect,
-              message: widget.isCorrect ? 'Chính xác!' : 'Chưa đúng',
+              message: widget.isCorrect
+                  ? context.locale.practice_result_correct
+                  : context.locale.practice_result_incorrect,
               encouragement: widget.isCorrect
-                  ? 'Tuyệt vời!'
-                  : 'Không sao, bạn đã học được điều gì đó!',
+                  ? context.locale.practice_result_encouragement_correct
+                  : context.locale.practice_result_encouragement_incorrect,
             ),
 
             Gap(context.spacing.s24),
@@ -99,7 +102,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Đáp án đúng: ${question!.finalAnswer}',
+                        context.locale.practice_result_correct_answer(question!.finalAnswer!),
                         style: context.textStyle.body.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -107,7 +110,9 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                       if (question.problemText != null) ...[
                         Gap(context.spacing.s8),
                         Text(
-                          'Giải thích: ${_getExplanation(question.problemText!, question.finalAnswer!)}',
+                          context.locale.practice_result_explanation_label(
+                            _getExplanation(context, question.problemText!, question.finalAnswer!),
+                          ),
                           style: context.textStyle.bodySmall.copyWith(
                             color: context.color.text.secondary,
                           ),
@@ -138,13 +143,13 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
             if (_streakCorrect >= 5) ...[
               AdaptiveNotification(
                 isDifficultyIncrease: true,
-                message: '🎉 Độ khó sẽ tăng ở câu tiếp theo!',
+                message: context.locale.practice_result_difficulty_increase_notification,
               ),
               Gap(context.spacing.s24),
             ] else if (_streakWrong >= 2) ...[
               AdaptiveNotification(
                 isDifficultyIncrease: false,
-                message: '💡 Độ khó sẽ giảm để bạn dễ hiểu hơn',
+                message: context.locale.practice_result_difficulty_decrease_notification,
               ),
               Gap(context.spacing.s24),
             ],
@@ -165,7 +170,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                       Gap(context.spacing.s12),
                       Expanded(
                         child: Text(
-                          '⚠️ Lưu ý: Hãy kiểm tra lại các bước giải của bạn',
+                          context.locale.practice_result_warning_check_steps,
                           style: context.textStyle.bodySmall.copyWith(
                             color: const Color(0xFFFF9800),
                           ),
@@ -186,11 +191,16 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Đã làm: ${widget.questionNumber ?? 1}/${widget.totalQuestions ?? 8} bài',
+                      context.locale.practice_result_progress_done(
+                        widget.questionNumber ?? 1,
+                        widget.totalQuestions ?? 8,
+                      ),
                       style: context.textStyle.body,
                     ),
                     Text(
-                      'Tiến độ: ${((widget.questionNumber ?? 1) / (widget.totalQuestions ?? 8) * 100).toStringAsFixed(1)}%',
+                      context.locale.practice_result_progress_percentage(
+                        ((widget.questionNumber ?? 1) / (widget.totalQuestions ?? 8) * 100).toStringAsFixed(1),
+                      ),
                       style: context.textStyle.bodySmall.copyWith(
                         color: context.color.text.secondary,
                       ),
@@ -243,12 +253,12 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                   padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                   minimumSize: const Size(0, 56),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Câu tiếp theo'),
-                    Gap(8),
-                    Icon(Icons.arrow_forward, size: 20),
+                    Text(context.locale.practice_result_action_next_question),
+                    const Gap(8),
+                    const Icon(Icons.arrow_forward, size: 20),
                   ],
                 ),
               ),
@@ -268,7 +278,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                       padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                       minimumSize: const Size(0, 48),
                     ),
-                    child: const Text('Tạm dừng'),
+                    child: Text(context.locale.practice_result_action_pause),
                   ),
                 ),
                 if (!widget.isCorrect) ...[
@@ -283,7 +293,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
                         padding: EdgeInsets.symmetric(vertical: context.padding.p12),
                         minimumSize: const Size(0, 48),
                       ),
-                      child: const Text('Xem lại giải thích'),
+                      child: Text(context.locale.practice_result_action_review_explanation),
                     ),
                   ),
                 ],
@@ -295,12 +305,12 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
     );
   }
 
-  String _getExplanation(String problemText, String answer) {
+  String _getExplanation(BuildContext context, String problemText, String answer) {
     // Simple explanation - in real app, this would come from question data
     if (problemText.contains('Rút gọn')) {
       return 'Tìm ƯCLN của tử và mẫu, sau đó chia cả tử và mẫu cho ƯCLN đó.';
     }
-    return 'Hãy xem lại các bước giải trong phần giải thích.';
+    return context.locale.practice_result_explanation_generic;
   }
 
   void _showExplanationDialog(BuildContext context, question) {
@@ -309,7 +319,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Giải thích'),
+        title: Text(context.locale.practice_result_explanation_dialog_title),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,12 +335,12 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
               Gap(context.spacing.s12),
               if (question.finalAnswer != null)
                 Text(
-                  'Đáp án: ${question.finalAnswer}',
+                  context.locale.practice_result_explanation_dialog_answer_label(question.finalAnswer!),
                   style: context.textStyle.body,
                 ),
               Gap(context.spacing.s12),
               Text(
-                _getExplanation(question.problemText ?? '', question.finalAnswer ?? ''),
+                _getExplanation(context, question.problemText ?? '', question.finalAnswer ?? ''),
                 style: context.textStyle.bodySmall,
               ),
             ],
@@ -339,7 +349,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Đóng'),
+            child: Text(context.locale.common_button_close),
           ),
         ],
       ),

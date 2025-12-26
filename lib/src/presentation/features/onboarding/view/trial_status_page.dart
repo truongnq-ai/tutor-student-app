@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -45,7 +46,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
       return Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: AppBar(
-          title: const HeadingSmallText('Trạng thái dùng thử'),
+          title: HeadingSmallText(context.locale.onboarding_trial_status_title),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.pop(),
@@ -64,11 +65,11 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                 ),
                 Gap(context.spacing.s24),
                 Text(
-                  isTrialExpired 
-                    ? 'Trial đã hết hạn'
-                    : isTrialNotFound
-                      ? 'Không tìm thấy trial'
-                      : 'Có lỗi xảy ra',
+                  isTrialExpired
+                      ? context.locale.onboarding_trial_status_error_expired
+                      : isTrialNotFound
+                          ? context.locale.onboarding_trial_status_error_not_found
+                          : context.locale.onboarding_trial_status_error_generic,
                   style: context.textStyle.headingMedium.copyWith(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -96,7 +97,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                     child: Text(
-                      'Thử lại',
+                      context.locale.onboarding_trial_status_button_retry,
                       style: context.textStyle.bodyLarge.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -117,7 +118,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       ),
                       child: Text(
-                        'Liên kết với phụ huynh',
+                        context.locale.onboarding_trial_status_button_link_parent,
                         style: context.textStyle.bodyLarge.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -139,7 +140,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
       return Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: AppBar(
-          title: const HeadingSmallText('Trạng thái dùng thử'),
+          title: HeadingSmallText(context.locale.onboarding_trial_status_title),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.pop(),
@@ -241,7 +242,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                       ),
                       Gap(context.spacing.s8),
                       Text(
-                        'ngày còn lại',
+                        context.locale.onboarding_trial_status_days_remaining(daysRemaining).replaceFirst('$daysRemaining ', ''),
                         style: context.textStyle.bodyLarge.copyWith(
                           fontSize: 16,
                           height: 1.5, // 24px / 16px
@@ -253,18 +254,18 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                   Gap(context.spacing.s16),
                   // Start and end dates
                   _InfoRow(
-                    label: 'Bắt đầu:',
+                    label: context.locale.onboarding_trial_status_start_label,
                     value: dateFormat.format(trialStatus.startDate),
                   ),
                   Gap(context.spacing.s8),
                   _InfoRow(
-                    label: 'Kết thúc:',
+                    label: context.locale.onboarding_trial_status_end_label,
                     value: dateFormat.format(trialStatus.endDate),
                   ),
                   Gap(context.spacing.s16),
                   // Progress bar
                   Semantics(
-                    label: 'Tiến độ: $daysUsed/$totalDays ngày',
+                    label: context.locale.onboarding_trial_status_progress_label(daysUsed, totalDays),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -272,7 +273,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Đã dùng: $daysUsed/$totalDays ngày',
+                              context.locale.onboarding_trial_status_progress_label(daysUsed, totalDays),
                               style: context.textStyle.bodyMedium.copyWith(
                                 fontSize: 14,
                                 height: 1.43, // 20px / 14px
@@ -325,7 +326,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Thống kê sử dụng',
+                    context.locale.onboarding_trial_status_stats_title,
                     style: context.textStyle.headingMedium.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -336,20 +337,20 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                   Gap(context.spacing.s16),
                   _StatRow(
                     icon: '📚',
-                    label: 'Số lượt giải bài hôm nay:',
+                    label: context.locale.onboarding_trial_status_stats_solves_today,
                     value: '$solvesToday/$maxSolvesPerDay',
                   ),
                   Gap(context.spacing.s12),
                   _StatRow(
                     icon: '📝',
-                    label: 'Tổng bài đã làm:',
-                    value: '$totalExercises bài',
+                    label: context.locale.onboarding_trial_status_stats_total_exercises,
+                    value: '$totalExercises ${context.locale.onboarding_trial_expiry_achievement_exercises}',
                   ),
                   Gap(context.spacing.s12),
                   _StatRow(
                     icon: '🎯',
-                    label: 'Số skill đã học:',
-                    value: '$skillsLearned skill',
+                    label: context.locale.onboarding_trial_status_stats_skills_learned,
+                    value: '$skillsLearned ${context.locale.onboarding_trial_expiry_achievement_skills.replaceFirst(' đã học', '')}',
                   ),
                 ],
               ),
@@ -370,7 +371,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Bạn đang có quyền truy cập:',
+                    context.locale.onboarding_trial_status_features_title,
                     style: context.textStyle.bodyMedium.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -379,13 +380,13 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                     ),
                   ),
                   Gap(context.spacing.s8),
-                  _FeatureItem(text: 'Giải bài Toán (3-5 lượt/ngày)'),
+                  _FeatureItem(text: context.locale.onboarding_trial_status_feature_unlimited_math),
                   Gap(context.spacing.s4),
-                  _FeatureItem(text: 'Lộ trình học hằng ngày'),
+                  _FeatureItem(text: context.locale.onboarding_trial_status_feature_daily_plan),
                   Gap(context.spacing.s4),
-                  _FeatureItem(text: 'Luyện tập cá nhân hoá'),
+                  _FeatureItem(text: context.locale.onboarding_trial_status_feature_personalized_practice),
                   Gap(context.spacing.s4),
-                  _FeatureItem(text: 'Mini test'),
+                  _FeatureItem(text: context.locale.onboarding_trial_status_feature_mini_test),
                 ],
               ),
             ),
@@ -413,7 +414,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                     Gap(context.spacing.s8),
                     Expanded(
                       child: Text(
-                        'Còn $daysRemaining ngày. Hãy liên kết với phụ huynh để tiếp tục học!',
+                        context.locale.onboarding_trial_status_warning_message(daysRemaining),
                         style: context.textStyle.bodyMedium.copyWith(
                           fontSize: 14,
                           height: 1.43, // 20px / 14px
@@ -445,7 +446,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                     elevation: 2,
                   ),
                   child: Text(
-                    'Liên kết với phụ huynh',
+                    context.locale.onboarding_trial_status_button_link_parent,
                     style: context.textStyle.bodyLarge.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -474,7 +475,7 @@ class _TrialStatusPageState extends ConsumerState<TrialStatusPage> {
                   ),
                 ),
                 child: Text(
-                  'Tiếp tục học',
+                  context.locale.onboarding_trial_status_button_continue_learning,
                   style: context.textStyle.bodyLarge.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

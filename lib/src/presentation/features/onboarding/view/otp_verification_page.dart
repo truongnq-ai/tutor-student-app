@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -167,7 +168,9 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Vui lòng đợi $cooldownRemaining giây trước khi yêu cầu lại OTP.'),
+            content: Text(
+              context.locale.onboarding_otp_verification_error_cooldown(cooldownRemaining),
+            ),
             backgroundColor: const Color(0xFFFF9800),
           ),
         );
@@ -191,9 +194,9 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
             _startCooldownTimer();
 
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Đã gửi lại mã OTP'),
-                backgroundColor: Color(0xFF4CAF50),
+              SnackBar(
+                content: Text(context.locale.onboarding_otp_verification_success_resend),
+                backgroundColor: const Color(0xFF4CAF50),
               ),
             );
           }
@@ -232,7 +235,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const HeadingSmallText('Nhập mã OTP'),
+        title: HeadingSmallText(context.locale.onboarding_otp_verification_title),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -246,7 +249,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
             Gap(context.spacing.s32),
             // Description
             Text(
-              'Mã OTP đã được gửi đến số điện thoại $_phoneNumber. Vui lòng hỏi phụ huynh lấy mã.',
+              context.locale.onboarding_otp_verification_description(_phoneNumber ?? ''),
               textAlign: TextAlign.center,
               style: context.textStyle.bodyLarge.copyWith(
                 fontSize: 16,
@@ -260,7 +263,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(6, (index) {
                 return Semantics(
-                  label: 'Ô nhập mã OTP số ${index + 1}',
+                  label: context.locale.onboarding_otp_verification_input_label(index + 1),
                   child: SizedBox(
                     width: 48,
                     height: 48,
@@ -345,11 +348,11 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
             // Timer
             Center(
               child: Semantics(
-                label: 'Thời gian còn lại: ${_formatTime(_remainingSeconds)}',
+                label: context.locale.onboarding_otp_verification_timer_label(_formatTime(_remainingSeconds)),
                 child: Text(
                   isExpired
-                      ? 'Mã OTP đã hết hạn. Vui lòng gửi lại mã.'
-                      : 'Còn lại: ${_formatTime(_remainingSeconds)}',
+                      ? context.locale.onboarding_otp_verification_timer_expired
+                      : context.locale.onboarding_otp_verification_timer_remaining(_formatTime(_remainingSeconds)),
                   style: context.textStyle.bodyMedium.copyWith(
                     fontSize: 14,
                     height: 1.43, // 20px / 14px
@@ -384,7 +387,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
                 child: isLoading
                     ? const LoadingIndicator()
                     : Text(
-                        'Xác nhận',
+                        context.locale.onboarding_otp_verification_button_confirm,
                         style: context.textStyle.bodyLarge.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -400,8 +403,8 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
                 onPressed: canResend ? _onResendOtp : null,
                 child: Text(
                   canResend
-                      ? 'Gửi lại mã OTP'
-                      : 'Gửi lại mã OTP (còn $cooldownRemaining giây)',
+                      ? context.locale.onboarding_otp_verification_button_resend
+                      : context.locale.onboarding_otp_verification_button_resend_cooldown(cooldownRemaining ?? 0),
                   style: context.textStyle.bodyMedium.copyWith(
                     fontSize: 14,
                     height: 1.43, // 20px / 14px

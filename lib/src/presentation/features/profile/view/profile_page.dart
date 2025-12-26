@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/widgets/text/typography.dart';
 
@@ -17,13 +18,13 @@ class ProfilePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const HeadingSmallText('Hồ sơ'),
+        title: HeadingSmallText(context.locale.profile_title),
       ),
       body: ListView(
         children: [
           ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('Thông tin cá nhân'),
+            title: Text(context.locale.profile_menu_personal_info),
             onTap: () {
               // Navigate to personal info
             },
@@ -47,11 +48,11 @@ class ProfilePage extends ConsumerWidget {
                   ),
               ],
             ),
-            title: const Text('Trạng thái dùng thử'),
+            title: Text(context.locale.profile_menu_trial_status),
             subtitle: showWarning
-                ? const Text(
-                    'Còn ít hơn 2 ngày',
-                    style: TextStyle(color: Color(0xFFFF9800)),
+                ? Text(
+                    context.locale.profile_menu_trial_status_warning,
+                    style: const TextStyle(color: Color(0xFFFF9800)),
                   )
                 : null,
             trailing: showWarning
@@ -66,14 +67,14 @@ class ProfilePage extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('Cài đặt'),
+            title: Text(context.locale.profile_menu_settings),
             onTap: () {
               // Navigate to settings
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('Đăng xuất'),
+            title: Text(context.locale.profile_menu_logout),
             onTap: () {
               // Handle logout
             },
