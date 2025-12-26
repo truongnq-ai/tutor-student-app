@@ -58,14 +58,7 @@ List<GoRoute> _learningRoutes(Ref ref) {
         return const MaterialPage(child: PracticeSessionCompletePage());
       },
     ),
-    // Skill Selection
-    GoRoute(
-      path: Routes.skillSelection,
-      name: Routes.skillSelection,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: SkillSelectionPage());
-      },
-    ),
+    // Note: Skill Selection route is defined in shell_routes.dart as part of navigation shell
     // Practice History
     GoRoute(
       path: Routes.practiceHistory,
