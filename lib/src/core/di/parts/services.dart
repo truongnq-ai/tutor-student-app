@@ -23,6 +23,11 @@ TutorService tutorService(Ref ref) {
 }
 
 @riverpod
+ImageUploadService imageUploadService(Ref ref) {
+  return ImageUploadService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
 LearningService learningService(Ref ref) {
   return LearningService(ref.read(dioProvider), baseUrl: Endpoints.base);
 }

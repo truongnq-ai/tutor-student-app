@@ -34,4 +34,13 @@ class Routes {
 
   // Mini Test Routes (placeholder - will be implemented later)
   static const String miniTestStart = '/minitest/start';
+
+  // Tutor Mode Routes
+  static const String tutorModeEntry = '/tutor';
+  static const String tutorCameraCapture = '/tutor/camera';
+  static const String tutorTextInput = '/tutor/text';
+  static const String tutorOcrConfirmation = '/tutor/ocr-confirmation';
+  static const String tutorSolution = '/tutor/solution';
+  static const String tutorSolutionComplete = '/tutor/solution-complete';
+  static const String tutorRecentProblems = '/tutor/recent';
 }

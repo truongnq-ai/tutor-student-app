@@ -38,6 +38,11 @@ class Endpoints {
   
   static const String tutorSolveImage = '/api/tutor/solve/image';
   static const String tutorSolveText = '/api/tutor/solve/text';
+  static const String tutorRecentProblems = '/api/tutor/problems/recent';
+  
+  // ==================== Image Upload ====================
+  
+  static const String imageUpload = '/api/v1/images/upload';
 
   // ==================== Learning & Practice ====================
   

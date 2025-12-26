@@ -63,3 +63,17 @@ QuestionRepository questionRepository(Ref ref) {
     practiceService: ref.read(practiceServiceProvider),
   );
 }
+
+@Riverpod(keepAlive: true)
+TutorRepository tutorRepository(Ref ref) {
+  return TutorRepositoryImpl(
+    tutorService: ref.read(tutorServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+ImageUploadRepository imageUploadRepository(Ref ref) {
+  return ImageUploadRepositoryImpl(
+    imageUploadService: ref.read(imageUploadServiceProvider),
+  );
+}
