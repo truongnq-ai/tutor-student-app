@@ -57,10 +57,28 @@ class Endpoints {
   static const String practiceQuestionDetail = '/api/practice/questions/{id}';
   static const String practiceQuestionSubmit = '/api/practice/questions/{id}/submit';
 
-  // ==================== Mini Test ====================
+  // ==================== Progress & Mini Test ====================
   
-  static const String miniTestStart = '/api/minitest/start';
-  static const String miniTestSubmit = '/api/minitest/submit';
+  /// Progress Dashboard
+  static const String progressDashboard = '/api/v1/progress/dashboard';
+  static const String progressSkillDetail = '/api/v1/progress/skills/{skillId}';
+  static const String progressWeakSkills = '/api/v1/progress/weak-skills';
+  static const String progressRecommendations = '/api/v1/progress/recommendations';
+  
+  /// Practice Session
+  static const String practiceSessionCreate = '/api/v1/practice/sessions';
+  static const String practiceSessionGet = '/api/v1/practice/sessions/{sessionId}';
+  static const String practiceSessionPause = '/api/v1/practice/sessions/{sessionId}/pause';
+  static const String practiceSessionResume = '/api/v1/practice/sessions/{sessionId}/resume';
+  static const String practiceSessionComplete = '/api/v1/practice/sessions/{sessionId}/complete';
+  static const String practiceSessionResumable = '/api/v1/practice/sessions/resumable';
+  
+  /// Mini Test
+  static const String miniTestStart = '/api/v1/minitest/start';
+  static const String miniTestSessionGet = '/api/v1/minitest/sessions/{sessionId}';
+  static const String miniTestSubmitAnswer = '/api/v1/minitest/sessions/{sessionId}/answer';
+  static const String miniTestSubmit = '/api/v1/minitest/sessions/{sessionId}/submit';
+  static const String miniTestUnlock = '/api/v1/minitest/unlock/{skillId}';
 
   // ==================== Parent Linking ====================
   

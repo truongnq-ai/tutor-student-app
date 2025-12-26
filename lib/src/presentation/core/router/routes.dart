@@ -32,8 +32,13 @@ class Routes {
   static const String practiceHistory = '/practice/history';
   static const String sessionResume = '/practice/session-resume';
 
-  // Mini Test Routes (placeholder - will be implemented later)
-  static const String miniTestStart = '/minitest/start';
+  // Progress & Mini Test Routes
+  static const String progressDashboard = '/progress';
+  static const String progressSkillDetail = '/progress/skill';
+  static const String progressRecommendations = '/progress/recommendations';
+  static const String miniTestStart = '/progress/mini-test/start';
+  static const String miniTestQuestion = '/progress/mini-test';
+  static const String miniTestResult = '/progress/mini-test/result';
 
   // Tutor Mode Routes
   static const String tutorModeEntry = '/tutor';

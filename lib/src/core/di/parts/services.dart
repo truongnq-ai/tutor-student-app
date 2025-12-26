@@ -43,6 +43,16 @@ MiniTestService miniTestService(Ref ref) {
 }
 
 @riverpod
+ProgressService progressService(Ref ref) {
+  return ProgressService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
+PracticeSessionService practiceSessionService(Ref ref) {
+  return PracticeSessionService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
 LinkingService linkingService(Ref ref) {
   return LinkingService(ref.read(dioProvider), baseUrl: Endpoints.base);
 }

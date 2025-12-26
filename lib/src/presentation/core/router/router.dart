@@ -40,6 +40,12 @@ import '../../features/tutor/view/recent_problems_list_page.dart';
 import '../../features/tutor/view/solution_step_by_step_page.dart';
 import '../../features/tutor/view/text_input_page.dart';
 import '../../features/tutor/view/tutor_mode_entry_page.dart';
+import '../../features/progress/view/progress_dashboard_page.dart';
+import '../../features/progress/view/skill_detail_page.dart';
+import '../../features/progress/view/mini_test_start_page.dart';
+import '../../features/progress/view/mini_test_question_page.dart';
+import '../../features/progress/view/mini_test_result_page.dart';
+import '../../features/progress/view/recommendations_page.dart';
 import 'router_state/router_state_provider.dart';
 import 'routes.dart';
 
@@ -47,6 +53,7 @@ part 'parts/authentication_routes.dart';
 part 'parts/on_boarding_routes.dart';
 part 'parts/learning_routes.dart';
 part 'parts/tutor_routes.dart';
+part 'parts/progress_routes.dart';
 part 'parts/shell_routes.dart';
 part 'router.g.dart';
 
@@ -88,6 +95,7 @@ GoRouter goRouter(Ref ref) {
       ..._authenticationRoutes(ref),
       ..._learningRoutes(ref),
       ..._tutorRoutes(ref),
+      ..._progressRoutes(ref),
       _shellRoutes(ref),
     ],
   );

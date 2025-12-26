@@ -77,3 +77,24 @@ ImageUploadRepository imageUploadRepository(Ref ref) {
     imageUploadService: ref.read(imageUploadServiceProvider),
   );
 }
+
+@Riverpod(keepAlive: true)
+ProgressRepository progressRepository(Ref ref) {
+  return ProgressRepositoryImpl(
+    progressService: ref.read(progressServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+PracticeSessionRepository practiceSessionRepository(Ref ref) {
+  return PracticeSessionRepositoryImpl(
+    practiceSessionService: ref.read(practiceSessionServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+MiniTestRepository miniTestRepository(Ref ref) {
+  return MiniTestRepositoryImpl(
+    miniTestService: ref.read(miniTestServiceProvider),
+  );
+}

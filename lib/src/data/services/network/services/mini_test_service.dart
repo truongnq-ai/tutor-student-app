@@ -15,10 +15,29 @@ abstract class MiniTestService {
     @Body() Map<String, dynamic> request,
   );
 
-  /// Submit mini test answers
-  @POST(Endpoints.miniTestSubmit)
-  Future<HttpResponse<dynamic>> submitMiniTest(
+  /// Get mini test session
+  @GET(Endpoints.miniTestSessionGet)
+  Future<HttpResponse<dynamic>> getTestSession(
+    @Path('sessionId') String sessionId,
+  );
+
+  /// Submit answer
+  @POST(Endpoints.miniTestSubmitAnswer)
+  Future<HttpResponse<dynamic>> submitAnswer(
+    @Path('sessionId') String sessionId,
     @Body() Map<String, dynamic> request,
+  );
+
+  /// Submit mini test
+  @POST(Endpoints.miniTestSubmit)
+  Future<HttpResponse<dynamic>> submitTest(
+    @Path('sessionId') String sessionId,
+  );
+
+  /// Check unlock condition
+  @GET(Endpoints.miniTestUnlock)
+  Future<HttpResponse<dynamic>> checkUnlock(
+    @Path('skillId') String skillId,
   );
 }
 
