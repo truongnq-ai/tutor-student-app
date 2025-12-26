@@ -102,7 +102,7 @@ final class QuestionRepositoryImpl extends QuestionRepository {
         );
       }
 
-      final questions = (questionsData as List<dynamic>)
+      final questions = questionsData
           .map((item) {
             if (item is Map<String, dynamic>) {
               return QuestionModel.fromJson(item);

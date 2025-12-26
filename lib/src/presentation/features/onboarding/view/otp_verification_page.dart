@@ -404,7 +404,7 @@ class _OtpVerificationPageState extends ConsumerState<OtpVerificationPage> {
                 child: Text(
                   canResend
                       ? context.locale.onboarding_otp_verification_button_resend
-                      : context.locale.onboarding_otp_verification_button_resend_cooldown(cooldownRemaining ?? 0),
+                      : context.locale.onboarding_otp_verification_button_resend_cooldown(cooldownRemaining!),
                   style: context.textStyle.bodyMedium.copyWith(
                     fontSize: 14,
                     height: 1.43, // 20px / 14px

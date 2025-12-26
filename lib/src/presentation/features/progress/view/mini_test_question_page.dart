@@ -136,7 +136,7 @@ class _MiniTestQuestionPageState
     if (_selectedAnswer != null) {
       await _handleSubmitAnswer();
       // Wait a bit for answer to be saved
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
     }
 
     setState(() {

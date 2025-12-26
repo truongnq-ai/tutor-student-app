@@ -30,7 +30,6 @@ class OcrConfirmationPage extends ConsumerStatefulWidget {
 class _OcrConfirmationPageState extends ConsumerState<OcrConfirmationPage> {
   late TextEditingController _ocrTextController;
   bool _isLoading = false;
-  bool _hasChanges = false;
 
   @override
   void initState() {
@@ -39,15 +38,7 @@ class _OcrConfirmationPageState extends ConsumerState<OcrConfirmationPage> {
       text: widget.ocrText ?? '',
     );
     _ocrTextController.addListener(() {
-      if (_ocrTextController.text != (widget.ocrText ?? '')) {
-        setState(() {
-          _hasChanges = true;
-        });
-      } else {
-        setState(() {
-          _hasChanges = false;
-        });
-      }
+      // Text changes are handled by the controller
     });
   }
 

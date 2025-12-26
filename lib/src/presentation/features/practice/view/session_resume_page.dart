@@ -315,7 +315,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
   }
 
   void _showRestartConfirmation(BuildContext context, SessionInfoEntity sessionInfo) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.locale.practice_session_restart_dialog_title),
@@ -343,7 +343,7 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
   }
 
   void _showDiscardConfirmation(BuildContext context, SessionInfoEntity sessionInfo) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.locale.practice_session_discard_dialog_title),

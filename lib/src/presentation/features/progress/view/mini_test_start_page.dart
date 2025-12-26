@@ -77,7 +77,7 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
       await provider.startTest(skillId: _skillId!);
 
       // Wait a bit for state to update, then check
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
 
       // Get the session from provider state
       final sessionState = ref.read(miniTestSessionProvider(null));
