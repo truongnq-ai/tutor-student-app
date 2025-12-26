@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/extensions/app_localization.dart';
+import '../../../../domain/entities/question_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
@@ -313,7 +314,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
     return context.locale.practice_result_explanation_generic;
   }
 
-  void _showExplanationDialog(BuildContext context, question) {
+  void _showExplanationDialog(BuildContext context, QuestionEntity? question) {
     if (question == null) return;
 
     showDialog(

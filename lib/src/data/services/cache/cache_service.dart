@@ -14,6 +14,7 @@ enum CacheKey {
   trialId,
   grade,
   learningGoals,
+  currentSessionId,
 }
 
 abstract class CacheService {

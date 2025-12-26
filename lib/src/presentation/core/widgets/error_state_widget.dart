@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/extensions/app_localization.dart';
+import '../../../core/extensions/app_localization.dart';
 import '../theme/theme.dart';
 import 'text/typography.dart';
 

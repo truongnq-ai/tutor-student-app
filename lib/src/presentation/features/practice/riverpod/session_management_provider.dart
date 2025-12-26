@@ -16,20 +16,20 @@ class SessionManagement extends _$SessionManagement {
 
   Future<String?> _loadCurrentSessionId() async {
     final cacheService = ref.read(cacheServiceProvider);
-    return await cacheService.get('current_session_id');
+    return cacheService.get<String>(CacheKey.currentSessionId);
   }
 
   /// Set current session ID
   Future<void> setCurrentSessionId(String sessionId) async {
     final cacheService = ref.read(cacheServiceProvider);
-    await cacheService.set('current_session_id', sessionId);
+    await cacheService.save(CacheKey.currentSessionId, sessionId);
     state = AsyncValue.data(sessionId);
   }
 
   /// Clear current session ID
   Future<void> clearCurrentSessionId() async {
     final cacheService = ref.read(cacheServiceProvider);
-    await cacheService.remove('current_session_id');
+    await cacheService.remove([CacheKey.currentSessionId]);
     state = const AsyncValue.data(null);
   }
 

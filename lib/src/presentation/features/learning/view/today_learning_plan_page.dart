@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/extensions/app_localization.dart';
+import '../../../../domain/entities/learning_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -66,7 +67,8 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, learningPlan) {
+  Widget _buildContent(
+      BuildContext context, LearningPlanEntity learningPlan) {
     final recommendedSkill = learningPlan.recommendedSkill;
     final progressSummary = learningPlan.progressSummary;
 
@@ -101,7 +103,8 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
     );
   }
 
-  Widget _buildProgressSummaryCard(BuildContext context, progressSummary) {
+  Widget _buildProgressSummaryCard(
+      BuildContext context, ProgressSummaryEntity progressSummary) {
     final overallMastery = progressSummary.overallMastery;
     final totalSkills = progressSummary.totalSkills;
     final masteredSkills = progressSummary.masteredSkills;

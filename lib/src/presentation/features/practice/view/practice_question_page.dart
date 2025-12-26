@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/extensions/app_localization.dart';
+import '../../../../domain/entities/question_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
@@ -100,12 +101,14 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, question) {
-    final questionNumber = widget.questionNumber ?? question.questionNumber ?? 1;
-    final totalQuestions = widget.totalQuestions ?? question.totalQuestions ?? 8;
-    final progress = questionNumber / totalQuestions;
-    final difficultyLevel = question.difficultyLevel ?? 3;
-    final showHint = _wrongStreak >= 2 && question.hints != null && question.hints!.isNotEmpty;
+  Widget _buildContent(BuildContext context, QuestionEntity question) {
+    final int questionNumber = widget.questionNumber ?? question.questionNumber ?? 1;
+    final int totalQuestions = widget.totalQuestions ?? question.totalQuestions ?? 8;
+    final double progress = questionNumber / totalQuestions;
+    final int difficultyLevel = question.difficultyLevel ?? 3;
+    final bool showHint = _wrongStreak >= 2 &&
+        question.hints != null &&
+        question.hints!.isNotEmpty;
 
     return Column(
       children: [
@@ -217,7 +220,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
             children: [
               if (question.skillName != null)
                 Text(
-                  context.locale.practice_question_skill_label(question.skillName ?? ''),
+                  context.locale.practice_question_skill_label(question.skillName!),
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -357,7 +360,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     );
   }
 
-  Future<void> _onSubmitAnswer(BuildContext context, question) async {
+  Future<void> _onSubmitAnswer(BuildContext context, QuestionEntity question) async {
     final answer = _selectedAnswer ?? _answerController.text.trim();
     if (answer.isEmpty) return;
 
@@ -365,11 +368,13 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
         ? DateTime.now().difference(_startTime!).inSeconds
         : null;
 
+    final String skillId = question.skillId ?? widget.skillId ?? '';
+    final String questionId = question.id;
     final success = await ref.read(practiceSubmissionProvider.notifier).submitPractice(
-          skillId: question.skillId ?? widget.skillId ?? '',
+          skillId: skillId,
           answer: answer,
           durationSec: duration,
-          questionId: question.id,
+          questionId: questionId,
         );
 
     if (success && mounted) {
