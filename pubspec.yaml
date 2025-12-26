@@ -47,7 +47,7 @@ dependencies:
   # Media
   flutter_svg: ^2.0.10+1
   image_picker: ^1.0.5
-  image_cropper: ^5.0.1
+  image_cropper: ^8.0.2
   camera: ^0.10.5+5
   cached_network_image: ^3.3.0
   # Utilities
