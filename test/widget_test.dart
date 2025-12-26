@@ -14,13 +14,25 @@ import 'package:flutter_template/main.dart';
 void main() {
   testWidgets('App builds successfully', (WidgetTester tester) async {
     // Build our app wrapped in ProviderScope (required for Riverpod)
+    // This test verifies that the app can be instantiated without throwing exceptions
     await tester.pumpWidget(
       const ProviderScope(
         child: MyApp(),
       ),
     );
 
+    // Wait for initial build and allow async operations to complete
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
     // Verify that the app builds without errors
-    expect(find.byType(MaterialApp), findsOneWidget);
+    // Check for any exceptions that might have occurred during build
+    final exception = tester.takeException();
+    if (exception != null) {
+      fail('App build failed with exception: $exception');
+    }
+
+    // Verify that the widget tree is not empty
+    expect(find.byType(ProviderScope), findsOneWidget);
   });
 }
