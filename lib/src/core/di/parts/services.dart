@@ -81,3 +81,18 @@ GoogleOAuthService googleOAuthService(Ref ref) {
 AppleOAuthService appleOAuthService(Ref ref) {
   return AppleOAuthService();
 }
+
+@riverpod
+ProfileService profileService(Ref ref) {
+  return ProfileService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
+SettingsService settingsService(Ref ref) {
+  return SettingsService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}
+
+@riverpod
+PasswordService passwordService(Ref ref) {
+  return PasswordService(ref.read(dioProvider), baseUrl: Endpoints.base);
+}

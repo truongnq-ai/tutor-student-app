@@ -49,7 +49,7 @@ StatefulShellRoute _shellRoutes(Ref ref) {
             path: Routes.profile,
             name: Routes.profile,
             pageBuilder: (context, state) {
-              return const MaterialPage(child: ProfilePage());
+              return const MaterialPage(child: ProfileOverviewPage());
             },
           ),
         ],

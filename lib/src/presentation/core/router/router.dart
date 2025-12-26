@@ -23,6 +23,11 @@ import '../../features/onboarding/view/trial_start_page.dart';
 import '../../features/onboarding/view/trial_status_page.dart';
 import '../../features/onboarding/view/welcome_page.dart';
 import '../../features/profile/view/profile_page.dart';
+import '../../features/profile/view/profile_overview_page.dart';
+import '../../features/profile/view/edit_profile_page.dart';
+import '../../features/profile/view/settings_page.dart';
+import '../../features/profile/view/change_password_page.dart';
+import '../../features/profile/view/about_help_page.dart';
 import '../../features/splash/view/splash_page.dart';
 import '../widgets/app_startup/startup_widget.dart';
 import '../widgets/navigation_shell.dart';
@@ -54,6 +59,7 @@ part 'parts/on_boarding_routes.dart';
 part 'parts/learning_routes.dart';
 part 'parts/tutor_routes.dart';
 part 'parts/progress_routes.dart';
+part 'parts/profile_routes.dart';
 part 'parts/shell_routes.dart';
 part 'router.g.dart';
 
@@ -96,6 +102,7 @@ GoRouter goRouter(Ref ref) {
       ..._learningRoutes(ref),
       ..._tutorRoutes(ref),
       ..._progressRoutes(ref),
+      ..._profileRoutes(ref),
       _shellRoutes(ref),
     ],
   );

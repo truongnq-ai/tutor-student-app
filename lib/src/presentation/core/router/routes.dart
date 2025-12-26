@@ -22,6 +22,10 @@ class Routes {
 
   static const String home = '/home';
   static const String profile = '/profile';
+  static const String profileEdit = '/profile/edit';
+  static const String profileSettings = '/profile/settings';
+  static const String profileChangePassword = '/profile/change-password';
+  static const String profileAboutHelp = '/profile/about-help';
 
   // Learning Flow Routes
   static const String todayLearningPlan = '/learning/today';

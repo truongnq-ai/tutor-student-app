@@ -98,3 +98,24 @@ MiniTestRepository miniTestRepository(Ref ref) {
     miniTestService: ref.read(miniTestServiceProvider),
   );
 }
+
+@Riverpod(keepAlive: true)
+ProfileRepository profileRepository(Ref ref) {
+  return ProfileRepositoryImpl(
+    profileService: ref.read(profileServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+SettingsRepository settingsRepository(Ref ref) {
+  return SettingsRepositoryImpl(
+    settingsService: ref.read(settingsServiceProvider),
+  );
+}
+
+@Riverpod(keepAlive: true)
+PasswordRepository passwordRepository(Ref ref) {
+  return PasswordRepositoryImpl(
+    passwordService: ref.read(passwordServiceProvider),
+  );
+}

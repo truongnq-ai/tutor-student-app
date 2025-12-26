@@ -80,6 +80,20 @@ class Endpoints {
   static const String miniTestSubmit = '/api/v1/minitest/sessions/{sessionId}/submit';
   static const String miniTestUnlock = '/api/v1/minitest/unlock/{skillId}';
 
+  // ==================== Profile & Settings ====================
+  
+  /// Profile
+  static const String studentProfileGet = '/api/v1/student/profile/me';
+  static const String studentProfileUpdate = '/api/v1/student/profile';
+  static const String studentProfileAvatar = '/api/v1/student/profile/avatar';
+  
+  /// Settings
+  static const String studentSettingsGet = '/api/v1/student/settings';
+  static const String studentSettingsUpdate = '/api/v1/student/settings';
+  
+  /// Change Password
+  static const String studentChangePassword = '/api/v1/student/change-password';
+
   // ==================== Parent Linking ====================
   
   static const String linkRequestOtp = '/api/v1/student/parent/link/request-otp';
