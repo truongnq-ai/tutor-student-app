@@ -2,13 +2,7 @@ part of '../router.dart';
 
 List<RouteBase> _tutorRoutes(Ref ref) {
   return [
-    GoRoute(
-      path: Routes.tutorModeEntry,
-      name: Routes.tutorModeEntry,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: TutorModeEntryPage());
-      },
-    ),
+    // Note: Tutor Mode Entry route is defined in shell_routes.dart as part of navigation shell
     GoRoute(
       path: Routes.tutorCameraCapture,
       name: Routes.tutorCameraCapture,
