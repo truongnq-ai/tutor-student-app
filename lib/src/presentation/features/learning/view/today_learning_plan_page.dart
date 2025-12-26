@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/learning_entity.dart';
 import '../../../core/router/routes.dart';
@@ -13,6 +14,7 @@ import '../../../core/widgets/error_state_widget.dart';
 import '../../../core/widgets/skeleton/skeleton_list.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/learning_plan_provider.dart';
+import '../utils/learning_plan_utils.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/progress_indicator.dart';
 
@@ -85,13 +87,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
           if (recommendedSkill != null) ...[
             LearningCard(
               recommendedSkill: recommendedSkill,
-              onStartLearning: () {
-                if (recommendedSkill.skillId != null) {
-                  context.push(
-                    '${Routes.practiceQuestion}?skillId=${recommendedSkill.skillId}',
-                  );
-                }
-              },
+              onStartLearning: () => _handleStartLearning(context, recommendedSkill),
             ),
             Gap(context.spacing.s24),
           ],
@@ -269,6 +265,104 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
       message = '${message.substring(0, 100)}...';
     }
     return message;
+  }
+
+  Future<void> _handleStartLearning(
+    BuildContext context,
+    RecommendedSkillEntity recommendedSkill,
+  ) async {
+    if (recommendedSkill.skillId == null) {
+      return;
+    }
+
+    // Calculate totalQuestions based on difficultyLevel
+    final totalQuestions = LearningPlanUtils.calculateTotalQuestionsForLearningPlan(
+      recommendedSkill.difficultyLevel,
+    );
+
+    // Show loading indicator
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      // Create PracticeSession using repository directly
+      final sessionRepository = ref.read(practiceSessionRepositoryProvider);
+      final response = await sessionRepository.createSession(
+        skillId: recommendedSkill.skillId!,
+        totalQuestions: totalQuestions,
+      );
+
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+
+      // Check if session creation was successful
+      if (response.isSuccess && response.data != null) {
+        final session = response.data!;
+        final sessionId = session.sessionId;
+        
+        // Navigate to PracticeQuestionPage with sessionId
+        if (context.mounted && sessionId.isNotEmpty) {
+          context.push(
+            '${Routes.practiceQuestion}?sessionId=$sessionId',
+          );
+        } else {
+          // Session creation succeeded but no session ID
+          if (context.mounted) {
+            _showErrorDialog(
+              context,
+              context.locale.error_system_internal,
+            );
+          }
+        }
+      } else {
+        // Session creation failed
+        final errorMessage = response.getErrorMessage();
+        if (context.mounted) {
+          _showErrorDialog(
+            context,
+            errorMessage.isNotEmpty
+                ? errorMessage
+                : context.locale.error_system_internal,
+          );
+        }
+      }
+    } catch (e) {
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
+
+      // Show error dialog (strict error handling)
+      if (context.mounted) {
+        _showErrorDialog(
+          context,
+          _getUserFriendlyErrorMessage(context, e),
+        );
+      }
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.locale.learning_plan_error_load_failed),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.locale.common_button_ok),
+          ),
+        ],
+      ),
+    );
   }
 
 }

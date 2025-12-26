@@ -9,15 +9,6 @@ part 'practice_service.g.dart';
 abstract class PracticeService {
   factory PracticeService(Dio dio, {String? baseUrl}) = _PracticeService;
 
-  /// Submit practice answer
-  @POST(Endpoints.practiceSubmit)
-  Future<HttpResponse<dynamic>> submitPractice(
-    @Query('skillId') String skillId,
-    @Query('answer') String answer,
-    @Query('durationSec') int? durationSec,
-    @Query('questionId') String? questionId,
-  );
-
   /// Get practice history
   @GET(Endpoints.practiceHistory)
   Future<HttpResponse<dynamic>> getPracticeHistory(

@@ -3,15 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/question_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/widgets/error_state_widget.dart';
-import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/skeleton/skeleton_question.dart';
-import '../../../core/widgets/text/typography.dart';
 import '../../learning/widgets/progress_indicator.dart';
 import '../riverpod/practice_provider.dart';
 import '../riverpod/question_provider.dart';
@@ -49,10 +48,47 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
     super.initState();
     _startTime = DateTime.now();
     
-    if (widget.questionId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.sessionId != null) {
+        // Load questions from session
+        _loadQuestionsFromSession(widget.sessionId!);
+      } else if (widget.questionId != null) {
+        // Load single question (existing behavior)
         ref.read(currentQuestionProvider.notifier).loadQuestion(widget.questionId!);
-      });
+      }
+    });
+  }
+
+  Future<void> _loadQuestionsFromSession(String sessionId) async {
+    try {
+      // Get questions from session using QuestionRepository
+      final questionRepository = ref.read(questionRepositoryProvider);
+      final response = await questionRepository.getQuestionsBySession(sessionId);
+      
+      if (response.isSuccess && response.data != null) {
+        final questions = response.data!;
+        if (questions.isNotEmpty) {
+          // Load the first question (or current question based on session state)
+          // For now, load the first question
+          final firstQuestion = questions.first;
+          ref.read(currentQuestionProvider.notifier).loadQuestion(firstQuestion.id);
+        } else {
+          // No questions found in session
+          if (mounted) {
+            // Error will be handled by questionState.when(error: ...)
+          }
+        }
+      } else {
+        // Error loading questions - will be handled by questionState.when(error: ...)
+        if (mounted) {
+          // Error will be handled by questionState.when(error: ...)
+        }
+      }
+    } catch (e) {
+      // Error loading questions from session
+      if (mounted) {
+        // Error will be handled by questionState.when(error: ...)
+      }
     }
   }
 
@@ -370,11 +406,24 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
 
     final String skillId = question.skillId ?? widget.skillId ?? '';
     final String questionId = question.id;
+    
+    // Determine session context
+    String? sessionId = widget.sessionId;
+    String? sessionType;
+    if (sessionId != null) {
+      // If sessionId is provided, determine session type
+      // For PracticeSession, use 'PRACTICE_SESSION'
+      // This can be enhanced later to support other session types
+      sessionType = 'PRACTICE_SESSION';
+    }
+    
     final success = await ref.read(practiceSubmissionProvider.notifier).submitPractice(
           skillId: skillId,
           answer: answer,
           durationSec: duration,
           questionId: questionId,
+          sessionId: sessionId,
+          sessionType: sessionType,
         );
 
     if (success && mounted) {
@@ -405,7 +454,7 @@ class _PracticeQuestionPageState extends ConsumerState<PracticeQuestionPage> {
   }
 
   void _showHintDialog(BuildContext context, String hint) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.locale.practice_question_hint),

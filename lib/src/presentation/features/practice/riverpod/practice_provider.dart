@@ -17,6 +17,8 @@ class PracticeSubmission extends _$PracticeSubmission {
     required String answer,
     int? durationSec,
     String? questionId,
+    String? sessionId,
+    String? sessionType,
   }) async {
     if (state.isLoading) return false;
 
@@ -28,6 +30,8 @@ class PracticeSubmission extends _$PracticeSubmission {
             answer: answer,
             durationSec: durationSec,
             questionId: questionId,
+            sessionId: sessionId,
+            sessionType: sessionType,
           );
 
       if (response.isSuccess && response.data != null) {

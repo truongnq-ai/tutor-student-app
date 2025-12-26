@@ -61,6 +61,7 @@ PracticeRepository practiceRepository(Ref ref) {
 QuestionRepository questionRepository(Ref ref) {
   return QuestionRepositoryImpl(
     practiceService: ref.read(practiceServiceProvider),
+    practiceSessionService: ref.read(practiceSessionServiceProvider),
   );
 }
 

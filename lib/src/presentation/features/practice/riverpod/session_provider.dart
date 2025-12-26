@@ -27,5 +27,20 @@ class SessionInfo extends _$SessionInfo {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _fetchSessionInfo(sessionId));
   }
+
+  Future<bool> cancelSession(String sessionId) async {
+    try {
+      final response = await ref.read(practiceSessionRepositoryProvider).cancelSession(sessionId);
+      if (response.isSuccess) {
+        // Refresh session info after cancellation
+        await refresh();
+        return true;
+      } else {
+        throw Exception(response.getErrorMessage());
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }
 

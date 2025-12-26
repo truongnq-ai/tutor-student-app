@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../domain/entities/tutor_entity.dart';
-import '../../../core/extensions/app_localization.dart';
+import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
 
 class SolutionStepCard extends StatelessWidget {

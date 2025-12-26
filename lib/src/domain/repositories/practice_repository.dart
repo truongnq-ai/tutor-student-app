@@ -8,6 +8,8 @@ abstract class PracticeRepository {
     required String answer,
     int? durationSec,
     String? questionId,
+    String? sessionId,
+    String? sessionType,
   });
 
   Future<ResponseObject<Map<String, dynamic>>> getPracticeHistory({

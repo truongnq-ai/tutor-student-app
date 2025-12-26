@@ -356,11 +356,25 @@ class _SessionResumePageState extends ConsumerState<SessionResumePage> {
             child: Text(context.locale.common_button_cancel),
           ),
           FilledButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              // TODO: Delete session from backend
-              // Navigate back to home
-              context.go(Routes.todayLearningPlan);
+              // Cancel session from backend
+              final success = await ref
+                  .read(sessionInfoProvider(sessionId: sessionInfo.sessionId).notifier)
+                  .cancelSession(sessionInfo.sessionId);
+              if (mounted) {
+                if (success) {
+                  // Navigate back to home
+                  context.go(Routes.todayLearningPlan);
+                } else {
+                  // Show error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(context.locale.practice_session_error_cancel_failed),
+                    ),
+                  );
+                }
+              }
             },
             style: FilledButton.styleFrom(
               backgroundColor: const Color(0xFFF44336),

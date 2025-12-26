@@ -48,14 +48,13 @@ class Endpoints {
   
   static const String learningToday = '/api/v1/learning/today';
   static const String learningWeakSkills = '/api/v1/learning/weak-skills';
-  static const String practiceSubmit = '/api/v1/practice/submit';
   static const String practiceHistory = '/api/v1/practice/history';
   static const String practiceSessionInfo = '/api/v1/practice/sessions/{sessionId}';
   
   /// Practice Questions (new API)
-  static const String practiceQuestions = '/api/practice/questions';
-  static const String practiceQuestionDetail = '/api/practice/questions/{id}';
-  static const String practiceQuestionSubmit = '/api/practice/questions/{id}/submit';
+  static const String practiceQuestions = '/api/v1/practice/questions';
+  static const String practiceQuestionDetail = '/api/v1/practice/questions/{id}';
+  static const String practiceQuestionSubmit = '/api/v1/practice/questions/{id}/submit';
 
   // ==================== Progress & Mini Test ====================
   
@@ -68,9 +67,11 @@ class Endpoints {
   /// Practice Session
   static const String practiceSessionCreate = '/api/v1/practice/sessions';
   static const String practiceSessionGet = '/api/v1/practice/sessions/{sessionId}';
+  static const String practiceSessionQuestions = '/api/v1/practice/sessions/{sessionId}/questions';
   static const String practiceSessionPause = '/api/v1/practice/sessions/{sessionId}/pause';
   static const String practiceSessionResume = '/api/v1/practice/sessions/{sessionId}/resume';
   static const String practiceSessionComplete = '/api/v1/practice/sessions/{sessionId}/complete';
+  static const String practiceSessionCancel = '/api/v1/practice/sessions/{sessionId}';
   static const String practiceSessionResumable = '/api/v1/practice/sessions/resumable';
   
   /// Mini Test

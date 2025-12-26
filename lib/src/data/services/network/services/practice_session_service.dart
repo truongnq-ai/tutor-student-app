@@ -23,6 +23,12 @@ abstract class PracticeSessionService {
     @Path('sessionId') String sessionId,
   );
 
+  /// Get questions in practice session
+  @GET(Endpoints.practiceSessionQuestions)
+  Future<HttpResponse<dynamic>> getQuestionsInSession(
+    @Path('sessionId') String sessionId,
+  );
+
   /// Pause practice session
   @PUT(Endpoints.practiceSessionPause)
   Future<HttpResponse<dynamic>> pauseSession(
@@ -38,6 +44,12 @@ abstract class PracticeSessionService {
   /// Complete practice session
   @PUT(Endpoints.practiceSessionComplete)
   Future<HttpResponse<dynamic>> completeSession(
+    @Path('sessionId') String sessionId,
+  );
+
+  /// Cancel practice session
+  @DELETE(Endpoints.practiceSessionCancel)
+  Future<HttpResponse<dynamic>> cancelSession(
     @Path('sessionId') String sessionId,
   );
 

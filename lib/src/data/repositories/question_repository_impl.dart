@@ -3,13 +3,16 @@ import '../../domain/entities/question_entity.dart';
 import '../../domain/repositories/question_repository.dart';
 import '../models/question_model.dart';
 import '../services/network/services/practice_service.dart';
+import '../services/network/services/practice_session_service.dart';
 
 final class QuestionRepositoryImpl extends QuestionRepository {
   QuestionRepositoryImpl({
     required this.practiceService,
+    required this.practiceSessionService,
   });
 
   final PracticeService practiceService;
+  final PracticeSessionService practiceSessionService;
 
   @override
   Future<ResponseObject<QuestionEntity>> getQuestionById(String questionId) async {
@@ -61,16 +64,59 @@ final class QuestionRepositoryImpl extends QuestionRepository {
   @override
   Future<ResponseObject<List<QuestionEntity>>> getQuestionsBySession(String sessionId) async {
     try {
-      // This would need a new endpoint or use existing practiceQuestions endpoint
-      // For now, return error as this endpoint might not exist yet
-      return ResponseObject.error(
-        errorCode: '5001',
-        errorDetail: 'Not implemented yet',
+      final response = await practiceSessionService.getQuestionsInSession(sessionId);
+
+      final responseJson = response.data;
+      if (responseJson == null) {
+        return ResponseObject.error(
+          errorCode: '5001',
+          errorDetail: 'Invalid response format',
+        );
+      }
+
+      final responseMap = responseJson is Map<String, dynamic>
+          ? responseJson
+          : <String, dynamic>{};
+
+      final responseData = ResponseObject<dynamic>.fromJson(
+        responseMap,
+        (data) => data,
       );
+
+      if (!responseData.isSuccess) {
+        return ResponseObject.error(
+          errorCode: responseData.errorCode ?? '5001',
+          errorDetail: responseData.errorDetail ?? 'Failed to get questions in session',
+        );
+      }
+
+      final questionsData = responseData.data;
+      if (questionsData == null) {
+        return ResponseObject.success([]);
+      }
+
+      if (questionsData is! List) {
+        return ResponseObject.error(
+          errorCode: '5001',
+          errorDetail: 'Invalid response format: expected list',
+        );
+      }
+
+      final questions = (questionsData as List<dynamic>)
+          .map((item) {
+            if (item is Map<String, dynamic>) {
+              return QuestionModel.fromJson(item);
+            }
+            return null;
+          })
+          .whereType<QuestionEntity>()
+          .toList();
+
+      return ResponseObject.success(questions);
     } catch (e) {
       return ResponseObject.error(
         errorCode: '5001',
-        errorDetail: 'Failed to get questions: ${e.toString()}',
+        errorDetail: 'Failed to get questions in session: ${e.toString()}',
       );
     }
   }
