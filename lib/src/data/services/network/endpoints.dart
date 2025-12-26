@@ -49,7 +49,7 @@ class Endpoints {
   static const String learningToday = '/api/v1/learning/today';
   static const String learningWeakSkills = '/api/v1/learning/weak-skills';
   static const String practiceHistory = '/api/v1/practice/history';
-  static const String practiceSessionInfo = '/api/v1/practice/sessions/{sessionId}';
+  static const String practiceSessionInfo = '/api/v1/practice/session-info/{sessionId}';
   
   /// Practice Questions (new API)
   static const String practiceQuestions = '/api/v1/practice/questions';
