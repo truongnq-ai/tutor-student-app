@@ -86,8 +86,22 @@ jobs:
           set +e
           flutter test --reporter expanded > /tmp/test_output.log 2>&1
           EXIT_CODE=$?
-          grep -E "(warning|error|WARNING|ERROR|FAILED|✗|FAIL|Exception)" /tmp/test_output.log || echo "No warnings or errors found"
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "=== Full test output log ==="
+            cat /tmp/test_output.log
+            echo "=== End of test output log ==="
+          else
+            grep -E "(warning|error|WARNING|ERROR|FAILED|✗|FAIL|Exception)" /tmp/test_output.log || echo "No warnings or errors found"
+          fi
           exit $EXIT_CODE
+
+      - name: Upload test output log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output-log
+          path: /tmp/test_output.log
+          retention-days: 7
 
       - name: Build APK (Release)
         run: |
