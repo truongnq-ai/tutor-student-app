@@ -12,6 +12,7 @@ abstract class _Typography extends StatelessWidget {
     this.softWrap,
     this.textDirection,
     this.semanticsLabel,
+    this.style,
   });
 
   final String text;
@@ -21,6 +22,7 @@ abstract class _Typography extends StatelessWidget {
   final bool? softWrap;
   final TextDirection? textDirection;
   final String? semanticsLabel;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context);
@@ -36,10 +38,14 @@ class HeadingLargeText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   });
 
   @override
   Widget build(BuildContext context) {
+    final baseStyle = context.textStyle.headingLarge.copyWith(
+      color: context.color.text.primary,
+    );
     return Text(
       text,
       textAlign: textAlign,
@@ -48,9 +54,7 @@ class HeadingLargeText extends _Typography {
       softWrap: softWrap,
       textDirection: textDirection,
       semanticsLabel: semanticsLabel,
-      style: context.textStyle.headingLarge.copyWith(
-        color: context.color.text.primary,
-      ),
+      style: style != null ? baseStyle.merge(style) : baseStyle,
     );
   }
 }
@@ -65,10 +69,14 @@ class HeadingSmallText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   });
 
   @override
   Widget build(BuildContext context) {
+    final baseStyle = context.textStyle.headingSmall.copyWith(
+      color: context.color.text.primary,
+    );
     return Text(
       text,
       textAlign: textAlign,
@@ -77,9 +85,7 @@ class HeadingSmallText extends _Typography {
       softWrap: softWrap,
       textDirection: textDirection,
       semanticsLabel: semanticsLabel,
-      style: context.textStyle.headingSmall.copyWith(
-        color: context.color.text.primary,
-      ),
+      style: style != null ? baseStyle.merge(style) : baseStyle,
     );
   }
 }
@@ -94,10 +100,14 @@ class BodyLargeText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   });
 
   @override
   Widget build(BuildContext context) {
+    final baseStyle = context.textStyle.bodyLarge.copyWith(
+      color: context.color.text.primary,
+    );
     return Text(
       text,
       textAlign: textAlign,
@@ -106,9 +116,7 @@ class BodyLargeText extends _Typography {
       softWrap: softWrap,
       textDirection: textDirection,
       semanticsLabel: semanticsLabel,
-      style: context.textStyle.bodyLarge.copyWith(
-        color: context.color.text.primary,
-      ),
+      style: style != null ? baseStyle.merge(style) : baseStyle,
     );
   }
 }
@@ -123,10 +131,14 @@ class BodySmallText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   });
 
   @override
   Widget build(BuildContext context) {
+    final baseStyle = context.textStyle.bodySmall.copyWith(
+      color: context.color.text.primary,
+    );
     return Text(
       text,
       textAlign: textAlign,
@@ -135,9 +147,7 @@ class BodySmallText extends _Typography {
       softWrap: softWrap,
       textDirection: textDirection,
       semanticsLabel: semanticsLabel,
-      style: context.textStyle.bodySmall.copyWith(
-        color: context.color.text.primary,
-      ),
+      style: style != null ? baseStyle.merge(style) : baseStyle,
     );
   }
 }
@@ -154,6 +164,7 @@ class BodyMediumText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   }) : _variant = _BodyMediumTextVariant.primary;
 
   const BodyMediumText.secondary(
@@ -165,13 +176,14 @@ class BodyMediumText extends _Typography {
     super.softWrap,
     super.textDirection,
     super.semanticsLabel,
+    super.style,
   }) : _variant = _BodyMediumTextVariant.secondary;
 
   final _BodyMediumTextVariant _variant;
 
   @override
   Widget build(BuildContext context) {
-    final style = switch (_variant) {
+    final baseStyle = switch (_variant) {
       _BodyMediumTextVariant.primary => context.textStyle.bodyMedium,
       _BodyMediumTextVariant.secondary => context.textStyle.bodyMedium.copyWith(
         color: context.color.text.secondary,
@@ -187,7 +199,7 @@ class BodyMediumText extends _Typography {
       softWrap: softWrap,
       textDirection: textDirection,
       semanticsLabel: semanticsLabel,
-      style: style,
+      style: style != null ? baseStyle.merge(style) : baseStyle,
     );
   }
 }
