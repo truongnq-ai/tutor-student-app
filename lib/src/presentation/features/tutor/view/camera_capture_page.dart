@@ -12,7 +12,6 @@ import '../../../../data/services/cache/cache_service.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
-import '../../onboarding/riverpod/trial_provider.dart';
 import '../riverpod/image_upload_provider.dart';
 import '../riverpod/tutor_provider.dart';
 import '../utils/grade_helper.dart';
@@ -200,7 +199,7 @@ class _CameraCapturePageState extends ConsumerState<CameraCapturePage> {
           .read(solveProblemProvider.notifier)
           .solveFromImage(
             imageUrl: imageUrl,
-            grade: grade!,
+            grade: grade,
             trialId: trialId,
           );
 

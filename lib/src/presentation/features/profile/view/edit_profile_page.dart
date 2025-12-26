@@ -8,7 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/extensions/app_localization.dart';
+import '../../../../domain/entities/profile_entity.dart';
+import '../../../core/theme/theme.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/profile_provider.dart';
 
@@ -64,7 +65,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, profile) {
+  Widget _buildContent(BuildContext context, ProfileEntity profile) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(context.padding.p16),
       child: Form(
@@ -163,7 +164,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   }
 
   Future<void> _showImagePicker(BuildContext context) async {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => SafeArea(
         child: Wrap(

@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../domain/entities/mini_test_result_entity.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 /// Skill breakdown item for mini test result
 class SkillBreakdownItemWidget extends StatelessWidget {

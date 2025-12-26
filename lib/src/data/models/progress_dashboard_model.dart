@@ -1,7 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import '../../domain/entities/progress_dashboard_entity.dart';
-import 'weak_skill_model.dart';
 
 part 'progress_dashboard_model.mapper.dart';
 

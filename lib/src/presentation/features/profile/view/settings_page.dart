@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/settings_entity.dart';
+import '../../../core/theme/theme.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/settings_provider.dart';

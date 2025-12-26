@@ -1,7 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import '../../domain/entities/recommendation_entity.dart';
-import 'weak_skill_model.dart';
 
 part 'recommendation_model.mapper.dart';
 

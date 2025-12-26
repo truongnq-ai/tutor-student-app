@@ -7,7 +7,6 @@ import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/question_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/practice_provider.dart';
 import '../riverpod/question_provider.dart';
@@ -48,8 +47,6 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
   }
 
   Future<void> _loadQuestionData() async {
-    // Load question to get mastery info
-    final question = ref.read(currentQuestionProvider).valueOrNull;
     // TODO: Get mastery from practice submission response
     // For now, simulate mastery change
     _previousMastery = 45;
@@ -68,8 +65,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
   @override
   Widget build(BuildContext context) {
     final question = ref.read(currentQuestionProvider).valueOrNull;
-    final practiceResponse = ref.read(practiceSubmissionProvider).valueOrNull;
-
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -317,7 +313,7 @@ class _PracticeResultPageState extends ConsumerState<PracticeResultPage> {
   void _showExplanationDialog(BuildContext context, QuestionEntity? question) {
     if (question == null) return;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.locale.practice_result_explanation_dialog_title),

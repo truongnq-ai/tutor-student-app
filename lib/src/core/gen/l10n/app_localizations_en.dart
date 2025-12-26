@@ -1021,6 +1021,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cannot load session information';
 
   @override
+  String get practice_session_error_cancel_failed =>
+      'Cannot cancel session. Please try again.';
+
+  @override
   String get practice_session_error_expired_message =>
       'Session has expired or does not exist. Start a new session?';
 

@@ -1028,6 +1028,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể tải thông tin session';
 
   @override
+  String get practice_session_error_cancel_failed =>
+      'Không thể hủy session. Vui lòng thử lại.';
+
+  @override
   String get practice_session_error_expired_message =>
       'Session đã hết hạn hoặc không tồn tại. Bắt đầu session mới?';
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
 
 class MathSymbolsToolbar extends StatelessWidget {
-  final Function(String) onSymbolTap;
+  final void Function(String) onSymbolTap;
 
   const MathSymbolsToolbar({
     super.key,

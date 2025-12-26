@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 /// Question card for mini test
 class TestQuestionCard extends StatelessWidget {

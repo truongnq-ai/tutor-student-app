@@ -8,6 +8,7 @@ import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/profile_entity.dart';
 import '../../../../domain/entities/progress_dashboard_entity.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/theme/theme.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../../progress/riverpod/progress_provider.dart';
 import '../riverpod/profile_provider.dart';
@@ -161,7 +162,7 @@ class _ProfileOverviewPageState extends ConsumerState<ProfileOverviewPage> {
     );
   }
 
-  Widget _buildStatsSection(BuildContext context, dashboard) {
+  Widget _buildStatsSection(BuildContext context, ProgressDashboardEntity dashboard) {
     return Row(
       children: [
         Expanded(
@@ -339,7 +340,7 @@ class _ProfileOverviewPageState extends ConsumerState<ProfileOverviewPage> {
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Xác nhận đăng xuất'),

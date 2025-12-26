@@ -778,6 +778,7 @@
     "practice_session_error_invalid_id": "Session ID không hợp lệ",
     "practice_session_error_not_found": "Không tìm thấy session",
     "practice_session_error_load_failed": "Không thể tải thông tin session",
+    "practice_session_error_cancel_failed": "Không thể hủy session. Vui lòng thử lại.",
     "practice_session_error_expired_message": "Session đã hết hạn hoặc không tồn tại. Bắt đầu session mới?",
     "practice_session_error_expired": "Session đã hết hạn hoặc không tồn tại.",
     "practice_session_complete_title": "Hoàn thành",

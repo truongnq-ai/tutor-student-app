@@ -1820,6 +1820,12 @@ abstract class AppLocalizations {
   /// **'Cannot load session information'**
   String get practice_session_error_load_failed;
 
+  /// No description provided for @practice_session_error_cancel_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot cancel session. Please try again.'**
+  String get practice_session_error_cancel_failed;
+
   /// No description provided for @practice_session_error_expired_message.
   ///
   /// In en, this message translates to:

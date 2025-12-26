@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 /// Animated mastery progress bar showing mastery level change
 class MasteryProgressBar extends StatefulWidget {

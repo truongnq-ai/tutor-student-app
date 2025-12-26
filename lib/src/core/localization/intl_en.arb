@@ -778,6 +778,7 @@
     "practice_session_error_invalid_id": "Invalid session ID",
     "practice_session_error_not_found": "Session not found",
     "practice_session_error_load_failed": "Cannot load session information",
+    "practice_session_error_cancel_failed": "Cannot cancel session. Please try again.",
     "practice_session_error_expired_message": "Session has expired or does not exist. Start a new session?",
     "practice_session_error_expired": "Session has expired or does not exist.",
     "practice_session_complete_title": "Complete",

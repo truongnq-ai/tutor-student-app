@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 class AdaptiveNotification extends StatelessWidget {
   final bool isDifficultyIncrease; // true if increasing, false if decreasing

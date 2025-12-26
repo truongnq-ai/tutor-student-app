@@ -36,7 +36,12 @@ jobs:
         run: flutter doctor -v
 
       - name: Get dependencies
-        run: flutter pub get
+        run: |
+          set +e
+          flutter pub get > /tmp/flutter_output.log 2>&1
+          EXIT_CODE=$?
+          grep -E "(warning|error|WARNING|ERROR|FAILED)" /tmp/flutter_output.log || echo "No warnings or errors found"
+          exit $EXIT_CODE
 
       - name: Cache Flutter dependencies
         uses: actions/cache@v4
@@ -61,16 +66,36 @@ jobs:
             ${{ runner.os }}-pub-
 
       - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          set +e
+          dart run build_runner build --delete-conflicting-outputs > /tmp/build_runner_output.log 2>&1
+          EXIT_CODE=$?
+          grep -E "(warning|error|WARNING|ERROR|FAILED)" /tmp/build_runner_output.log || echo "No warnings or errors found"
+          exit $EXIT_CODE
 
       - name: Run Flutter analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: |
+          set +e
+          flutter analyze --no-fatal-infos --no-fatal-warnings > /tmp/analyze_output.log 2>&1
+          EXIT_CODE=$?
+          grep -E "(warning|error|WARNING|ERROR|FAILED|issue)" /tmp/analyze_output.log || echo "No warnings or errors found"
+          exit $EXIT_CODE
 
       - name: Run Flutter tests
-        run: flutter test
+        run: |
+          set +e
+          flutter test --reporter expanded > /tmp/test_output.log 2>&1
+          EXIT_CODE=$?
+          grep -E "(warning|error|WARNING|ERROR|FAILED|✗|FAIL|Exception)" /tmp/test_output.log || echo "No warnings or errors found"
+          exit $EXIT_CODE
 
       - name: Build APK (Release)
-        run: flutter build apk --release --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} --dart-define=ENVIRONMENT=production
+        run: |
+          set +e
+          flutter build apk --release --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://apitutor.dienluc.vn' }} --dart-define=ENVIRONMENT=production > /tmp/build_output.log 2>&1
+          EXIT_CODE=$?
+          grep -E "(warning|error|WARNING|ERROR|FAILED)" /tmp/build_output.log || echo "No warnings or errors found"
+          exit $EXIT_CODE
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

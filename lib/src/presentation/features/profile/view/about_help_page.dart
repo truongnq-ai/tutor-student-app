@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/extensions/app_localization.dart';
+import '../../../core/theme/theme.dart';
 import '../../../core/widgets/text/typography.dart';
 
 class AboutHelpPage extends StatefulWidget {

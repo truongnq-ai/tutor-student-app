@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
@@ -57,7 +56,6 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
 
   Widget _buildContent(BuildContext context, Map<String, dynamic> data) {
     final content = data['content'] as List<dynamic>? ?? [];
-    final totalElements = data['totalElements'] as int? ?? 0;
     final totalPages = data['totalPages'] as int? ?? 0;
 
     if (content.isEmpty) {
@@ -147,12 +145,12 @@ class _PracticeHistoryPageState extends ConsumerState<PracticeHistoryPage> {
           children: [
             if (masteryLevel != null)
               Text(
-                context.locale.practice_history_mastery(masteryLevel!),
+                context.locale.practice_history_mastery(masteryLevel),
                 style: context.textStyle.bodySmall,
               ),
             if (durationSec != null)
               Text(
-                context.locale.practice_history_duration(durationSec!),
+                context.locale.practice_history_duration(durationSec),
                 style: context.textStyle.bodySmall,
               ),
           ],

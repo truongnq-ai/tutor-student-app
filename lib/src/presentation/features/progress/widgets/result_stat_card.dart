@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 /// Stat card for mini test result
 class ResultStatCard extends StatelessWidget {

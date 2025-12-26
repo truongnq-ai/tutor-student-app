@@ -84,6 +84,64 @@ class HeadingSmallText extends _Typography {
   }
 }
 
+class BodyLargeText extends _Typography {
+  const BodyLargeText(
+    super.text, {
+    super.key,
+    super.textAlign,
+    super.maxLines,
+    super.overflow,
+    super.softWrap,
+    super.textDirection,
+    super.semanticsLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+      softWrap: softWrap,
+      textDirection: textDirection,
+      semanticsLabel: semanticsLabel,
+      style: context.textStyle.bodyLarge.copyWith(
+        color: context.color.text.primary,
+      ),
+    );
+  }
+}
+
+class BodySmallText extends _Typography {
+  const BodySmallText(
+    super.text, {
+    super.key,
+    super.textAlign,
+    super.maxLines,
+    super.overflow,
+    super.softWrap,
+    super.textDirection,
+    super.semanticsLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+      softWrap: softWrap,
+      textDirection: textDirection,
+      semanticsLabel: semanticsLabel,
+      style: context.textStyle.bodySmall.copyWith(
+        color: context.color.text.primary,
+      ),
+    );
+  }
+}
+
 enum _BodyMediumTextVariant { primary, secondary }
 
 class BodyMediumText extends _Typography {

@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../core/extensions/app_localization.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 
 class SkillCard extends StatelessWidget {
   final String skillName;

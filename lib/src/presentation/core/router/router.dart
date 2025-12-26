@@ -22,7 +22,6 @@ import '../../features/onboarding/view/trial_expiry_page.dart';
 import '../../features/onboarding/view/trial_start_page.dart';
 import '../../features/onboarding/view/trial_status_page.dart';
 import '../../features/onboarding/view/welcome_page.dart';
-import '../../features/profile/view/profile_page.dart';
 import '../../features/profile/view/profile_overview_page.dart';
 import '../../features/profile/view/edit_profile_page.dart';
 import '../../features/profile/view/settings_page.dart';

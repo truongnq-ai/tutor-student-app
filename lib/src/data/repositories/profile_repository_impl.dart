@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-
 import '../../core/base/response_object.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/repositories/profile_repository.dart';

@@ -3,8 +3,6 @@ import '../../domain/entities/progress_dashboard_entity.dart';
 import '../../domain/entities/recommendation_entity.dart';
 import '../../domain/entities/skill_detail_entity.dart';
 import '../../domain/entities/weak_skill_entity.dart';
-import '../../domain/entities/skill_detail_entity.dart';
-import '../../domain/entities/recommendation_entity.dart';
 import '../../domain/repositories/progress_repository.dart';
 import '../models/progress_dashboard_model.dart';
 import '../models/recommendation_model.dart';

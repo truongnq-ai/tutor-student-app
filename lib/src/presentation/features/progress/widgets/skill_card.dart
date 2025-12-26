@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 import '../../../../domain/entities/progress_dashboard_entity.dart';
 import 'mastery_circle.dart';
 

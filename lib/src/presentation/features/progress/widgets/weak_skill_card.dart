@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../domain/entities/weak_skill_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/text/typography.dart';
 import 'mastery_circle.dart';
 
 /// Weak skill card for recommendations
