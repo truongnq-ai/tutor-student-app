@@ -56,28 +56,13 @@ MarkOnboardingCompletedUseCase markOnboardingCompletedUseCase(Ref ref) {
 }
 
 @riverpod
-StartTrialUseCase startTrialUseCase(Ref ref) {
-  return StartTrialUseCase(ref.read(trialRepositoryProvider));
-}
-
-@riverpod
 GetTrialStatusUseCase getTrialStatusUseCase(Ref ref) {
   return GetTrialStatusUseCase(ref.read(trialRepositoryProvider));
 }
 
 @riverpod
-SaveGradeUseCase saveGradeUseCase(Ref ref) {
-  return SaveGradeUseCase(ref.read(onboardingRepositoryProvider));
-}
-
-@riverpod
 GetGradeUseCase getGradeUseCase(Ref ref) {
   return GetGradeUseCase(ref.read(onboardingRepositoryProvider));
-}
-
-@riverpod
-SaveLearningGoalsUseCase saveLearningGoalsUseCase(Ref ref) {
-  return SaveLearningGoalsUseCase(ref.read(onboardingRepositoryProvider));
 }
 
 @riverpod

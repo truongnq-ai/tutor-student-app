@@ -8,25 +8,36 @@ import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
+import '../../../../core/di/dependency_injection.dart';
+import '../riverpod/grade_provider.dart';
 import '../riverpod/learning_goal_provider.dart';
 
-class SelectLearningGoalPage extends ConsumerStatefulWidget {
-  const SelectLearningGoalPage({super.key});
+class SelectGradeAndGoalsPage extends ConsumerStatefulWidget {
+  const SelectGradeAndGoalsPage({super.key});
 
   @override
-  ConsumerState<SelectLearningGoalPage> createState() =>
-      _SelectLearningGoalPageState();
+  ConsumerState<SelectGradeAndGoalsPage> createState() =>
+      _SelectGradeAndGoalsPageState();
 }
 
-class _SelectLearningGoalPageState
-    extends ConsumerState<SelectLearningGoalPage> {
+class _SelectGradeAndGoalsPageState
+    extends ConsumerState<SelectGradeAndGoalsPage> {
   final Set<String> _selectedGoals = {};
+  int? _selectedGrade; // Local state cho grade
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    // Load learning goals when page initializes
+    // Load existing grade and learning goals from providers (nếu có) - chỉ để hiển thị
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final gradeState = ref.read(gradeSelectionProvider);
+      if (gradeState.value != null) {
+        setState(() {
+          _selectedGrade = gradeState.value;
+        });
+      }
+      
       final goalsState = ref.read(learningGoalsProvider);
       if (goalsState.value != null && goalsState.value!.isNotEmpty) {
         setState(() {
@@ -36,26 +47,71 @@ class _SelectLearningGoalPageState
     });
   }
 
-  Future<void> _onStartLearning() async {
-    if (_selectedGoals.isEmpty) return;
-
-    await ref.read(learningGoalsProvider.notifier).saveLearningGoals(_selectedGoals);
-    
-    // Listen to state changes
-    ref.listenManual(learningGoalsProvider, (previous, next) {
-      next.when(
-        data: (goals) {
-          if (goals.isNotEmpty && mounted) {
-            // Navigate to home on success
-            context.go(Routes.home);
-          }
-        },
-        loading: () {},
-        error: (error, stackTrace) {
-          // Error handling is done in the UI
-        },
+  Future<void> _onCreateTrial() async {
+    if (_selectedGrade == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vui lòng chọn lớp học'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
       );
+      return;
+    }
+
+    if (_selectedGoals.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vui lòng chọn ít nhất một mục tiêu học tập'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
     });
+
+    try {
+      // Gọi API create trial với cả grade và learningGoals
+      final repository = ref.read(trialRepositoryProvider);
+      final response = await repository.createTrial(
+        grade: _selectedGrade!,
+        learningGoals: _selectedGoals.toList(),
+      );
+
+      if (!response.isSuccess) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response.errorDetail ?? 'Không thể tạo trial. Vui lòng thử lại.'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Navigate to home on success
+      if (mounted) {
+        context.go(Routes.home);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Có lỗi xảy ra: ${e.toString()}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
   }
 
   void _toggleGoal(String goalId) {
@@ -68,16 +124,20 @@ class _SelectLearningGoalPageState
     });
   }
 
+  void _selectGrade(int grade) {
+    setState(() {
+      _selectedGrade = grade;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final goalsState = ref.watch(learningGoalsProvider);
-    final isLoading = goalsState.isLoading;
-    final error = goalsState.hasError ? goalsState.error : null;
+    // Không cần watch providers nữa, chỉ dùng local state
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: HeadingSmallText(context.locale.onboarding_select_goal_title),
+        title: HeadingSmallText('Chọn lớp và mục tiêu học tập'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
@@ -95,76 +155,44 @@ class _SelectLearningGoalPageState
                     Gap(context.spacing.s32),
                     // Header
                     Text(
-                      context.locale.onboarding_select_goal_header,
+                      'Chọn lớp học của bạn',
                       style: context.textStyle.headingLarge.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        height: 1.33, // 32px / 24px
+                        height: 1.33,
                         color: const Color(0xFF212121),
                       ),
                     ),
                     Gap(context.spacing.s16),
-                    // Error message
-                    if (error != null) ...[
-                      Container(
-                        padding: EdgeInsets.all(context.padding.p16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFEBEE),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFFF44336).withOpacity(0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              color: Color(0xFFF44336),
-                              size: 20,
-                            ),
-                            Gap(context.spacing.s8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    error.toString().replaceFirst('Exception: ', ''),
-                                    style: context.textStyle.bodyMedium.copyWith(
-                                      fontSize: 14,
-                                      color: const Color(0xFF212121),
-                                    ),
-                                  ),
-                                  Gap(context.spacing.s8),
-                                  TextButton(
-                                    onPressed: () {
-                                      if (_selectedGoals.isNotEmpty) {
-                                        ref.read(learningGoalsProvider.notifier).saveLearningGoals(_selectedGoals);
-                                      }
-                                    },
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: Size.zero,
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    child: Text(
-                                      context.locale.onboarding_select_goal_button_retry,
-                                      style: context.textStyle.bodyMedium.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFF44336),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                    // Grade selection cards
+                    _GradeCard(
+                      grade: 6,
+                      title: context.locale.onboarding_grade_6_title,
+                      description: context.locale.onboarding_grade_6_description,
+                      icon: Icons.school,
+                      isSelected: _selectedGrade == 6,
+                      onTap: () => _selectGrade(6),
+                    ),
+                    Gap(context.spacing.s16),
+                    _GradeCard(
+                      grade: 7,
+                      title: context.locale.onboarding_grade_7_title,
+                      description: context.locale.onboarding_grade_7_description,
+                      icon: Icons.school,
+                      isSelected: _selectedGrade == 7,
+                      onTap: () => _selectGrade(7),
+                    ),
+                    Gap(context.spacing.s32),
+                    // Learning goals section
+                    Text(
+                      'Chọn mục tiêu học tập',
+                      style: context.textStyle.headingLarge.copyWith(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        height: 1.33,
+                        color: const Color(0xFF212121),
                       ),
-                      Gap(context.spacing.s16),
-                    ],
+                    ),
                     Gap(context.spacing.s16),
                     // Learning goal cards
                     _LearningGoalCard(
@@ -181,8 +209,7 @@ class _SelectLearningGoalPageState
                       title: context.locale.onboarding_goal_strengthen_weakness_title,
                       description: context.locale.onboarding_goal_strengthen_weakness_description,
                       icon: Icons.track_changes,
-                      isSelected:
-                          _selectedGoals.contains('strengthen_weakness'),
+                      isSelected: _selectedGoals.contains('strengthen_weakness'),
                       onTap: () => _toggleGoal('strengthen_weakness'),
                     ),
                     Gap(context.spacing.s12),
@@ -216,12 +243,14 @@ class _SelectLearningGoalPageState
                 width: double.infinity,
                 height: 56,
                 child: FilledButton(
-                  onPressed:
-                      _selectedGoals.isNotEmpty && !isLoading
-                          ? _onStartLearning
-                          : null,
+                  onPressed: _selectedGrade != null &&
+                          _selectedGoals.isNotEmpty &&
+                          !_isLoading
+                      ? _onCreateTrial
+                      : null,
                   style: FilledButton.styleFrom(
-                    backgroundColor: _selectedGoals.isNotEmpty
+                    backgroundColor: _selectedGrade != null &&
+                            _selectedGoals.isNotEmpty
                         ? const Color(0xFF4CAF50)
                         : const Color(0xFFBDBDBD),
                     foregroundColor: Colors.white,
@@ -231,10 +260,10 @@ class _SelectLearningGoalPageState
                     ),
                     elevation: 2,
                   ),
-                  child: isLoading
+                  child: _isLoading
                       ? const LoadingIndicator()
                       : Text(
-                          context.locale.onboarding_select_goal_button_start,
+                          'Bắt đầu học tập',
                           style: context.textStyle.bodyLarge.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -245,6 +274,113 @@ class _SelectLearningGoalPageState
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GradeCard extends StatelessWidget {
+  const _GradeCard({
+    required this.grade,
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final int grade;
+  final String title;
+  final String description;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '$title - $description',
+      selected: isSelected,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 120,
+          padding: EdgeInsets.all(context.padding.p24),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? const Color(0xFFE8F5E9)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isSelected
+                  ? const Color(0xFF4CAF50)
+                  : const Color(0xFFE0E0E0),
+              width: isSelected ? 2 : 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xFF4CAF50).withOpacity(0.1)
+                      : const Color(0xFFE0E0E0).withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: isSelected
+                      ? const Color(0xFF4CAF50)
+                      : const Color(0xFF757575),
+                ),
+              ),
+              Gap(context.spacing.s16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: context.textStyle.headingMedium.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                        color: const Color(0xFF212121),
+                      ),
+                    ),
+                    Gap(context.spacing.s4),
+                    Text(
+                      description,
+                      style: context.textStyle.bodyMedium.copyWith(
+                        fontSize: 14,
+                        height: 1.43,
+                        color: const Color(0xFF757575),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (isSelected)
+                const Icon(
+                  Icons.check_circle,
+                  color: Color(0xFF4CAF50),
+                  size: 24,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -301,7 +437,6 @@ class _LearningGoalCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Icon
                   Container(
                     width: 48,
                     height: 48,
@@ -320,7 +455,6 @@ class _LearningGoalCard extends StatelessWidget {
                     ),
                   ),
                   Gap(context.spacing.s16),
-                  // Title and description
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +464,7 @@ class _LearningGoalCard extends StatelessWidget {
                           style: context.textStyle.headingMedium.copyWith(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            height: 1.33, // 24px / 18px
+                            height: 1.33,
                             color: const Color(0xFF212121),
                           ),
                         ),
@@ -339,7 +473,7 @@ class _LearningGoalCard extends StatelessWidget {
                           description,
                           style: context.textStyle.bodyMedium.copyWith(
                             fontSize: 14,
-                            height: 1.43, // 20px / 14px
+                            height: 1.43,
                             color: const Color(0xFF757575),
                           ),
                         ),
@@ -348,37 +482,31 @@ class _LearningGoalCard extends StatelessWidget {
                   ),
                 ],
               ),
-              // Checkbox at top right
               Positioned(
                 top: 0,
                 right: 0,
-                child: Semantics(
-                  label: isSelected
-                      ? context.locale.onboarding_select_goal_semantics_selected
-                      : context.locale.onboarding_select_goal_semantics_not_selected,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? const Color(0xFF4CAF50)
+                        : Colors.transparent,
+                    border: Border.all(
                       color: isSelected
                           ? const Color(0xFF4CAF50)
-                          : Colors.transparent,
-                      border: Border.all(
-                        color: isSelected
-                            ? const Color(0xFF4CAF50)
-                            : const Color(0xFF757575),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(4),
+                          : const Color(0xFF757575),
+                      width: 2,
                     ),
-                    child: isSelected
-                        ? const Icon(
-                            Icons.check,
-                            size: 16,
-                            color: Colors.white,
-                          )
-                        : null,
+                    borderRadius: BorderRadius.circular(4),
                   ),
+                  child: isSelected
+                      ? const Icon(
+                          Icons.check,
+                          size: 16,
+                          color: Colors.white,
+                        )
+                      : null,
                 ),
               ),
             ],

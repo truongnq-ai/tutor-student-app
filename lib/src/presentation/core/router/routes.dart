@@ -3,8 +3,7 @@ class Routes {
   static const String splash = '/splash';
   static const String welcome = '/welcome';
   static const String trialStart = '/trial-start';
-  static const String selectGrade = '/select-grade';
-  static const String selectLearningGoal = '/select-learning-goal';
+  static const String selectGradeAndGoals = '/select-grade-and-goals';
   static const String trialStatus = '/trial-status';
   static const String trialExpiry = '/trial-expiry';
   static const String otpVerification = '/otp-verification';

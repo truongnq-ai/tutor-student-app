@@ -3,13 +3,10 @@ import '../constants/error_codes.dart';
 /// Error handler helper to map error codes to user-friendly messages
 class ErrorHandler {
   /// Get user-friendly error message from error code and detail
-  /// 
+  ///
   /// If errorDetail is provided and not empty, it will be used.
   /// Otherwise, a default message based on errorCode will be returned.
-  static String getErrorMessage(
-    String errorCode,
-    String? errorDetail,
-  ) {
+  static String getErrorMessage(String errorCode, String? errorDetail) {
     // Use errorDetail if available and not empty
     if (errorDetail != null && errorDetail.isNotEmpty) {
       return errorDetail;
@@ -25,7 +22,8 @@ class ErrorHandler {
       case ErrorCodes.forbidden:
         return 'Bạn không có quyền thực hiện thao tác này.';
       case ErrorCodes.phoneNotVerified:
-        return 'Số điện thoại chưa được xác thực. Vui lòng xác thực số điện thoại.';
+        return 'Số điện thoại chưa được xác thực. '
+            'Vui lòng xác thực số điện thoại.';
 
       // Validation
       case ErrorCodes.validationError:
@@ -73,11 +71,14 @@ class ErrorHandler {
 
       // Special errors
       case ErrorCodes.trialExpired:
-        return 'Thời gian dùng thử đã hết hạn. Vui lòng đăng ký để tiếp tục sử dụng.';
+        return 'Thời gian dùng thử đã hết hạn. '
+            'Vui lòng đăng ký để tiếp tục sử dụng.';
       case ErrorCodes.skillNotUnlocked:
-        return 'Kỹ năng này chưa được mở khóa. Vui lòng hoàn thành các kỹ năng trước đó.';
+        return 'Kỹ năng này chưa được mở khóa. '
+            'Vui lòng hoàn thành các kỹ năng trước đó.';
       case ErrorCodes.prerequisiteNotMet:
-        return 'Chưa đạt yêu cầu tiên quyết. Vui lòng hoàn thành các kỹ năng cần thiết.';
+        return 'Chưa đạt yêu cầu tiên quyết. '
+            'Vui lòng hoàn thành các kỹ năng cần thiết.';
       case ErrorCodes.rateLimitExceeded:
         return 'Bạn đã vượt quá giới hạn yêu cầu. Vui lòng thử lại sau.';
 
@@ -120,4 +121,3 @@ class ErrorHandler {
         errorCode == ErrorCodes.trialExpired;
   }
 }
-

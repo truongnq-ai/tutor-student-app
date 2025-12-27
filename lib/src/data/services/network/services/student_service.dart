@@ -13,15 +13,11 @@ abstract class StudentService {
 
   /// Manual registration
   @POST(Endpoints.studentRegister)
-  Future<HttpResponse<dynamic>> register(
-    @Body() Map<String, dynamic> request,
-  );
+  Future<HttpResponse<dynamic>> register(@Body() Map<String, dynamic> request);
 
   /// Manual login
   @POST(Endpoints.studentLogin)
-  Future<HttpResponse<dynamic>> login(
-    @Body() Map<String, dynamic> request,
-  );
+  Future<HttpResponse<dynamic>> login(@Body() Map<String, dynamic> request);
 
   /// OAuth login (Google/Apple)
   @POST(Endpoints.studentOAuthLogin)
@@ -38,15 +34,11 @@ abstract class StudentService {
 
   // ==================== Trial ====================
 
-  /// Check trial status (primary endpoint - backend decides NEW/ACTIVE/EXPIRED/CONSUMED)
-  @POST(Endpoints.trialCheck)
-  Future<HttpResponse<dynamic>> checkTrial(
-    @Body() Map<String, dynamic> request,
-  );
-
-  /// Start trial (legacy - prefer checkTrial)
-  @POST(Endpoints.trialStart)
-  Future<HttpResponse<dynamic>> startTrial(
+  /// Check student status (trial and licence) - primary endpoint
+  /// Returns one of 6 statuses: NO_TRIAL, TRIAL_ACTIVE_DEVICE_CONSUMED, TRIAL_ACTIVE,
+  /// LICENCE_ACTIVE, LICENCE_EXPIRED, TRIAL_EXPIRED_NO_LICENCE
+  @POST(Endpoints.studentCheck)
+  Future<HttpResponse<dynamic>> checkStudentStatus(
     @Body() Map<String, dynamic> request,
   );
 
@@ -62,25 +54,11 @@ abstract class StudentService {
 
   // ==================== Grade & Learning Goals ====================
 
-  /// Save grade selection (requires authentication)
-  @POST(Endpoints.studentSaveGrade)
-  Future<HttpResponse<dynamic>> saveGrade(
-    @Body() Map<String, dynamic> request,
-  );
-
   /// Get grade selection (requires authentication)
   @GET(Endpoints.studentGetGrade)
   Future<HttpResponse<dynamic>> getGrade();
-
-  /// Save learning goals and create trial if not exists (requires authentication)
-  /// Note: Grade must be included in request body when creating trial
-  @POST(Endpoints.studentSaveLearningGoals)
-  Future<HttpResponse<dynamic>> saveLearningGoals(
-    @Body() Map<String, dynamic> request,
-  );
 
   /// Get learning goals (requires authentication)
   @GET(Endpoints.studentGetLearningGoals)
   Future<HttpResponse<dynamic>> getLearningGoals();
 }
-

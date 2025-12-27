@@ -25,15 +25,12 @@ class Endpoints {
 
   // ==================== Onboarding & Trial ====================
   
-  static const String trialCheck = '/api/v1/student/trial/check';
-  static const String trialStart = '/api/v1/student/trial/start';
+  static const String studentCheck = '/api/v1/student/check';
   static const String trialCreate = '/api/v1/student/trial/create';
   static const String trialStatus = '/api/v1/student/trial/status';
   
   /// Grade & Learning Goals
-  static const String studentSaveGrade = '/api/v1/student/grade';
   static const String studentGetGrade = '/api/v1/student/grade';
-  static const String studentSaveLearningGoals = '/api/v1/student/learning-goals';
   static const String studentGetLearningGoals = '/api/v1/student/learning-goals';
 
   // ==================== Tutor Mode ====================

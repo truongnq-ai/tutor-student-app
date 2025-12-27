@@ -13,7 +13,9 @@ import '../../../../core/widgets/loading_indicator.dart';
 import '../../../../features/authentication/login/riverpod/login_provider.dart';
 import '../../../../features/authentication/login/riverpod/oauth_provider.dart';
 import '../../../../features/authentication/oauth/widgets/oauth_button.dart';
+import '../../../../../domain/entities/student_check_entity.dart';
 import '../../../../features/onboarding/riverpod/trial_provider.dart';
+import '../../../../features/onboarding/widgets/trial_status_dialog.dart';
 import '../widgets/language_switcher.dart';
 
 part '../widgets/login_form.dart';
@@ -37,11 +39,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.initState();
 
     ref.listenManual(loginProvider, (previous, next) {
+      if (!mounted) return;
       switch (next) {
         case AsyncData(:final value) when value != null:
           // After login, ensure trial exists before selecting grade
           _ensureTrialAndNavigate(context, ref);
         case AsyncError(:final error):
+          if (!mounted) return;
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
           // Map error messages to user-friendly localized messages
           final friendlyMessage = _getUserFriendlyErrorMessage(
@@ -59,6 +63,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
 
     ref.listenManual(oAuthLoginProvider, (previous, next) {
+      if (!mounted) return;
       switch (next) {
         case AsyncData(:final value) when value != null:
           // Check if requiresSetCredential
@@ -69,33 +74,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             // Navigate to set credential page
             final studentId = value['studentId'] as String? ?? '';
             if (studentId.isNotEmpty) {
-              context.pushNamed(
-                Routes.setCredential,
-                queryParameters: {'studentId': studentId},
-              );
+              if (mounted) {
+                context.pushNamed(
+                  Routes.setCredential,
+                  queryParameters: {'studentId': studentId},
+                );
+              }
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    context.locale.auth_oauth_error_student_not_found,
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      context.locale.auth_oauth_error_student_not_found,
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.error,
                   ),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-              );
+                );
+              }
             }
           } else {
             // OAuth login successful with tokens
             final tokens = value['tokens'] as Map<String, dynamic>?;
             if (tokens != null) {
               // Tokens are already saved by repository during oauthLogin
-              // Navigate to home
-              context.pushReplacementNamed(Routes.home);
+              // Check student status and navigate accordingly
+              _ensureTrialAndNavigate(context, ref);
             } else {
-              // No tokens but no error, navigate anyway
-              context.pushReplacementNamed(Routes.home);
+              // No tokens but no error, check status anyway
+              _ensureTrialAndNavigate(context, ref);
             }
           }
         case AsyncError(:final error):
+          if (!mounted) return;
           // Don't show error for user cancellation (already handled in provider)
           // Error messages are already user-friendly from the provider
           final errorMessage = error
@@ -143,25 +153,128 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     WidgetRef ref,
   ) async {
     try {
-      // Check if trial exists
-      final trialStatus = await ref
+      // Check student status (trial and licence)
+      final checkStatus = await ref
           .read(trialProvider.notifier)
-          .getTrialStatus();
+          .checkStudentStatus();
 
-      if (trialStatus == null) {
-        // Start trial first - this will create trial profile and save trialId
-        await ref.read(trialProvider.notifier).startTrial();
+      if (checkStatus == null) {
+        // Error occurred, navigate to home as fallback
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.home);
+        }
+        return;
       }
 
-      // Then navigate to select grade
-      if (context.mounted) {
-        context.pushReplacementNamed(Routes.selectGrade);
-      }
+      // Handle 6 statuses
+      await _handleStudentStatus(context, ref, checkStatus);
     } catch (e) {
-      // If trial start fails, still navigate (user can retry)
+      // If check fails, navigate to home as fallback
       if (context.mounted) {
-        context.pushReplacementNamed(Routes.selectGrade);
+        context.pushReplacementNamed(Routes.home);
       }
+    }
+  }
+
+  Future<void> _handleStudentStatus(
+    BuildContext context,
+    WidgetRef ref,
+    StudentCheckEntity checkStatus,
+  ) async {
+    final status = checkStatus.status;
+
+    switch (status) {
+      case 'NO_TRIAL':
+        // Navigate to select grade + learning goals (merged screen)
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.selectGradeAndGoals);
+        }
+        break;
+
+      case 'TRIAL_ACTIVE_DEVICE_CONSUMED':
+        // Show dialog with message and OK button -> navigate to login
+        if (context.mounted) {
+          await TrialStatusDialog.show(
+            context,
+            message:
+                checkStatus.message ??
+                'Thiết bị này đã sử dụng hết lượt dùng thử.',
+            onOk: () {
+              if (context.mounted) {
+                context.pushReplacementNamed(Routes.authEntry);
+              }
+            },
+          );
+        }
+        break;
+
+      case 'TRIAL_ACTIVE':
+        // Navigate to learning page + show reminder snackbar
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.home);
+          // Show reminder notification after navigation
+          final daysRemaining = checkStatus.daysRemaining ?? 0;
+          final expiresAt = checkStatus.expiresAt;
+          if (expiresAt != null && context.mounted) {
+            final expiresAtStr =
+                '${expiresAt.day}/${expiresAt.month}/${expiresAt.year} ${expiresAt.hour}:${expiresAt.minute.toString().padLeft(2, '0')}';
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Số ngày dùng thử còn lại $daysRemaining ngày. Thời điểm kết thúc $expiresAtStr.',
+                ),
+                duration: const Duration(seconds: 5),
+              ),
+            );
+          }
+        }
+        break;
+
+      case 'LICENCE_ACTIVE':
+        // Navigate to learning page + snackbar if < 7 days
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.home);
+          final daysRemaining = checkStatus.daysRemaining ?? 0;
+          if (daysRemaining < 7 && context.mounted) {
+            final expiresAt = checkStatus.expiresAt;
+            if (expiresAt != null) {
+              final expiresAtStr =
+                  '${expiresAt.day}/${expiresAt.month}/${expiresAt.year} ${expiresAt.hour}:${expiresAt.minute.toString().padLeft(2, '0')}';
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Tài khoản của bạn sắp hết hiệu lực ($daysRemaining ngày). Thời điểm kết thúc $expiresAtStr.',
+                  ),
+                  duration: const Duration(seconds: 5),
+                ),
+              );
+            }
+          }
+        }
+        break;
+
+      case 'LICENCE_EXPIRED':
+      case 'TRIAL_EXPIRED_NO_LICENCE':
+        // Show dialog with message and OK button -> navigate to login
+        if (context.mounted) {
+          await TrialStatusDialog.show(
+            context,
+            message:
+                checkStatus.message ?? 'Tài khoản của bạn đã hết hiệu lực.',
+            onOk: () {
+              if (context.mounted) {
+                context.pushReplacementNamed(Routes.authEntry);
+              }
+            },
+          );
+        }
+        break;
+
+      default:
+        // Unknown status, navigate to home
+        if (context.mounted) {
+          context.pushReplacementNamed(Routes.home);
+        }
     }
   }
 

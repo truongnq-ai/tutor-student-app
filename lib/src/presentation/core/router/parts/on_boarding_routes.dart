@@ -24,17 +24,10 @@ List<GoRoute> _onboardingRoutes(Ref ref) {
       },
     ),
     GoRoute(
-      path: Routes.selectGrade,
-      name: Routes.selectGrade,
+      path: Routes.selectGradeAndGoals,
+      name: Routes.selectGradeAndGoals,
       pageBuilder: (context, state) {
-        return const MaterialPage(child: SelectGradePage());
-      },
-    ),
-    GoRoute(
-      path: Routes.selectLearningGoal,
-      name: Routes.selectLearningGoal,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: SelectLearningGoalPage());
+        return const MaterialPage(child: SelectGradeAndGoalsPage());
       },
     ),
     GoRoute(

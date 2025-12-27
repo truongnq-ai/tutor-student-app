@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -133,20 +134,22 @@ class _CameraCapturePageState extends ConsumerState<CameraCapturePage> {
 
     // Show loading
     if (mounted) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  LoadingIndicator(),
-                  Gap(16),
-                  Text('Đang nhận dạng đề bài...'),
-                ],
+      unawaited(
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LoadingIndicator(),
+                    Gap(16),
+                    Text('Đang nhận dạng đề bài...'),
+                  ],
+                ),
               ),
             ),
           ),
