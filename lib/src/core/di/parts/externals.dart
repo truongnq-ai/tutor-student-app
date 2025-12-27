@@ -8,11 +8,13 @@ Future<SharedPreferences> sharedPreferences(Ref ref) =>
 Dio dio(Ref ref) {
   final dio = Dio();
 
+  final deviceIdService = ref.read(deviceIdServiceProvider);
   dio.interceptors.addAll([
     TokenManager(
       baseUrl: Endpoints.base,
       refreshTokenEndpoint: Endpoints.refreshToken,
       cacheService: ref.read(cacheServiceProvider),
+      deviceIdService: deviceIdService,
       navigatorKey: ref.read(goRouterProvider).routerDelegate.navigatorKey,
       dio: Dio(
         BaseOptions(

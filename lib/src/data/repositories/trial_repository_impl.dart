@@ -18,20 +18,23 @@ final class TrialRepositoryImpl extends TrialRepository {
   @override
   Future<ResponseObject<TrialEntity>> startTrial() async {
     try {
-      // Get anonymousId and deviceId from cache
-      final anonymousId = cacheService.get<String>(CacheKey.anonymousId);
+      // Get deviceId from cache (required for checkTrial)
       final deviceId = cacheService.get<String>(CacheKey.deviceId);
-
-      // Build request body
-      final request = <String, dynamic>{};
-      if (anonymousId != null) {
-        request['anonymousId'] = anonymousId;
-      }
-      if (deviceId != null) {
-        request['deviceId'] = deviceId;
+      
+      if (deviceId == null || deviceId.isEmpty) {
+        return ResponseObject.error(
+          errorCode: ErrorCodes.internalError,
+          errorDetail: 'Device ID is required',
+        );
       }
 
-      final response = await studentService.startTrial(request);
+      // Build request body for checkTrial (deviceId-based)
+      final request = <String, dynamic>{
+        'deviceId': deviceId,
+      };
+
+      // Use checkTrial endpoint (backend decides NEW/ACTIVE/EXPIRED/CONSUMED)
+      final response = await studentService.checkTrial(request);
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
@@ -90,11 +93,8 @@ final class TrialRepositoryImpl extends TrialRepository {
   @override
   Future<ResponseObject<TrialEntity>> getTrialStatus() async {
     try {
-      // Get deviceId and anonymousId from cache (headers are added by TokenManager)
-      final deviceId = cacheService.get<String>(CacheKey.deviceId);
-      final anonymousId = cacheService.get<String>(CacheKey.anonymousId);
-
-      final response = await studentService.getTrialStatus(deviceId, anonymousId);
+      // Authentication is handled by TokenManager (JWT token in headers)
+      final response = await studentService.getTrialStatus();
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;

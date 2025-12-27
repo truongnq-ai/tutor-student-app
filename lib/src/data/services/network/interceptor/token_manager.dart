@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../presentation/core/router/routes.dart';
 import '../../cache/cache_service.dart';
+import '../../device/device_id_service.dart';
 
 class TokenManager extends Interceptor {
   TokenManager({
     required this.baseUrl,
     required this.refreshTokenEndpoint,
     required this.cacheService,
+    required this.deviceIdService,
     required this.navigatorKey,
     required this.dio,
   });
@@ -17,6 +19,7 @@ class TokenManager extends Interceptor {
   final String baseUrl;
   final String refreshTokenEndpoint;
   final CacheService cacheService;
+  final DeviceIdService deviceIdService;
   final GlobalKey<NavigatorState> navigatorKey;
   final Dio dio;
 
@@ -39,6 +42,25 @@ class TokenManager extends Interceptor {
     
     if (deviceId != null) {
       options.headers['X-Device-Id'] = deviceId;
+      
+      // Add device info headers (platform, model, OS version)
+      try {
+        final platform = deviceIdService.getPlatform();
+        options.headers['X-Platform'] = platform;
+        
+        final model = await deviceIdService.getModel();
+        if (model != null && model.isNotEmpty) {
+          options.headers['X-Model'] = model;
+        }
+        
+        final osVersion = await deviceIdService.getOSVersion();
+        if (osVersion != null && osVersion.isNotEmpty) {
+          options.headers['X-OS-Version'] = osVersion;
+        }
+      } catch (e) {
+        // If device info retrieval fails, continue without it
+        // Don't fail the request
+      }
     }
     if (anonymousId != null) {
       options.headers['X-Anonymous-Id'] = anonymousId;

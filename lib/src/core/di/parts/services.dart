@@ -96,3 +96,10 @@ SettingsService settingsService(Ref ref) {
 PasswordService passwordService(Ref ref) {
   return PasswordService(ref.read(dioProvider), baseUrl: Endpoints.base);
 }
+
+@riverpod
+DeviceIdService deviceIdService(Ref ref) {
+  return DeviceIdService(
+    cacheService: ref.read(cacheServiceProvider),
+  );
+}

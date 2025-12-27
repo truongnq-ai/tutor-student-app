@@ -1,3 +1,33 @@
+enum TrialStatus {
+  active,
+  expired,
+  consumed;
+
+  static TrialStatus fromString(String value) {
+    switch (value.toUpperCase()) {
+      case 'ACTIVE':
+        return TrialStatus.active;
+      case 'EXPIRED':
+        return TrialStatus.expired;
+      case 'CONSUMED':
+        return TrialStatus.consumed;
+      default:
+        return TrialStatus.active;
+    }
+  }
+
+  String toUpperCaseString() {
+    switch (this) {
+      case TrialStatus.active:
+        return 'ACTIVE';
+      case TrialStatus.expired:
+        return 'EXPIRED';
+      case TrialStatus.consumed:
+        return 'CONSUMED';
+    }
+  }
+}
+
 class TrialEntity {
   final String? trialId;
   final int daysRemaining;
@@ -10,6 +40,7 @@ class TrialEntity {
   final int totalExercises;
   final int skillsLearned;
   final bool isLinked;
+  final TrialStatus? trialStatus;
 
   TrialEntity({
     this.trialId,
@@ -23,6 +54,7 @@ class TrialEntity {
     required this.totalExercises,
     required this.skillsLearned,
     required this.isLinked,
+    this.trialStatus,
   });
 }
 

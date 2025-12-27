@@ -39,6 +39,7 @@ import '../../data/services/network/services/tutor_service.dart';
 import '../../data/services/network/services/profile_service.dart';
 import '../../data/services/network/services/settings_service.dart';
 import '../../data/services/network/services/password_service.dart';
+import '../../data/services/device/device_id_service.dart';
 import '../../data/services/oauth/apple_oauth_service.dart';
 import '../../data/services/oauth/composite_oauth_service.dart';
 import '../../data/services/oauth/google_oauth_service.dart';

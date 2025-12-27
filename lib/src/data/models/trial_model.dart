@@ -13,6 +13,7 @@ class TrialModel extends TrialEntity {
     required super.totalExercises,
     required super.skillsLearned,
     required super.isLinked,
+    super.trialStatus,
   });
 
   factory TrialModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +29,9 @@ class TrialModel extends TrialEntity {
       totalExercises: json['totalExercises'] as int,
       skillsLearned: json['skillsLearned'] as int,
       isLinked: json['isLinked'] as bool,
+      trialStatus: json['trialStatus'] != null
+          ? TrialStatus.fromString(json['trialStatus'] as String)
+          : null,
     );
   }
 

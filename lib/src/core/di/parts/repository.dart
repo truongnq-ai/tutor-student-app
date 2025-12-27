@@ -32,6 +32,7 @@ OnboardingRepository onboardingRepository(Ref ref) {
   return OnboardingRepositoryImpl(
     studentService: ref.read(studentServiceProvider),
     cacheService: ref.read(cacheServiceProvider),
+    trialRepository: ref.read(trialRepositoryProvider),
   );
 }
 

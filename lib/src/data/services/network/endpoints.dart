@@ -25,7 +25,9 @@ class Endpoints {
 
   // ==================== Onboarding & Trial ====================
   
+  static const String trialCheck = '/api/v1/student/trial/check';
   static const String trialStart = '/api/v1/student/trial/start';
+  static const String trialCreate = '/api/v1/student/trial/create';
   static const String trialStatus = '/api/v1/student/trial/status';
   
   /// Grade & Learning Goals

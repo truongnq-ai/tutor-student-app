@@ -38,49 +38,49 @@ abstract class StudentService {
 
   // ==================== Trial ====================
 
-  /// Start trial
+  /// Check trial status (primary endpoint - backend decides NEW/ACTIVE/EXPIRED/CONSUMED)
+  @POST(Endpoints.trialCheck)
+  Future<HttpResponse<dynamic>> checkTrial(
+    @Body() Map<String, dynamic> request,
+  );
+
+  /// Start trial (legacy - prefer checkTrial)
   @POST(Endpoints.trialStart)
   Future<HttpResponse<dynamic>> startTrial(
     @Body() Map<String, dynamic> request,
   );
 
-  /// Get trial status
+  /// Get trial status (requires authentication)
   @GET(Endpoints.trialStatus)
-  Future<HttpResponse<dynamic>> getTrialStatus(
-    @Header('X-Device-Id') String? deviceId,
-    @Header('X-Anonymous-Id') String? anonymousId,
+  Future<HttpResponse<dynamic>> getTrialStatus();
+
+  /// Create trial (requires authentication)
+  @POST(Endpoints.trialCreate)
+  Future<HttpResponse<dynamic>> createTrial(
+    @Body() Map<String, dynamic> request,
   );
 
   // ==================== Grade & Learning Goals ====================
 
-  /// Save grade selection
+  /// Save grade selection (requires authentication)
   @POST(Endpoints.studentSaveGrade)
   Future<HttpResponse<dynamic>> saveGrade(
-    @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
     @Body() Map<String, dynamic> request,
   );
 
-  /// Get grade selection
+  /// Get grade selection (requires authentication)
   @GET(Endpoints.studentGetGrade)
-  Future<HttpResponse<dynamic>> getGrade(
-    @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
-  );
+  Future<HttpResponse<dynamic>> getGrade();
 
-  /// Save learning goals
+  /// Save learning goals and create trial if not exists (requires authentication)
+  /// Note: Grade must be included in request body when creating trial
   @POST(Endpoints.studentSaveLearningGoals)
   Future<HttpResponse<dynamic>> saveLearningGoals(
-    @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
     @Body() Map<String, dynamic> request,
   );
 
-  /// Get learning goals
+  /// Get learning goals (requires authentication)
   @GET(Endpoints.studentGetLearningGoals)
-  Future<HttpResponse<dynamic>> getLearningGoals(
-    @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
-  );
+  Future<HttpResponse<dynamic>> getLearningGoals();
 }
 

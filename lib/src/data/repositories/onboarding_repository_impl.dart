@@ -13,31 +13,16 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
   final StudentService studentService;
   final CacheService cacheService;
 
-  /// Get trialId or anonymousId for API calls
-  Future<Map<String, String?>> _getTrialIdentifiers() async {
-    final trialId = cacheService.get<String>(CacheKey.trialId);
-    final anonymousId = cacheService.get<String>(CacheKey.anonymousId);
-    return {
-      'trialId': trialId,
-      'anonymousId': anonymousId,
-    };
-  }
-
   @override
   Future<ResponseObject<void>> saveGrade(int grade) async {
     try {
-      final identifiers = await _getTrialIdentifiers();
-      
       // Build request body
+      // Note: Device ID is automatically added via X-Device-Id header by TokenManager
       final request = <String, dynamic>{
         'grade': grade,
       };
 
-      final response = await studentService.saveGrade(
-        identifiers['trialId'],
-        identifiers['anonymousId'],
-        request,
-      );
+      final response = await studentService.saveGrade(request);
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
@@ -101,13 +86,8 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
         return ResponseObject.success(cachedGrade);
       }
 
-      // Get from API
-      final identifiers = await _getTrialIdentifiers();
-
-      final response = await studentService.getGrade(
-        identifiers['trialId'],
-        identifiers['anonymousId'],
-      );
+      // Get from API (authentication required)
+      final response = await studentService.getGrade();
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
@@ -163,18 +143,24 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
   @override
   Future<ResponseObject<void>> saveLearningGoals(Set<String> goals) async {
     try {
-      final identifiers = await _getTrialIdentifiers();
+      // Get grade from cache (required when creating trial)
+      final grade = cacheService.get<int>(CacheKey.grade);
+      if (grade == null) {
+        return ResponseObject.error(
+          errorCode: ErrorCodes.missingRequestParameter,
+          errorDetail: 'Vui lòng chọn lớp học trước khi chọn mục tiêu học tập',
+        );
+      }
       
       // Build request body
+      // Note: Device ID is automatically added via X-Device-Id header by TokenManager
+      // Grade is required when creating trial
       final request = <String, dynamic>{
         'goals': goals.toList(),
+        'grade': grade,
       };
 
-      final response = await studentService.saveLearningGoals(
-        identifiers['trialId'],
-        identifiers['anonymousId'],
-        request,
-      );
+      final response = await studentService.saveLearningGoals(request);
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;
@@ -239,13 +225,8 @@ final class OnboardingRepositoryImpl extends OnboardingRepository {
         return ResponseObject.success(goals);
       }
 
-      // Get from API
-      final identifiers = await _getTrialIdentifiers();
-
-      final response = await studentService.getLearningGoals(
-        identifiers['trialId'],
-        identifiers['anonymousId'],
-      );
+      // Get from API (authentication required)
+      final response = await studentService.getLearningGoals();
 
       // Parse ResponseObject from HttpResponse
       final responseJson = response.data;

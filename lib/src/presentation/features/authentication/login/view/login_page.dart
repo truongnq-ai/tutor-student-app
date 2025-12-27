@@ -13,6 +13,7 @@ import '../../../../core/widgets/loading_indicator.dart';
 import '../../../../features/authentication/login/riverpod/login_provider.dart';
 import '../../../../features/authentication/login/riverpod/oauth_provider.dart';
 import '../../../../features/authentication/oauth/widgets/oauth_button.dart';
+import '../../../../features/onboarding/riverpod/trial_provider.dart';
 import '../widgets/language_switcher.dart';
 
 part '../widgets/login_form.dart';
@@ -38,10 +39,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listenManual(loginProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
-          // After login, check if has grade, if not go to Select Grade
-          // Mock: Assume no grade, go to Select Grade
-          // In real implementation, check grade from user profile
-          context.pushReplacementNamed(Routes.selectGrade);
+          // After login, ensure trial exists before selecting grade
+          _ensureTrialAndNavigate(context, ref);
         case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
           // Map error messages to user-friendly localized messages
@@ -136,6 +135,33 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             password: passwordController.text,
             shouldRemember: shouldRemember.value,
           );
+    }
+  }
+
+  Future<void> _ensureTrialAndNavigate(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    try {
+      // Check if trial exists
+      final trialStatus = await ref
+          .read(trialProvider.notifier)
+          .getTrialStatus();
+
+      if (trialStatus == null) {
+        // Start trial first - this will create trial profile and save trialId
+        await ref.read(trialProvider.notifier).startTrial();
+      }
+
+      // Then navigate to select grade
+      if (context.mounted) {
+        context.pushReplacementNamed(Routes.selectGrade);
+      }
+    } catch (e) {
+      // If trial start fails, still navigate (user can retry)
+      if (context.mounted) {
+        context.pushReplacementNamed(Routes.selectGrade);
+      }
     }
   }
 
