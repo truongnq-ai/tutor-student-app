@@ -33,7 +33,8 @@ class Login extends _$Login {
       if (response.isSuccess && response.data != null) {
         state = AsyncValue.data(response.data);
       } else {
-        // Handle error - check errorCode
+        // Handle error - use errorCode and errorDetail from ResponseObject
+        // The errorDetail should already be user-friendly from repository
         final errorMessage = response.getErrorMessage();
         state = AsyncValue.error(
           Exception(errorMessage),
@@ -41,7 +42,14 @@ class Login extends _$Login {
         );
       }
     } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      // Handle unexpected exceptions
+      final errorMessage = e is Exception 
+          ? e.toString().replaceFirst('Exception: ', '')
+          : 'An unexpected error occurred. Please try again.';
+      state = AsyncValue.error(
+        Exception(errorMessage),
+        stackTrace,
+      );
     }
   }
 }

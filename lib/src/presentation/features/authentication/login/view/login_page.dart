@@ -44,17 +44,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           context.pushReplacementNamed(Routes.selectGrade);
         case AsyncError(:final error):
           final errorMessage = error.toString().replaceFirst('Exception: ', '');
-          // User-friendly error message
-          final friendlyMessage = errorMessage.contains('username') ||
-                  errorMessage.contains('password') ||
-                  errorMessage.contains('incorrect') ||
-                  errorMessage.contains('invalid')
-              ? context.locale.auth_login_error_invalid_credentials
-              : errorMessage;
+          // Map error messages to user-friendly localized messages
+          final friendlyMessage = _getUserFriendlyErrorMessage(
+            context,
+            errorMessage,
+          );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(friendlyMessage),
               backgroundColor: Theme.of(context).colorScheme.error,
+              duration: const Duration(seconds: 4),
             ),
           );
       }
@@ -64,8 +63,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       switch (next) {
         case AsyncData(:final value) when value != null:
           // Check if requiresSetCredential
-          final requiresSetCredential = value['requiresSetCredential'] as bool? ?? false;
-          
+          final requiresSetCredential =
+              value['requiresSetCredential'] as bool? ?? false;
+
           if (requiresSetCredential) {
             // Navigate to set credential page
             final studentId = value['studentId'] as String? ?? '';
@@ -77,7 +77,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(context.locale.auth_oauth_error_student_not_found),
+                  content: Text(
+                    context.locale.auth_oauth_error_student_not_found,
+                  ),
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
@@ -97,12 +99,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         case AsyncError(:final error):
           // Don't show error for user cancellation (already handled in provider)
           // Error messages are already user-friendly from the provider
-          final errorMessage = error.toString()
+          final errorMessage = error
+              .toString()
               .replaceFirst('Exception: ', '')
               .replaceFirst('Error: ', '');
-          
+
           // Only show error if it's not a cancellation
-          if (errorMessage.isNotEmpty && 
+          if (errorMessage.isNotEmpty &&
               !errorMessage.toLowerCase().contains('cancelled') &&
               !errorMessage.toLowerCase().contains('canceled')) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -189,8 +192,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Widget _buildOAuthSection() {
-    final oauthState = ref.watch(oAuthLoginProvider);
-    final isLoading = oauthState.isLoading;
+    final loadingProvider = ref.watch(oAuthLoadingProviderProvider);
 
     return Column(
       children: [
@@ -210,20 +212,69 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         Gap(context.spacing.s16),
         OAuthButton(
           provider: 'google',
-          onPressed: isLoading
+          onPressed: loadingProvider != null
               ? () {}
-              : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('google'),
-          isLoading: isLoading,
+              : () => ref
+                    .read(oAuthLoginProvider.notifier)
+                    .loginWithOAuth('google'),
+          isLoading: loadingProvider == 'google',
         ),
         Gap(context.spacing.s8),
         OAuthButton(
           provider: 'apple',
-          onPressed: isLoading
+          onPressed: loadingProvider != null
               ? () {}
-              : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('apple'),
-          isLoading: isLoading,
+              : () => ref
+                    .read(oAuthLoginProvider.notifier)
+                    .loginWithOAuth('apple'),
+          isLoading: loadingProvider == 'apple',
         ),
       ],
     );
+  }
+
+  /// Get user-friendly error message from error string
+  String _getUserFriendlyErrorMessage(
+    BuildContext context,
+    String errorMessage,
+  ) {
+    final lowerError = errorMessage.toLowerCase();
+
+    // Check for authentication errors (401, unauthorized, invalid credentials)
+    if (lowerError.contains('401') ||
+        lowerError.contains('unauthorized') ||
+        lowerError.contains('invalid username') ||
+        lowerError.contains('invalid password') ||
+        lowerError.contains('incorrect') ||
+        lowerError.contains('username') && lowerError.contains('password')) {
+      return context.locale.auth_login_error_invalid_credentials;
+    }
+
+    // Check for network errors
+    if (lowerError.contains('network') ||
+        lowerError.contains('connection') ||
+        lowerError.contains('timeout') ||
+        lowerError.contains('socket')) {
+      return context.locale.error_network_connection;
+    }
+
+    // Check for system errors
+    if (lowerError.contains('500') ||
+        lowerError.contains('internal') ||
+        lowerError.contains('server error')) {
+      return context.locale.error_system_internal;
+    }
+
+    // Check for session expired (different from invalid credentials)
+    if (lowerError.contains('session') && lowerError.contains('expired')) {
+      return context.locale.error_auth_unauthorized;
+    }
+
+    // Return original message if no mapping found, but limit length
+    if (errorMessage.length > 150) {
+      return '${errorMessage.substring(0, 150)}...';
+    }
+
+    return errorMessage;
   }
 }

@@ -16,8 +16,7 @@ class AuthEntryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final oauthState = ref.watch(oAuthLoginProvider);
-    final isLoading = oauthState.isLoading;
+    final loadingProvider = ref.watch(oAuthLoadingProviderProvider);
 
     // Listen to OAuth login result
     ref.listenManual(oAuthLoginProvider, (previous, next) {
@@ -96,18 +95,18 @@ class AuthEntryPage extends ConsumerWidget {
               // OAuth buttons
               OAuthButton(
                 provider: 'google',
-                onPressed: isLoading
+                onPressed: loadingProvider != null
                     ? () {}
                     : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('google'),
-                isLoading: isLoading,
+                isLoading: loadingProvider == 'google',
               ),
               Gap(context.spacing.s12),
               OAuthButton(
                 provider: 'apple',
-                onPressed: isLoading
+                onPressed: loadingProvider != null
                     ? () {}
                     : () => ref.read(oAuthLoginProvider.notifier).loginWithOAuth('apple'),
-                isLoading: isLoading,
+                isLoading: loadingProvider == 'apple',
               ),
               Gap(context.spacing.s24),
               // Divider
@@ -134,7 +133,7 @@ class AuthEntryPage extends ConsumerWidget {
                 width: double.infinity,
                 height: 48,
                 child: OutlinedButton(
-                  onPressed: isLoading
+                  onPressed: loadingProvider != null
                       ? null
                       : () {
                           context.pushNamed(Routes.registration);

@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../core/base/response_object.dart';
 import '../../domain/entities/login_entity.dart';
 import '../../domain/entities/sign_up_entity.dart';
@@ -165,6 +167,31 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
           expiresIn: expiresIn,
           refreshTokenExpiresIn: refreshTokenExpiresIn,
         ),
+      );
+    } on DioException catch (e) {
+      // Try to parse error response from backend if available
+      if (e.response != null && e.response!.data != null) {
+        try {
+          final responseData = e.response!.data;
+          if (responseData is Map<String, dynamic>) {
+            final errorResponse = ResponseObject<Map<String, dynamic>>.fromJson(
+              responseData,
+              (data) => data is Map<String, dynamic> ? data : <String, dynamic>{},
+            );
+            return ResponseObject.error(
+              errorCode: errorResponse.errorCode ?? _getErrorCodeFromStatusCode(e.response!.statusCode),
+              errorDetail: errorResponse.errorDetail ?? _getDefaultErrorMessage(e),
+            );
+          }
+        } catch (_) {
+          // Fall through to default error handling
+        }
+      }
+      
+      // Return error with status code-based error code
+      return ResponseObject.error(
+        errorCode: _getErrorCodeFromStatusCode(e.response?.statusCode),
+        errorDetail: _getDefaultErrorMessage(e),
       );
     } catch (e) {
       return ResponseObject.error(
@@ -429,5 +456,47 @@ final class AuthenticationRepositoryImpl extends AuthenticationRepository {
         errorDetail: 'Logout failed: ${e.toString()}',
       );
     }
+  }
+
+  /// Get error code from HTTP status code
+  String _getErrorCodeFromStatusCode(int? statusCode) {
+    if (statusCode == null) {
+      return '5001';
+    }
+    
+    return switch (statusCode) {
+      400 => '2001', // Validation error
+      401 => '1001', // Unauthorized
+      403 => '1003', // Forbidden
+      404 => '3001', // Not found
+      409 => '3002', // Conflict
+      500 => '5001', // Internal error
+      502 || 503 || 504 => '4001', // Service unavailable
+      _ => '5001', // Default to internal error
+    };
+  }
+
+  /// Get default error message from DioException
+  /// 
+  /// Returns generic error messages that will be mapped to localized messages
+  /// in the UI layer based on errorCode.
+  String _getDefaultErrorMessage(DioException e) {
+    final statusCode = e.response?.statusCode;
+    
+    // For 401, return generic message that will be mapped to localized message
+    if (statusCode == 401) {
+      return 'Invalid credentials';
+    }
+    
+    return switch (e.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.receiveTimeout ||
+      DioExceptionType.sendTimeout => 'Connection timeout',
+      DioExceptionType.connectionError => 'Network connection error',
+      DioExceptionType.badResponse => 'Server error',
+      DioExceptionType.badCertificate => 'Certificate error',
+      DioExceptionType.cancel => 'Request cancelled',
+      DioExceptionType.unknown => 'Unexpected error',
+    };
   }
 }

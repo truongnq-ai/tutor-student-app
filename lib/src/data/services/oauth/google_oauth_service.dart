@@ -12,15 +12,23 @@ class GoogleOAuthService implements OAuthService {
   @override
   Future<String?> signInWithGoogle() async {
     try {
+      print('[GoogleOAuthService] Starting Google Sign-In...');
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
       if (account == null) {
-        // User cancelled the sign-in
+        print('[GoogleOAuthService] User cancelled Google Sign-In');
         return null;
       }
 
+      print('[GoogleOAuthService] Google Sign-In successful, getting authentication...');
+      print('[GoogleOAuthService] Account email: ${account.email}');
       final GoogleSignInAuthentication auth = await account.authentication;
+      print('[GoogleOAuthService] Got ID token: ${auth.idToken != null ? 'Yes (${auth.idToken!.length} chars)' : 'No'}');
+      print('[GoogleOAuthService] Got access token: ${auth.accessToken != null ? 'Yes' : 'No'}');
       return auth.idToken;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('[GoogleOAuthService] Google Sign-In error: $e');
+      print('[GoogleOAuthService] Error type: ${e.runtimeType}');
+      print('[GoogleOAuthService] Stack trace: $stackTrace');
       throw Exception('Google sign-in failed: $e');
     }
   }

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "791167162864-n2vn1ngv5bdoie773c643mqit47tm6nh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tutorai.student",
+            "certificate_hash": "f9697cec22a59caccd5b5cf61ca2dac43efa49c5"
+          }
+        },
+        {
           "client_id": "791167162864-jt5r15g04d538lmls538g16mv1hr8g0v.apps.googleusercontent.com",
           "client_type": 3
         }
