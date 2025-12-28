@@ -65,7 +65,7 @@ dependencies:
   # Serialization & Deserialization
   dart_mappable:
   # Networking
-  retrofit: ^4.4.0
+  retrofit: '>=4.6.0 <4.9.0'
   dio: ^5.8.0+1
   # Localization
   flutter_localizations:
@@ -85,7 +85,7 @@ dev_dependencies:
   riverpod_lint:
   flutter_gen_runner:
   dart_mappable_builder:
-  retrofit_generator: '>=8.0.0 <10.0.0'
+  retrofit_generator: ^9.7.0
   freezed: ^3.0.6
 
 flutter:
