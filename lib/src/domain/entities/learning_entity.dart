@@ -2,19 +2,33 @@ class RecommendedSkillEntity {
   final String? skillId;
   final String? skillCode;
   final String? skillName;
-  final int? difficultyLevel;
-  final String? activityType; // "review", "practice", "mini_test"
-  final String? recommendationReason;
   final List<String> prerequisiteSkills;
 
   RecommendedSkillEntity({
     this.skillId,
     this.skillCode,
     this.skillName,
+    required this.prerequisiteSkills,
+  });
+}
+
+class RecommendedChapterEntity {
+  final String? chapterId;
+  final String? chapterName;
+  final String? chapterCode;
+  final int? difficultyLevel;
+  final String? activityType; // "review", "practice", "mini_test"
+  final String? recommendationReason;
+  final List<RecommendedSkillEntity> skills;  // Skills within chapter to focus on
+
+  RecommendedChapterEntity({
+    this.chapterId,
+    this.chapterName,
+    this.chapterCode,
     this.difficultyLevel,
     this.activityType,
     this.recommendationReason,
-    required this.prerequisiteSkills,
+    required this.skills,
   });
 }
 
@@ -35,11 +49,11 @@ class ProgressSummaryEntity {
 }
 
 class LearningPlanEntity {
-  final RecommendedSkillEntity? recommendedSkill;
+  final RecommendedChapterEntity? recommendedChapter;
   final ProgressSummaryEntity progressSummary;
 
   LearningPlanEntity({
-    this.recommendedSkill,
+    this.recommendedChapter,
     required this.progressSummary,
   });
 }

@@ -4,7 +4,7 @@ import '../entities/mini_test_session_entity.dart';
 
 abstract class MiniTestRepository {
   Future<ResponseObject<MiniTestSessionEntity>> startTest({
-    required String skillId,
+    required String chapterId,
   });
 
   Future<ResponseObject<MiniTestSessionEntity>> getTestSession(String sessionId);
@@ -17,6 +17,6 @@ abstract class MiniTestRepository {
 
   Future<ResponseObject<MiniTestResultEntity>> submitTest(String sessionId);
 
-  Future<ResponseObject<bool>> checkUnlock(String skillId);
+  Future<ResponseObject<bool>> checkUnlock(String chapterId);
 }
 

@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 
 class MiniTestResultEntity extends Equatable {
   final String resultId;
-  final String skillId;
-  final String skillCode;
-  final String skillName;
+  final String? chapterId;
+  final String? chapterName;
+  final String? skillId;  // Kept for backward compatibility
+  final String? skillCode;
+  final String? skillName;
   final int score; // 0-100
   final bool passed; // score >= 70
   final int totalQuestions;
@@ -12,15 +14,17 @@ class MiniTestResultEntity extends Equatable {
   final int timeTakenSec;
   final int previousMasteryLevel;
   final int newMasteryLevel;
-  final List<SkillBreakdownItem> skillBreakdown;
+  final List<SkillBreakdownItem> skillBreakdown;  // Skill-level analysis
   final String recommendation;
   final DateTime completedAt;
 
   const MiniTestResultEntity({
     required this.resultId,
-    required this.skillId,
-    required this.skillCode,
-    required this.skillName,
+    this.chapterId,
+    this.chapterName,
+    this.skillId,
+    this.skillCode,
+    this.skillName,
     required this.score,
     required this.passed,
     required this.totalQuestions,
@@ -34,8 +38,10 @@ class MiniTestResultEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         resultId,
+        chapterId,
+        chapterName,
         skillId,
         skillCode,
         skillName,

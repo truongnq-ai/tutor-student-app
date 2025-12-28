@@ -514,6 +514,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get learning_plan_focus_on_skills => 'Tập trung vào:';
+
+  @override
   String get learning_plan_empty_title => 'Chưa có lộ trình hôm nay';
 
   @override

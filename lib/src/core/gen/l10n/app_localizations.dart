@@ -944,6 +944,12 @@ abstract class AppLocalizations {
   /// **'{count} exercises done'**
   String learning_plan_week_exercises_done(int count);
 
+  /// No description provided for @learning_plan_focus_on_skills.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on:'**
+  String get learning_plan_focus_on_skills;
+
   /// No description provided for @learning_plan_empty_title.
   ///
   /// In en, this message translates to:

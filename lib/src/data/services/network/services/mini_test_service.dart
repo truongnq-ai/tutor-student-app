@@ -37,7 +37,7 @@ abstract class MiniTestService {
   /// Check unlock condition
   @GET(Endpoints.miniTestUnlock)
   Future<HttpResponse<dynamic>> checkUnlock(
-    @Path('skillId') String skillId,
+    @Path('chapterId') String chapterId,
   );
 }
 

@@ -37,5 +37,10 @@ class LearningPlan extends _$LearningPlan {
   void reset() {
     state = const AsyncValue.data(null);
   }
+
+  /// Refresh the learning plan (useful after practice completion)
+  Future<void> refresh() async {
+    await loadTodayPlan();
+  }
 }
 

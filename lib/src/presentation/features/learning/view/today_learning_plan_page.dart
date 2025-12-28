@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/extensions/app_localization.dart';
+import '../../../../core/utils/error_message_mapper.dart';
 import '../../../../domain/entities/learning_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
@@ -14,8 +14,7 @@ import '../../../core/widgets/error_state_widget.dart';
 import '../../../core/widgets/skeleton/skeleton_list.dart';
 import '../../../core/widgets/text/typography.dart';
 import '../riverpod/learning_plan_provider.dart';
-import '../utils/learning_plan_utils.dart';
-import '../widgets/learning_card.dart';
+import '../widgets/chapter_learning_card.dart';
 import '../widgets/progress_indicator.dart';
 
 class TodayLearningPlanPage extends ConsumerStatefulWidget {
@@ -31,6 +30,18 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(learningPlanProvider.notifier).loadTodayPlan();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh when navigating back to this page
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentState = ref.read(learningPlanProvider);
+      if (currentState.hasValue) {
+        ref.read(learningPlanProvider.notifier).refresh();
+      }
     });
   }
 
@@ -81,7 +92,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
 
   Widget _buildContent(
       BuildContext context, LearningPlanEntity learningPlan) {
-    final recommendedSkill = learningPlan.recommendedSkill;
+    final recommendedChapter = learningPlan.recommendedChapter;
     final progressSummary = learningPlan.progressSummary;
 
     return SingleChildScrollView(
@@ -94,11 +105,8 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
           Gap(context.spacing.s24),
 
           // Main Learning Card
-          if (recommendedSkill != null) ...[
-            LearningCard(
-              recommendedSkill: recommendedSkill,
-              onStartLearning: () => _handleStartLearning(context, recommendedSkill),
-            ),
+          if (recommendedChapter != null) ...[
+            ChapterLearningCard(recommendedChapter: recommendedChapter),
             Gap(context.spacing.s24),
           ],
 
@@ -112,8 +120,19 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
   Widget _buildProgressSummaryCard(
       BuildContext context, ProgressSummaryEntity progressSummary) {
     final overallMastery = progressSummary.overallMastery;
-    final totalSkills = progressSummary.totalSkills;
-    final masteredSkills = progressSummary.masteredSkills;
+    final masteryPercent = overallMastery.round();
+
+    // Positive message based on mastery level
+    String message;
+    if (masteryPercent >= 80) {
+      message = 'Tuyệt vời! Bạn đang tiến bộ rất tốt! 🎉';
+    } else if (masteryPercent >= 60) {
+      message = 'Tốt lắm! Tiếp tục cố gắng nhé! 💪';
+    } else if (masteryPercent >= 40) {
+      message = 'Đang tiến bộ! Hãy tiếp tục luyện tập! 📚';
+    } else {
+      message = 'Hãy bắt đầu học để cải thiện nhé! 🌱';
+    }
 
     return Card(
       child: Padding(
@@ -123,7 +142,7 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
           children: [
             HeadingSmallText(context.locale.learning_plan_progress_overview_title),
             Gap(context.spacing.s12),
-            // Circular Progress
+            // Circular Progress with positive message
             Row(
               children: [
                 CircularProgressWithLabel(
@@ -136,16 +155,18 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildStatRow(
-                        context,
-                        context.locale.learning_plan_stat_total_skills,
-                        totalSkills.toString(),
+                      Text(
+                        message,
+                        style: context.textStyle.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Gap(context.spacing.s4),
-                      _buildStatRow(
-                        context,
-                        context.locale.learning_plan_stat_mastered_skills,
-                        masteredSkills.toString(),
+                      Text(
+                        'Mức độ thành thạo: $masteryPercent%',
+                        style: context.textStyle.bodySmall.copyWith(
+                          color: context.color.text.secondary,
+                        ),
                       ),
                     ],
                   ),
@@ -155,24 +176,6 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildStatRow(BuildContext context, String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: context.textStyle.bodySmall,
-        ),
-        Text(
-          value,
-          style: context.textStyle.bodySmall.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 
@@ -222,18 +225,9 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
   }
 
   Widget _buildErrorState(BuildContext context, Object error) {
-    // Extract user-friendly error message
-    String errorMessage = _getUserFriendlyErrorMessage(context, error);
-    String? description;
-
-    // Check if it's a network error
-    final errorString = error.toString().toLowerCase();
-    if (errorString.contains('network') ||
-        errorString.contains('connection') ||
-        errorString.contains('timeout') ||
-        errorString.contains('socket')) {
-      description = context.locale.error_network_generic;
-    }
+    // Use ErrorMessageMapper for consistent error messages
+    final errorMessage = ErrorMessageMapper.getUserFriendlyMessage(context, error);
+    final description = ErrorMessageMapper.getErrorDescription(context, error);
 
     return ErrorStateWidget(
       title: context.locale.learning_plan_error_load_failed,
@@ -243,137 +237,4 @@ class _TodayLearningPlanPageState extends ConsumerState<TodayLearningPlanPage> {
       },
     );
   }
-
-  String _getUserFriendlyErrorMessage(BuildContext context, Object error) {
-    final errorString = error.toString();
-    
-    // Remove technical prefixes
-    String message = errorString
-        .replaceFirst('Exception: ', '')
-        .replaceFirst('Error: ', '')
-        .trim();
-
-    // Map common error patterns to user-friendly messages
-    if (message.toLowerCase().contains('network') ||
-        message.toLowerCase().contains('connection')) {
-      return context.locale.error_network_connection;
-    }
-    if (message.toLowerCase().contains('timeout')) {
-      return context.locale.error_network_timeout;
-    }
-    if (message.toLowerCase().contains('401') ||
-        message.toLowerCase().contains('unauthorized')) {
-      return context.locale.error_auth_unauthorized;
-    }
-    if (message.toLowerCase().contains('500') ||
-        message.toLowerCase().contains('internal')) {
-      return context.locale.error_system_internal;
-    }
-
-    // Return original message if no mapping found, but limit length
-    if (message.length > 100) {
-      message = '${message.substring(0, 100)}...';
-    }
-    return message;
-  }
-
-  Future<void> _handleStartLearning(
-    BuildContext context,
-    RecommendedSkillEntity recommendedSkill,
-  ) async {
-    if (recommendedSkill.skillId == null) {
-      return;
-    }
-
-    // Calculate totalQuestions based on difficultyLevel
-    final totalQuestions = LearningPlanUtils.calculateTotalQuestionsForLearningPlan(
-      recommendedSkill.difficultyLevel,
-    );
-
-    // Show loading indicator
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    try {
-      // Create PracticeSession using repository directly
-      final sessionRepository = ref.read(practiceSessionRepositoryProvider);
-      final response = await sessionRepository.createSession(
-        skillId: recommendedSkill.skillId!,
-        totalQuestions: totalQuestions,
-      );
-
-      // Close loading dialog
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
-
-      // Check if session creation was successful
-      if (response.isSuccess && response.data != null) {
-        final session = response.data!;
-        final sessionId = session.sessionId;
-        
-        // Navigate to PracticeQuestionPage with sessionId
-        if (context.mounted && sessionId.isNotEmpty) {
-          context.push(
-            '${Routes.practiceQuestion}?sessionId=$sessionId',
-          );
-        } else {
-          // Session creation succeeded but no session ID
-          if (context.mounted) {
-            _showErrorDialog(
-              context,
-              context.locale.error_system_internal,
-            );
-          }
-        }
-      } else {
-        // Session creation failed
-        final errorMessage = response.getErrorMessage();
-        if (context.mounted) {
-          _showErrorDialog(
-            context,
-            errorMessage.isNotEmpty
-                ? errorMessage
-                : context.locale.error_system_internal,
-          );
-        }
-      }
-    } catch (e) {
-      // Close loading dialog
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
-
-      // Show error dialog (strict error handling)
-      if (context.mounted) {
-        _showErrorDialog(
-          context,
-          _getUserFriendlyErrorMessage(context, e),
-        );
-      }
-    }
-  }
-
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.locale.learning_plan_error_load_failed),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.locale.common_button_ok),
-          ),
-        ],
-      ),
-    );
-  }
-
 }
-

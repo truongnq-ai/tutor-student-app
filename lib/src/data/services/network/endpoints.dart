@@ -78,7 +78,11 @@ class Endpoints {
   static const String miniTestSessionGet = '/api/v1/minitest/sessions/{sessionId}';
   static const String miniTestSubmitAnswer = '/api/v1/minitest/sessions/{sessionId}/answer';
   static const String miniTestSubmit = '/api/v1/minitest/sessions/{sessionId}/submit';
-  static const String miniTestUnlock = '/api/v1/minitest/unlock/{skillId}';
+  static const String miniTestUnlock = '/api/v1/minitest/unlock/{chapterId}';
+  
+  /// Chapter Progress
+  static const String progressChapterProgress = '/api/v1/admin/chapters/progress/{chapterId}';
+  static const String progressAllChaptersProgress = '/api/v1/admin/chapters/progress';
 
   // ==================== Profile & Settings ====================
   

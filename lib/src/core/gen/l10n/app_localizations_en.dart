@@ -510,6 +510,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get learning_plan_focus_on_skills => 'Focus on:';
+
+  @override
   String get learning_plan_empty_title => 'No learning plan today';
 
   @override

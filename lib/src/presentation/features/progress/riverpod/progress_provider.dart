@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/di/dependency_injection.dart';
+import '../../../../domain/entities/chapter_progress_entity.dart';
 import '../../../../domain/entities/progress_dashboard_entity.dart';
 import '../../../../domain/entities/skill_detail_entity.dart';
 import '../../../../domain/entities/recommendation_entity.dart';
@@ -141,6 +142,30 @@ class Recommendations extends _$Recommendations {
 
   void reset() {
     state = const AsyncValue.data(null);
+  }
+}
+
+@riverpod
+class ChapterProgress extends _$ChapterProgress {
+  @override
+  Future<ChapterProgressEntity?> build(String chapterId) async {
+    return _fetchChapterProgress(chapterId);
+  }
+
+  Future<ChapterProgressEntity?> _fetchChapterProgress(String chapterId) async {
+    final response = await ref.read(progressRepositoryProvider).getChapterProgress(
+          chapterId: chapterId,
+        );
+    if (response.isSuccess && response.data != null) {
+      return response.data;
+    } else {
+      throw Exception(response.getErrorMessage());
+    }
+  }
+
+  Future<void> refresh(String chapterId) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _fetchChapterProgress(chapterId));
   }
 }
 

@@ -141,6 +141,7 @@
     "learning_plan_stat_mastered_skills": "Mastered Skills",
     "learning_plan_week_streak": "{days} days streak",
     "learning_plan_week_exercises_done": "{count} exercises done",
+    "learning_plan_focus_on_skills": "Focus on:",
     "learning_plan_empty_title": "No learning plan today",
     "learning_plan_empty_description": "Start learning to see your plan!",
     "learning_plan_error_load_failed": "Cannot load learning plan",

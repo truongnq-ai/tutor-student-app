@@ -140,6 +140,7 @@
     "learning_plan_stat_mastered_skills": "Đã thành thạo",
     "learning_plan_week_streak": "{days} ngày liên tiếp",
     "learning_plan_week_exercises_done": "{count} bài đã làm",
+    "learning_plan_focus_on_skills": "Tập trung vào:",
     "learning_plan_empty_title": "Chưa có lộ trình hôm nay",
     "learning_plan_empty_description": "Hãy bắt đầu học để xem lộ trình của bạn!",
     "learning_plan_error_load_failed": "Không thể tải lộ trình học tập",

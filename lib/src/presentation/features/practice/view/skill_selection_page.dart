@@ -21,8 +21,6 @@ class SkillSelectionPage extends ConsumerStatefulWidget {
 }
 
 class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
-  String? _selectedSkillId;
-  String? _selectedSkillName;
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
 
@@ -95,7 +93,6 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
         loading: () => const SkeletonList(itemCount: 3, itemHeight: 100),
         error: (error, stackTrace) => _buildErrorState(context, error),
       ),
-      bottomNavigationBar: _buildBottomButton(context),
     );
   }
 
@@ -120,20 +117,20 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                 child: SkillCard(
                   skillName: skill.skillName,
                   description: skill.description,
-                  chapter: skill.chapter,
+                  chapterName: skill.chapterName,
                   masteryLevel: skill.masteryLevel,
                   status: skill.status == 'weak' 
                       ? context.locale.practice_skill_status_weak 
                       : context.locale.practice_skill_status_unstable,
                   questionCount: skill.questionCount,
                   estimatedTime: context.locale.learning_skill_estimated_time(skill.estimatedTimeMinutes),
-                  isSelected: _selectedSkillId == skill.skillId,
+                  isSelected: false,
                   isPriority: skill.isPriority,
                   onTap: () {
-                    setState(() {
-                      _selectedSkillId = skill.skillId;
-                      _selectedSkillName = skill.skillName;
-                    });
+                    // Navigate directly to practice question page
+                    context.push(
+                      '${Routes.practiceQuestion}?skillId=${skill.skillId}&skillName=${skill.skillName}',
+                    );
                   },
                 ),
               )),
@@ -169,41 +166,6 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-
-  Widget _buildBottomButton(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(context.padding.p16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        child: FilledButton(
-          onPressed: _selectedSkillId != null
-              ? () {
-                  // Navigate to practice question with selected skill
-                  context.push(
-                    '${Routes.practiceQuestion}?skillId=$_selectedSkillId&skillName=$_selectedSkillName',
-                  );
-                }
-              : null,
-          style: FilledButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: context.padding.p12),
-            minimumSize: const Size(0, 56),
-          ),
-          child: Text(context.locale.common_button_start_learning),
-        ),
       ),
     );
   }

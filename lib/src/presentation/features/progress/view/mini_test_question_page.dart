@@ -301,6 +301,27 @@ class _MiniTestQuestionPageState
           color: Colors.white,
           child: Column(
             children: [
+              // Chapter name (if available)
+              if (session.chapterName != null && session.chapterName!.isNotEmpty) ...[
+                Row(
+                  children: [
+                    Icon(
+                      Icons.book,
+                      size: 16,
+                      color: context.color.text.secondary,
+                    ),
+                    Gap(context.spacing.s4),
+                    Text(
+                      'Chương: ${session.chapterName}',
+                      style: context.textStyle.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: context.color.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                Gap(context.spacing.s8),
+              ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

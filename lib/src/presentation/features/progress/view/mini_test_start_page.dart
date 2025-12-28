@@ -3,14 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/config/mini_test_config.dart';
 import '../../../../core/extensions/app_localization.dart';
+import '../../../../domain/entities/chapter_progress_entity.dart';
+import '../../../../domain/entities/skill_detail_entity.dart';
+import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/widgets/error_state_widget.dart';
 import '../../../core/widgets/loading_indicator.dart';
 import '../../../core/widgets/text/typography.dart';
-import '../../../../domain/entities/skill_detail_entity.dart';
-import '../../../core/router/routes.dart';
 import '../riverpod/mini_test_provider.dart';
 import '../riverpod/progress_provider.dart';
 import '../widgets/mastery_circle.dart';
@@ -19,11 +21,11 @@ import '../widgets/test_instructions_card.dart';
 import '../widgets/unlock_celebration_card.dart';
 
 class MiniTestStartPage extends ConsumerStatefulWidget {
-  final String? skillId;
+  final String? chapterId;
 
   const MiniTestStartPage({
     super.key,
-    this.skillId,
+    this.chapterId,
   });
 
   @override
@@ -32,58 +34,83 @@ class MiniTestStartPage extends ConsumerStatefulWidget {
 }
 
 class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
-  String? _skillId;
+  String? _chapterId;
   bool _isStarting = false;
 
   @override
   void initState() {
     super.initState();
-    _skillId = widget.skillId;
+    _chapterId = widget.chapterId;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_skillId != null) {
+      if (_chapterId != null) {
         _checkUnlockStatus();
+        _loadChapterProgress();
       }
     });
+  }
+  
+  void _loadChapterProgress() {
+    if (_chapterId != null) {
+      ref.read(chapterProgressProvider(_chapterId!).notifier).refresh(_chapterId!);
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_skillId == null) {
+    if (_chapterId == null) {
       final uri = GoRouterState.of(context).uri;
-      _skillId = uri.queryParameters['skillId'];
-      if (_skillId != null) {
+      _chapterId = uri.queryParameters['chapterId'];
+      if (_chapterId != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _checkUnlockStatus();
+          _loadChapterProgress();
         });
       }
     }
   }
 
   void _checkUnlockStatus() {
-    ref.read(miniTestUnlockProvider(_skillId!).notifier).refresh(_skillId!);
+    if (_chapterId == null || _chapterId!.isEmpty) {
+      // Invalid chapterId, show error
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Chapter ID không hợp lệ. Vui lòng thử lại.'),
+          ),
+        );
+      }
+      return;
+    }
+    
+    try {
+      ref.read(miniTestUnlockProvider(_chapterId!).notifier).refresh(_chapterId!);
+    } catch (e) {
+      // Error handling is done in the provider, but we can log here
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Không thể kiểm tra trạng thái mở khóa: ${e.toString()}'),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _handleStartTest() async {
-    if (_skillId == null || _isStarting) return;
+    if (_chapterId == null || _isStarting) return;
 
     setState(() {
       _isStarting = true;
     });
 
     try {
-      // Start test using provider
+      // Start test using provider - get session directly
       final provider = ref.read(miniTestSessionProvider(null).notifier);
-      await provider.startTest(skillId: _skillId!);
+      final session = await provider.startTest(chapterId: _chapterId!);
 
-      // Wait a bit for state to update, then check
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-
-      // Get the session from provider state
-      final sessionState = ref.read(miniTestSessionProvider(null));
-      final session = sessionState.valueOrNull;
-
-      if (session != null && mounted) {
+      // Navigate to question page with session
+      if (mounted && session.sessionId.isNotEmpty) {
         context.push(
           '${Routes.miniTestQuestion}?sessionId=${session.sessionId}',
         );
@@ -93,9 +120,6 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
             content: Text('Không thể bắt đầu bài test. Vui lòng thử lại.'),
           ),
         );
-        setState(() {
-          _isStarting = false;
-        });
       }
     } catch (e) {
       if (mounted) {
@@ -116,19 +140,19 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_skillId == null) {
+    if (_chapterId == null) {
       return Scaffold(
         appBar: AppBar(
           title: const HeadingSmallText('Mini Test'),
         ),
         body: const Center(
-          child: Text('Không tìm thấy skill ID'),
+          child: Text('Không tìm thấy chapter ID'),
         ),
       );
     }
 
-    final unlockState = ref.watch(miniTestUnlockProvider(_skillId!));
-    final skillDetailState = ref.watch(skillDetailProvider(_skillId!));
+    final unlockState = ref.watch(miniTestUnlockProvider(_chapterId!));
+    final chapterProgressState = ref.watch(chapterProgressProvider(_chapterId!));
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -137,12 +161,17 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
       ),
       body: unlockState.when(
         data: (isUnlocked) {
-          return skillDetailState.when(
-            data: (skillDetail) {
-              if (skillDetail == null) {
-                return _buildEmptyState(context);
-              }
-              return _buildContent(context, isUnlocked, skillDetail);
+          return chapterProgressState.when(
+            data: (chapterProgress) {
+              // Get chapter name from chapter progress
+              final chapterName = chapterProgress?.chapterName ?? _chapterId;
+              return _buildContent(
+                context, 
+                isUnlocked, 
+                null, // No skill detail for chapter-based test
+                chapterName,
+                chapterProgress,
+              );
             },
             loading: () => const Center(child: LoadingIndicator()),
             error: (error, stackTrace) => _buildErrorState(context, error),
@@ -157,36 +186,42 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
   Widget _buildContent(
     BuildContext context,
     bool isUnlocked,
-    SkillDetailEntity skillDetail,
+    SkillDetailEntity? skillDetail,
+    String? chapterName,
+    ChapterProgressEntity? chapterProgress,
   ) {
-    // Get skill info
-    final skillName = skillDetail.skillName;
-    final skillCode = skillDetail.skillCode;
-    final masteryLevel = skillDetail.masteryLevel;
-    final chapter = skillDetail.chapter;
+    // Get chapter info (primary display)
+    final chapter = chapterName ?? '-';
+    
+    // Get skill info (optional, for display only)
+    final skillName = skillDetail?.skillName;
+    final skillCode = skillDetail?.skillCode ?? '';
+    final masteryLevel = skillDetail?.masteryLevel ?? 0;
 
-    // Test constants
-    const totalQuestions = 6;
-    const timeLimitMinutes = 10;
-    const passingScore = 70;
-    const requiredPracticeCount = 10;
+    // Get test config from chapter progress, fallback to defaults
+    final totalQuestions = chapterProgress?.miniTestTotalQuestions ?? MiniTestConfig.defaultTotalQuestions;
+    final timeLimitSec = chapterProgress?.miniTestTimeLimitSec ?? MiniTestConfig.defaultTimeLimitSec;
+    final timeLimitMinutes = (timeLimitSec / 60).round();
+    final passingScore = chapterProgress?.miniTestPassingScore ?? MiniTestConfig.defaultPassingScore;
+    final requiredPracticeCount = chapterProgress?.miniTestRequiredPracticeCount ?? MiniTestConfig.defaultRequiredPracticeCount;
 
-    // Skills to test (main skill + prerequisites if any)
-    final skillsToTest = [
-      skillName,
-      if (skillDetail.prerequisites.isNotEmpty)
-        ...skillDetail.prerequisites
+    // Skills to test (for chapter-based test, show skills only, not chapter name)
+    final skillsToTest = <String>[];
+    if (skillDetail != null && skillDetail.prerequisites.isNotEmpty) {
+      skillsToTest.addAll(
+        skillDetail.prerequisites
             .map((p) => p.skillName)
             .take(2), // Limit to 2 prerequisites
-    ];
+      );
+    }
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(context.padding.p16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Skill Info Card
-          _buildSkillInfoCard(context, skillName, skillCode, chapter, masteryLevel),
+          // Chapter Info Card
+          _buildChapterInfoCard(context, chapter, skillName, skillCode, masteryLevel),
           Gap(context.spacing.s16),
 
           // Unlock Celebration (if just unlocked)
@@ -274,9 +309,15 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
                   Gap(context.spacing.s12),
                   OutlinedButton.icon(
                     onPressed: () {
-                      context.push(
-                        '${Routes.practiceQuestion}?skillId=$_skillId',
-                      );
+                      // Navigate to practice for chapter (use first skill if needed)
+                      // For now, just show message that practice should be started from chapter page
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Vui lòng bắt đầu luyện tập từ trang chương học.'),
+                          ),
+                        );
+                      }
                     },
                     icon: const Icon(Icons.assignment),
                     label: const Text('Luyện tập ngay'),
@@ -294,11 +335,11 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
     );
   }
 
-  Widget _buildSkillInfoCard(
+  Widget _buildChapterInfoCard(
     BuildContext context,
-    String skillName,
-    String skillCode,
-    String chapter,
+    String chapterName,
+    String? skillName,
+    String? skillCode,
     int masteryLevel,
   ) {
     return Card(
@@ -317,22 +358,24 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    skillName,
+                    chapterName,
                     style: context.textStyle.headingSmall.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Gap(context.spacing.s4),
-                  Text(
-                    skillCode,
-                    style: context.textStyle.bodySmall.copyWith(
-                      color: context.color.text.secondary,
-                    ),
-                  ),
-                  if (chapter.isNotEmpty) ...[
+                  if (skillName != null && skillName.isNotEmpty) ...[
                     Gap(context.spacing.s4),
                     Text(
-                      chapter,
+                      skillName,
+                      style: context.textStyle.bodySmall.copyWith(
+                        color: context.color.text.secondary,
+                      ),
+                    ),
+                  ],
+                  if (skillCode != null && skillCode.isNotEmpty) ...[
+                    Gap(context.spacing.s4),
+                    Text(
+                      skillCode,
                       style: context.textStyle.bodySmall.copyWith(
                         color: context.color.text.secondary,
                       ),
@@ -376,11 +419,7 @@ class _MiniTestStartPageState extends ConsumerState<MiniTestStartPage> {
       description: description ?? errorMessage,
       onRetry: () {
         _checkUnlockStatus();
-        if (_skillId != null) {
-          ref
-              .read(skillDetailProvider(_skillId!).notifier)
-              .loadSkillDetail(skillId: _skillId!);
-        }
+        _loadChapterProgress();
       },
     );
   }

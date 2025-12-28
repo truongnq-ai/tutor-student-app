@@ -7,7 +7,7 @@ import '../../../core/theme/theme.dart';
 class SkillCard extends StatelessWidget {
   final String skillName;
   final String? description;
-  final String chapter;
+  final String? chapterName;
   final int masteryLevel; // 0-100
   final String? status; // "Yếu", "Chưa vững", etc.
   final int? questionCount;
@@ -20,7 +20,7 @@ class SkillCard extends StatelessWidget {
     super.key,
     required this.skillName,
     this.description,
-    required this.chapter,
+    this.chapterName,
     required this.masteryLevel,
     this.status,
     this.questionCount,
@@ -204,7 +204,7 @@ class SkillCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  chapter,
+                  chapterName ?? '-',
                   style: context.textStyle.bodySmall.copyWith(
                     color: const Color(0xFF2196F3),
                     fontWeight: FontWeight.w600,

@@ -151,9 +151,49 @@ class _MiniTestResultPageState extends ConsumerState<MiniTestResultPage> {
           ),
           Gap(context.spacing.s24),
 
+          // Chapter Header (if available)
+          if (result.chapterName != null && result.chapterName!.isNotEmpty) ...[
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(context.padding.p16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.book,
+                      color: context.color.primary,
+                      size: 24,
+                    ),
+                    Gap(context.spacing.s8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Chương',
+                            style: context.textStyle.bodySmall.copyWith(
+                              color: context.color.text.secondary,
+                            ),
+                          ),
+                          Gap(context.spacing.s4),
+                          Text(
+                            result.chapterName!,
+                            style: context.textStyle.headingSmall.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Gap(context.spacing.s16),
+          ],
+
           // Skills Breakdown
           if (result.skillBreakdown.isNotEmpty) ...[
-            HeadingSmallText('Kỹ năng đã làm:'),
+            HeadingSmallText('Sai ở skill:'),
             Gap(context.spacing.s12),
             ...result.skillBreakdown.map((item) => Padding(
                   padding: EdgeInsets.only(bottom: context.spacing.s12),

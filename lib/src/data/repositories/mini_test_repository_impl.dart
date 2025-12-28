@@ -15,11 +15,11 @@ final class MiniTestRepositoryImpl extends MiniTestRepository {
 
   @override
   Future<ResponseObject<MiniTestSessionEntity>> startTest({
-    required String skillId,
+    required String chapterId,
   }) async {
     try {
       final response = await miniTestService.startMiniTest({
-        'skillId': skillId,
+        'chapterId': chapterId,
       });
 
       final responseJson = response.data;
@@ -216,9 +216,9 @@ final class MiniTestRepositoryImpl extends MiniTestRepository {
   }
 
   @override
-  Future<ResponseObject<bool>> checkUnlock(String skillId) async {
+  Future<ResponseObject<bool>> checkUnlock(String chapterId) async {
     try {
-      final response = await miniTestService.checkUnlock(skillId);
+      final response = await miniTestService.checkUnlock(chapterId);
 
       final responseJson = response.data;
       if (responseJson == null) {

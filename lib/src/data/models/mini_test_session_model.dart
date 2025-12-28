@@ -9,9 +9,11 @@ class MiniTestSessionModel extends MiniTestSessionEntity
     with MiniTestSessionModelMappable {
   const MiniTestSessionModel({
     required super.sessionId,
-    required super.skillId,
-    required super.skillCode,
-    required super.skillName,
+    super.chapterId,
+    super.chapterName,
+    super.skillId,
+    super.skillCode,
+    super.skillName,
     required super.status,
     required super.startedAt,
     required super.timeLimitSec,

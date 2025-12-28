@@ -198,7 +198,7 @@ class _SkillDetailPageState extends ConsumerState<SkillDetailPage> {
                 ),
                 Gap(context.spacing.s4),
                 Text(
-                  skillDetail.chapter,
+                  skillDetail.chapterName ?? '-',
                   style: context.textStyle.bodySmall.copyWith(
                     color: context.color.text.secondary,
                   ),
@@ -305,13 +305,13 @@ class _SkillDetailPageState extends ConsumerState<SkillDetailPage> {
         Gap(context.spacing.s12),
 
         // Mini Test Button (only if mastery >= 70%)
-        if (skillDetail.canTakeMiniTest) ...[
+        if (skillDetail.canTakeMiniTest && skillDetail.chapterId != null) ...[
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
                 context.push(
-                  '${Routes.miniTestStart}?skillId=${skillDetail.skillId}',
+                  '${Routes.miniTestStart}?chapterId=${skillDetail.chapterId}',
                 );
               },
               icon: const Icon(Icons.quiz),

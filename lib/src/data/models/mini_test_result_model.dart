@@ -9,9 +9,11 @@ class MiniTestResultModel extends MiniTestResultEntity
     with MiniTestResultModelMappable {
   const MiniTestResultModel({
     required super.resultId,
-    required super.skillId,
-    required super.skillCode,
-    required super.skillName,
+    super.chapterId,
+    super.chapterName,
+    super.skillId,
+    super.skillCode,
+    super.skillName,
     required super.score,
     required super.passed,
     required super.totalQuestions,

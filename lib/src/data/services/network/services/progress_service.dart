@@ -34,5 +34,17 @@ abstract class ProgressService {
   Future<HttpResponse<dynamic>> getRecommendations(
     @Query('trialId') String? trialId,
   );
+
+  /// Get chapter progress
+  @GET(Endpoints.progressChapterProgress)
+  Future<HttpResponse<dynamic>> getChapterProgress(
+    @Path('chapterId') String chapterId,
+  );
+
+  /// Get all chapter progress by grade
+  @GET(Endpoints.progressAllChaptersProgress)
+  Future<HttpResponse<dynamic>> getAllChapterProgress(
+    @Query('grade') int grade,
+  );
 }
 

@@ -5,9 +5,6 @@ class RecommendedSkillModel extends RecommendedSkillEntity {
     super.skillId,
     super.skillCode,
     super.skillName,
-    super.difficultyLevel,
-    super.activityType,
-    super.recommendationReason,
     required super.prerequisiteSkills,
   });
 
@@ -16,11 +13,36 @@ class RecommendedSkillModel extends RecommendedSkillEntity {
       skillId: json['skillId'] as String?,
       skillCode: json['skillCode'] as String?,
       skillName: json['skillName'] as String?,
+      prerequisiteSkills: (json['prerequisiteSkills'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class RecommendedChapterModel extends RecommendedChapterEntity {
+  RecommendedChapterModel({
+    super.chapterId,
+    super.chapterName,
+    super.chapterCode,
+    super.difficultyLevel,
+    super.activityType,
+    super.recommendationReason,
+    required super.skills,
+  });
+
+  factory RecommendedChapterModel.fromJson(Map<String, dynamic> json) {
+    return RecommendedChapterModel(
+      chapterId: json['chapterId'] as String?,
+      chapterName: json['chapterName'] as String?,
+      chapterCode: json['chapterCode'] as String?,
       difficultyLevel: json['difficultyLevel'] as int?,
       activityType: json['activityType'] as String?,
       recommendationReason: json['recommendationReason'] as String?,
-      prerequisiteSkills: (json['prerequisiteSkills'] as List<dynamic>?)
-              ?.map((e) => e.toString())
+      skills: (json['skills'] as List<dynamic>?)
+              ?.map((e) => RecommendedSkillModel.fromJson(
+                  e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -49,15 +71,15 @@ class ProgressSummaryModel extends ProgressSummaryEntity {
 
 class LearningPlanModel extends LearningPlanEntity {
   LearningPlanModel({
-    super.recommendedSkill,
+    super.recommendedChapter,
     required super.progressSummary,
   });
 
   factory LearningPlanModel.fromJson(Map<String, dynamic> json) {
     return LearningPlanModel(
-      recommendedSkill: json['recommendedSkill'] != null
-          ? RecommendedSkillModel.fromJson(
-              json['recommendedSkill'] as Map<String, dynamic>)
+      recommendedChapter: json['recommendedChapter'] != null
+          ? RecommendedChapterModel.fromJson(
+              json['recommendedChapter'] as Map<String, dynamic>)
           : null,
       progressSummary: ProgressSummaryModel.fromJson(
           json['progressSummary'] as Map<String, dynamic>),

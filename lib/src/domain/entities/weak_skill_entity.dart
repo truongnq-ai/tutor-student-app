@@ -4,7 +4,8 @@ class WeakSkillEntity extends Equatable {
   final String skillId;
   final String skillCode;
   final String skillName;
-  final String chapter;
+  final String? chapterId;
+  final String? chapterName;
   final String? description;
   final int masteryLevel;
   final String status; // "weak" (< 40), "needs_practice" (40-69)
@@ -16,7 +17,8 @@ class WeakSkillEntity extends Equatable {
     required this.skillId,
     required this.skillCode,
     required this.skillName,
-    required this.chapter,
+    this.chapterId,
+    this.chapterName,
     this.description,
     required this.masteryLevel,
     required this.status,
@@ -30,7 +32,8 @@ class WeakSkillEntity extends Equatable {
         skillId,
         skillCode,
         skillName,
-        chapter,
+        chapterId,
+        chapterName,
         description,
         masteryLevel,
         status,

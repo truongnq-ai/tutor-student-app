@@ -4,7 +4,8 @@ class SkillDetailEntity extends Equatable {
   final String skillId;
   final String skillCode;
   final String skillName;
-  final String chapter;
+  final String? chapterId;
+  final String? chapterName;
   final int grade;
   final int masteryLevel;
   final String status; // "weak", "improving", "mastered"
@@ -18,7 +19,8 @@ class SkillDetailEntity extends Equatable {
     required this.skillId,
     required this.skillCode,
     required this.skillName,
-    required this.chapter,
+    this.chapterId,
+    this.chapterName,
     required this.grade,
     required this.masteryLevel,
     required this.status,
@@ -34,7 +36,8 @@ class SkillDetailEntity extends Equatable {
         skillId,
         skillCode,
         skillName,
-        chapter,
+        chapterId,
+        chapterName,
         grade,
         masteryLevel,
         status,

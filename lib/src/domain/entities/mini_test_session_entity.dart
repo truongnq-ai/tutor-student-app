@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 
 class MiniTestSessionEntity extends Equatable {
   final String sessionId;
-  final String skillId;
-  final String skillCode;
-  final String skillName;
+  final String? chapterId;
+  final String? chapterName;
+  final String? skillId;  // Kept for backward compatibility
+  final String? skillCode;
+  final String? skillName;
   final String status; // "IN_PROGRESS", "SUBMITTED", "EXPIRED"
   final DateTime startedAt;
   final int timeLimitSec;
@@ -15,9 +17,11 @@ class MiniTestSessionEntity extends Equatable {
 
   const MiniTestSessionEntity({
     required this.sessionId,
-    required this.skillId,
-    required this.skillCode,
-    required this.skillName,
+    this.chapterId,
+    this.chapterName,
+    this.skillId,
+    this.skillCode,
+    this.skillName,
     required this.status,
     required this.startedAt,
     required this.timeLimitSec,
@@ -28,8 +32,10 @@ class MiniTestSessionEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         sessionId,
+        chapterId,
+        chapterName,
         skillId,
         skillCode,
         skillName,
