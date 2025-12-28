@@ -7,7 +7,6 @@ abstract class TutorRepository {
     required String imageUrl,
     required int grade,
     String? trialId,
-    String? anonymousId,
   });
 
   /// Solve math problem from text
@@ -15,7 +14,6 @@ abstract class TutorRepository {
     required String problemText,
     required int grade,
     String? trialId,
-    String? anonymousId,
   });
 
   /// Get recent solved problems
@@ -23,7 +21,6 @@ abstract class TutorRepository {
     int page = 0,
     int pageSize = 10,
     String? trialId,
-    String? anonymousId,
   });
 }
 

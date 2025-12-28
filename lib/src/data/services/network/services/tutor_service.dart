@@ -14,7 +14,6 @@ abstract class TutorService {
   Future<HttpResponse<dynamic>> solveImage(
     @Body() Map<String, dynamic> request,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Solve math problem from text
@@ -22,7 +21,6 @@ abstract class TutorService {
   Future<HttpResponse<dynamic>> solveText(
     @Body() Map<String, dynamic> request,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Get recent solved problems
@@ -31,7 +29,6 @@ abstract class TutorService {
     @Query('page') int? page,
     @Query('pageSize') int? pageSize,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 }
 

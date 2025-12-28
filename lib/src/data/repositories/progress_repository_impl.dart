@@ -20,12 +20,10 @@ final class ProgressRepositoryImpl extends ProgressRepository {
   @override
   Future<ResponseObject<ProgressDashboardEntity>> getProgressDashboard({
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await progressService.getProgressDashboard(
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -74,13 +72,11 @@ final class ProgressRepositoryImpl extends ProgressRepository {
   Future<ResponseObject<SkillDetailEntity>> getSkillDetail({
     required String skillId,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await progressService.getSkillDetail(
         skillId,
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -129,13 +125,11 @@ final class ProgressRepositoryImpl extends ProgressRepository {
   Future<ResponseObject<List<WeakSkillEntity>>> getWeakSkills({
     int limit = 5,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await progressService.getWeakSkills(
         limit,
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -185,12 +179,10 @@ final class ProgressRepositoryImpl extends ProgressRepository {
   @override
   Future<ResponseObject<RecommendationEntity>> getRecommendations({
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await progressService.getRecommendations(
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;

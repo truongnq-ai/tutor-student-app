@@ -16,7 +16,6 @@ final class TutorRepositoryImpl extends TutorRepository {
     required String imageUrl,
     required int grade,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await tutorService.solveImage(
@@ -25,7 +24,6 @@ final class TutorRepositoryImpl extends TutorRepository {
           'grade': grade,
         },
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -75,7 +73,6 @@ final class TutorRepositoryImpl extends TutorRepository {
     required String problemText,
     required int grade,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await tutorService.solveText(
@@ -84,7 +81,6 @@ final class TutorRepositoryImpl extends TutorRepository {
           'grade': grade,
         },
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -134,14 +130,12 @@ final class TutorRepositoryImpl extends TutorRepository {
     int page = 0,
     int pageSize = 10,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await tutorService.getRecentProblems(
         page,
         pageSize,
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;

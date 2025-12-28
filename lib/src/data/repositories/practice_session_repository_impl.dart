@@ -18,7 +18,6 @@ final class PracticeSessionRepositoryImpl extends PracticeSessionRepository {
     required String skillId,
     required int totalQuestions,
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await practiceSessionService.createSession(
@@ -27,7 +26,6 @@ final class PracticeSessionRepositoryImpl extends PracticeSessionRepository {
           'totalQuestions': totalQuestions,
         },
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;
@@ -370,12 +368,10 @@ final class PracticeSessionRepositoryImpl extends PracticeSessionRepository {
   @override
   Future<ResponseObject<List<PracticeSessionEntity>>> getResumableSessions({
     String? trialId,
-    String? anonymousId,
   }) async {
     try {
       final response = await practiceSessionService.getResumableSessions(
         trialId,
-        anonymousId,
       );
 
       final responseJson = response.data;

@@ -7,7 +7,6 @@ abstract class PracticeSessionRepository {
     required String skillId,
     required int totalQuestions,
     String? trialId,
-    String? anonymousId,
   });
 
   Future<ResponseObject<PracticeSessionEntity>> getSession(String sessionId);
@@ -24,7 +23,6 @@ abstract class PracticeSessionRepository {
 
   Future<ResponseObject<List<PracticeSessionEntity>>> getResumableSessions({
     String? trialId,
-    String? anonymousId,
   });
 }
 

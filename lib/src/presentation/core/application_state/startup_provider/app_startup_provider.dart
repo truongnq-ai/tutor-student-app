@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../data/services/cache/cache_service.dart';
@@ -26,7 +25,7 @@ Future<void> appStartup(Ref ref) async {
 
   await ref.read(localizationProvider.notifier).setCurrentLocal();
   
-  // Initialize deviceId and anonymousId if not exists
+  // Initialize deviceId if not exists
   final cacheService = ref.read(cacheServiceProvider);
   final deviceIdService = ref.read(deviceIdServiceProvider);
   
@@ -35,12 +34,5 @@ Future<void> appStartup(Ref ref) async {
   if (deviceId == null) {
     deviceId = await deviceIdService.getDeviceId();
     await cacheService.save(CacheKey.deviceId, deviceId);
-  }
-  
-  // Generate anonymousId if not exists (keep as UUID v4 for analytics)
-  var anonymousId = cacheService.get<String>(CacheKey.anonymousId);
-  if (anonymousId == null) {
-    anonymousId = const Uuid().v4();
-    await cacheService.save(CacheKey.anonymousId, anonymousId);
   }
 }

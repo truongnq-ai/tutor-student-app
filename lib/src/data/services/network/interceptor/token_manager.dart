@@ -36,9 +36,8 @@ class TokenManager extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    // Add device ID and anonymous ID for trial users
+    // Add device ID for trial users
     final deviceId = cacheService.get<String>(CacheKey.deviceId);
-    final anonymousId = cacheService.get<String>(CacheKey.anonymousId);
     
     if (deviceId != null) {
       options.headers['X-Device-Id'] = deviceId;
@@ -61,9 +60,6 @@ class TokenManager extends Interceptor {
         // If device info retrieval fails, continue without it
         // Don't fail the request
       }
-    }
-    if (anonymousId != null) {
-      options.headers['X-Anonymous-Id'] = anonymousId;
     }
 
     handler.next(options);

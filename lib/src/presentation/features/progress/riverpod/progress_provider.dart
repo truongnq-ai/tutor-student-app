@@ -15,7 +15,7 @@ class ProgressDashboard extends _$ProgressDashboard {
     return null;
   }
 
-  Future<void> loadDashboard({String? trialId, String? anonymousId}) async {
+  Future<void> loadDashboard({String? trialId}) async {
     if (state.isLoading) return;
 
     state = const AsyncValue.loading();
@@ -23,7 +23,6 @@ class ProgressDashboard extends _$ProgressDashboard {
     try {
       final response = await ref.read(progressRepositoryProvider).getProgressDashboard(
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {
@@ -55,7 +54,6 @@ class SkillDetail extends _$SkillDetail {
   Future<void> loadSkillDetail({
     required String skillId,
     String? trialId,
-    String? anonymousId,
   }) async {
     if (state.isLoading) return;
 
@@ -65,7 +63,6 @@ class SkillDetail extends _$SkillDetail {
       final response = await ref.read(progressRepositoryProvider).getSkillDetail(
             skillId: skillId,
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {
@@ -118,7 +115,7 @@ class Recommendations extends _$Recommendations {
     return null;
   }
 
-  Future<void> loadRecommendations({String? trialId, String? anonymousId}) async {
+  Future<void> loadRecommendations({String? trialId}) async {
     if (state.isLoading) return;
 
     state = const AsyncValue.loading();
@@ -126,7 +123,6 @@ class Recommendations extends _$Recommendations {
     try {
       final response = await ref.read(progressRepositoryProvider).getRecommendations(
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {

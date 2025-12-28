@@ -10,7 +10,6 @@ enum CacheKey {
   rememberMe,
   language,
   deviceId,
-  anonymousId,
   trialId,
   grade,
   learningGoals,

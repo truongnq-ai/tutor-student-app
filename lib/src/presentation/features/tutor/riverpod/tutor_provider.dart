@@ -16,7 +16,6 @@ class SolveProblem extends _$SolveProblem {
     required String imageUrl,
     required int grade,
     String? trialId,
-    String? anonymousId,
   }) async {
     if (state.isLoading) return false;
 
@@ -27,7 +26,6 @@ class SolveProblem extends _$SolveProblem {
             imageUrl: imageUrl,
             grade: grade,
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {
@@ -51,7 +49,6 @@ class SolveProblem extends _$SolveProblem {
     required String problemText,
     required int grade,
     String? trialId,
-    String? anonymousId,
   }) async {
     if (state.isLoading) return false;
 
@@ -62,7 +59,6 @@ class SolveProblem extends _$SolveProblem {
             problemText: problemText,
             grade: grade,
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {
@@ -98,7 +94,6 @@ class RecentProblems extends _$RecentProblems {
     int page = 0,
     int pageSize = 10,
     String? trialId,
-    String? anonymousId,
   }) async {
     if (state.isLoading) return false;
 
@@ -109,7 +104,6 @@ class RecentProblems extends _$RecentProblems {
             page: page,
             pageSize: pageSize,
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {

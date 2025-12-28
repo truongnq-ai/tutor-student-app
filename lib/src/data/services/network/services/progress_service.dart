@@ -13,7 +13,6 @@ abstract class ProgressService {
   @GET(Endpoints.progressDashboard)
   Future<HttpResponse<dynamic>> getProgressDashboard(
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Get skill detail
@@ -21,7 +20,6 @@ abstract class ProgressService {
   Future<HttpResponse<dynamic>> getSkillDetail(
     @Path('skillId') String skillId,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Get weak skills
@@ -29,14 +27,12 @@ abstract class ProgressService {
   Future<HttpResponse<dynamic>> getWeakSkills(
     @Query('limit') int? limit,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Get recommendations
   @GET(Endpoints.progressRecommendations)
   Future<HttpResponse<dynamic>> getRecommendations(
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 }
 

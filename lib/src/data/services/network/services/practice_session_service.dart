@@ -14,7 +14,6 @@ abstract class PracticeSessionService {
   Future<HttpResponse<dynamic>> createSession(
     @Body() Map<String, dynamic> request,
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 
   /// Get practice session
@@ -57,7 +56,6 @@ abstract class PracticeSessionService {
   @GET(Endpoints.practiceSessionResumable)
   Future<HttpResponse<dynamic>> getResumableSessions(
     @Query('trialId') String? trialId,
-    @Query('anonymousId') String? anonymousId,
   );
 }
 

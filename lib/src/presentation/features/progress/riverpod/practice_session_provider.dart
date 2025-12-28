@@ -27,7 +27,6 @@ class PracticeSession extends _$PracticeSession {
     required String skillId,
     required int totalQuestions,
     String? trialId,
-    String? anonymousId,
   }) async {
     state = const AsyncValue.loading();
 
@@ -36,7 +35,6 @@ class PracticeSession extends _$PracticeSession {
             skillId: skillId,
             totalQuestions: totalQuestions,
             trialId: trialId,
-            anonymousId: anonymousId,
           );
 
       if (response.isSuccess && response.data != null) {
