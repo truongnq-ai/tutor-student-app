@@ -355,6 +355,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get practice_skill_selection_back_to_home => 'Back to Home';
 
   @override
+  String get practice_skill_selection_welcome_title => 'Welcome to Practice!';
+
+  @override
+  String get practice_skill_selection_welcome_description =>
+      'To get started, check out today\'s learning recommendations. The system will suggest the most suitable skills for you to practice.';
+
+  @override
+  String get practice_skill_selection_welcome_cta =>
+      'View Today\'s Learning Plan';
+
+  @override
+  String get practice_skill_selection_welcome_tip_title => 'Tip';
+
+  @override
+  String get practice_skill_selection_welcome_tip_description =>
+      'Starting with the most basic skills will help you build a solid foundation. The system will automatically suggest suitable skills based on your progress.';
+
+  @override
   String get practice_skill_status_weak => 'Weak';
 
   @override

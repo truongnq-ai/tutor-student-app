@@ -358,6 +358,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get practice_skill_selection_back_to_home => 'Về trang chủ';
 
   @override
+  String get practice_skill_selection_welcome_title =>
+      'Chào mừng bạn đến với Luyện tập!';
+
+  @override
+  String get practice_skill_selection_welcome_description =>
+      'Để bắt đầu, hãy xem gợi ý học tập hôm nay của bạn. Hệ thống sẽ đề xuất kỹ năng phù hợp nhất để bạn luyện tập.';
+
+  @override
+  String get practice_skill_selection_welcome_cta =>
+      'Xem gợi ý học tập hôm nay';
+
+  @override
+  String get practice_skill_selection_welcome_tip_title => 'Mẹo nhỏ';
+
+  @override
+  String get practice_skill_selection_welcome_tip_description =>
+      'Bắt đầu với kỹ năng cơ bản nhất sẽ giúp bạn xây dựng nền tảng vững chắc. Hệ thống sẽ tự động gợi ý kỹ năng phù hợp dựa trên tiến độ của bạn.';
+
+  @override
   String get practice_skill_status_weak => 'Yếu';
 
   @override

@@ -7,9 +7,7 @@ import '../models/weak_skill_model.dart';
 import '../services/network/services/learning_service.dart';
 
 final class LearningRepositoryImpl extends LearningRepository {
-  LearningRepositoryImpl({
-    required this.learningService,
-  });
+  LearningRepositoryImpl({required this.learningService});
 
   final LearningService learningService;
 
@@ -38,7 +36,8 @@ final class LearningRepositoryImpl extends LearningRepository {
       if (!responseData.isSuccess) {
         return ResponseObject.error(
           errorCode: responseData.errorCode ?? '5001',
-          errorDetail: responseData.errorDetail ?? 'Failed to get learning plan',
+          errorDetail:
+              responseData.errorDetail ?? 'Failed to get learning plan',
         );
       }
 
@@ -66,10 +65,7 @@ final class LearningRepositoryImpl extends LearningRepository {
     int offset = 0,
   }) async {
     try {
-      final response = await learningService.getWeakSkills(
-        limit: limit,
-        offset: offset,
-      );
+      final response = await learningService.getWeakSkills(limit, offset);
 
       final responseJson = response.data;
       if (responseJson == null) {
@@ -109,4 +105,3 @@ final class LearningRepositoryImpl extends LearningRepository {
     }
   }
 }
-

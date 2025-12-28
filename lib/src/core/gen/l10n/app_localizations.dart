@@ -710,6 +710,36 @@ abstract class AppLocalizations {
   /// **'Back to Home'**
   String get practice_skill_selection_back_to_home;
 
+  /// No description provided for @practice_skill_selection_welcome_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Practice!'**
+  String get practice_skill_selection_welcome_title;
+
+  /// No description provided for @practice_skill_selection_welcome_description.
+  ///
+  /// In en, this message translates to:
+  /// **'To get started, check out today\'s learning recommendations. The system will suggest the most suitable skills for you to practice.'**
+  String get practice_skill_selection_welcome_description;
+
+  /// No description provided for @practice_skill_selection_welcome_cta.
+  ///
+  /// In en, this message translates to:
+  /// **'View Today\'s Learning Plan'**
+  String get practice_skill_selection_welcome_cta;
+
+  /// No description provided for @practice_skill_selection_welcome_tip_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip'**
+  String get practice_skill_selection_welcome_tip_title;
+
+  /// No description provided for @practice_skill_selection_welcome_tip_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting with the most basic skills will help you build a solid foundation. The system will automatically suggest suitable skills based on your progress.'**
+  String get practice_skill_selection_welcome_tip_description;
+
   /// No description provided for @practice_skill_status_weak.
   ///
   /// In en, this message translates to:

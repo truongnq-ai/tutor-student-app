@@ -7,7 +7,6 @@ import '../../../../core/extensions/app_localization.dart';
 import '../../../../domain/entities/weak_skill_entity.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/widgets/error_state_widget.dart';
 import '../../../core/widgets/skeleton/skeleton_list.dart';
 import '../../../core/widgets/text/typography.dart';
@@ -89,7 +88,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
       body: weakSkillsState.when(
         data: (weakSkills) {
           if (weakSkills.isEmpty) {
-            return _buildEmptyState(context, context.locale.practice_skill_selection_no_weak_skills);
+            return _buildNewUserOnboarding(context);
           }
           return _buildContent(context, weakSkills);
         },
@@ -209,13 +208,106 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, String message) {
-    return EmptyStateWidget(
-      title: message,
-      icon: Icons.check_circle_outline,
-      iconColor: const Color(0xFF4CAF50),
-      onAction: () => context.go(Routes.todayLearningPlan),
-      actionButtonText: context.locale.practice_skill_selection_back_to_home,
+  /// Build onboarding state for new users who haven't practiced yet
+  Widget _buildNewUserOnboarding(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(context.padding.p16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Gap(context.spacing.s48),
+          
+          // Icon với background circle
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: context.color.primary.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.school_outlined,
+              size: 64,
+              color: context.color.primary,
+            ),
+          ),
+          
+          Gap(context.spacing.s24),
+          
+          // Title
+          HeadingLargeText(
+            context.locale.practice_skill_selection_welcome_title,
+            textAlign: TextAlign.center,
+          ),
+          
+          Gap(context.spacing.s12),
+          
+          // Description
+          Text(
+            context.locale.practice_skill_selection_welcome_description,
+            style: context.textStyle.body.copyWith(
+              color: context.color.text.secondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          
+          Gap(context.spacing.s32),
+          
+          // Primary CTA button
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () {
+                context.push(Routes.todayLearningPlan);
+              },
+              icon: const Icon(Icons.arrow_forward),
+              label: Text(context.locale.practice_skill_selection_welcome_cta),
+              style: FilledButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: context.padding.p16),
+                minimumSize: const Size(0, 56),
+              ),
+            ),
+          ),
+          
+          Gap(context.spacing.s24),
+          
+          // Info card với tip
+          Card(
+            color: const Color(0xFFE3F2FD),
+            child: Padding(
+              padding: EdgeInsets.all(context.padding.p16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.lightbulb_outline, color: Color(0xFF2196F3)),
+                  Gap(context.spacing.s12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.locale.practice_skill_selection_welcome_tip_title,
+                          style: context.textStyle.bodyMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF2196F3),
+                          ),
+                        ),
+                        Gap(context.spacing.s4),
+                        Text(
+                          context.locale.practice_skill_selection_welcome_tip_description,
+                          style: context.textStyle.bodySmall.copyWith(
+                            color: const Color(0xFF2196F3),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
