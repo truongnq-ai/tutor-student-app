@@ -4,6 +4,8 @@ class WeakSkillEntity extends Equatable {
   final String skillId;
   final String skillCode;
   final String skillName;
+  final String chapter;
+  final String? description;
   final int masteryLevel;
   final String status; // "weak" (< 40), "needs_practice" (40-69)
   final int questionCount;
@@ -14,6 +16,8 @@ class WeakSkillEntity extends Equatable {
     required this.skillId,
     required this.skillCode,
     required this.skillName,
+    required this.chapter,
+    this.description,
     required this.masteryLevel,
     required this.status,
     required this.questionCount,
@@ -22,10 +26,12 @@ class WeakSkillEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         skillId,
         skillCode,
         skillName,
+        chapter,
+        description,
         masteryLevel,
         status,
         questionCount,

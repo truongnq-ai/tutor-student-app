@@ -6,6 +6,8 @@ import '../../../core/theme/theme.dart';
 
 class SkillCard extends StatelessWidget {
   final String skillName;
+  final String? description;
+  final String chapter;
   final int masteryLevel; // 0-100
   final String? status; // "Yếu", "Chưa vững", etc.
   final int? questionCount;
@@ -17,6 +19,8 @@ class SkillCard extends StatelessWidget {
   const SkillCard({
     super.key,
     required this.skillName,
+    this.description,
+    required this.chapter,
     required this.masteryLevel,
     this.status,
     this.questionCount,
@@ -41,10 +45,12 @@ class SkillCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: EdgeInsets.all(context.padding.p20),
-          child: Row(
-            children: [
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(context.padding.p20),
+              child: Row(
+                children: [
               // Mastery Circle
               SizedBox(
                 width: 60,
@@ -80,14 +86,34 @@ class SkillCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Text(
-                            skillName,
-                            style: context.textStyle.body.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Skill Name (Heading 3 - 18px)
+                              Text(
+                                skillName,
+                                style: context.textStyle.body.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              // Description (Body Small - 14px, italic)
+                              if (description != null && description!.isNotEmpty) ...[
+                                Gap(context.spacing.s4),
+                                Text(
+                                  description!,
+                                  style: context.textStyle.bodySmall.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    color: context.color.text.secondary,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
                           ),
                         ),
                         if (isPriority)
@@ -158,7 +184,36 @@ class SkillCard extends StatelessWidget {
                 ),
               ),
             ],
-          ),
+              ),
+            ),
+            // Chapter Tag positioned at bottom right
+            Positioned(
+              bottom: context.padding.p20,
+              right: context.padding.p20,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.padding.p8,
+                  vertical: context.padding.p4,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2196F3).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF2196F3).withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  chapter,
+                  style: context.textStyle.bodySmall.copyWith(
+                    color: const Color(0xFF2196F3),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

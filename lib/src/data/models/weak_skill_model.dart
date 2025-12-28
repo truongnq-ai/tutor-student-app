@@ -10,6 +10,8 @@ class WeakSkillModel extends WeakSkillEntity with WeakSkillModelMappable {
     required super.skillId,
     required super.skillCode,
     required super.skillName,
+    required super.chapter,
+    super.description,
     required super.masteryLevel,
     required super.status,
     required super.questionCount,

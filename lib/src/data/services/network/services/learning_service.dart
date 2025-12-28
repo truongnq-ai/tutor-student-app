@@ -15,6 +15,9 @@ abstract class LearningService {
 
   /// Get weak skills that need practice
   @GET(Endpoints.learningWeakSkills)
-  Future<HttpResponse<dynamic>> getWeakSkills();
+  Future<HttpResponse<dynamic>> getWeakSkills(
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+  );
 }
 

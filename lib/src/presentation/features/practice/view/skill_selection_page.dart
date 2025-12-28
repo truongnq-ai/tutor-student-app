@@ -24,6 +24,58 @@ class SkillSelectionPage extends ConsumerStatefulWidget {
 class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
   String? _selectedSkillId;
   String? _selectedSkillName;
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= 
+        _scrollController.position.maxScrollExtent * 0.8) {
+      // Load more when 80% scrolled
+      if (!_isLoadingMore) {
+        _loadMore();
+      }
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore) return;
+    
+    setState(() {
+      _isLoadingMore = true;
+    });
+    
+    try {
+      await ref.read(weakSkillsProvider.notifier).loadMore();
+    } catch (e) {
+      // Handle error silently or show snackbar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Không thể tải thêm kỹ năng. Vui lòng thử lại.'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingMore = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +102,7 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
 
   Widget _buildContent(BuildContext context, List<WeakSkillEntity> weakSkills) {
     return SingleChildScrollView(
+      controller: _scrollController,
       padding: EdgeInsets.all(context.padding.p16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,6 +120,8 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                 padding: EdgeInsets.only(bottom: context.spacing.s12),
                 child: SkillCard(
                   skillName: skill.skillName,
+                  description: skill.description,
+                  chapter: skill.chapter,
                   masteryLevel: skill.masteryLevel,
                   status: skill.status == 'weak' 
                       ? context.locale.practice_skill_status_weak 
@@ -83,6 +138,13 @@ class _SkillSelectionPageState extends ConsumerState<SkillSelectionPage> {
                   },
                 ),
               )),
+
+          // Loading indicator for load more
+          if (_isLoadingMore)
+            Padding(
+              padding: EdgeInsets.all(context.padding.p16),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
 
           Gap(context.spacing.s24),
 

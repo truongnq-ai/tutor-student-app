@@ -61,9 +61,15 @@ final class LearningRepositoryImpl extends LearningRepository {
   }
 
   @override
-  Future<ResponseObject<List<WeakSkillEntity>>> getWeakSkills() async {
+  Future<ResponseObject<List<WeakSkillEntity>>> getWeakSkills({
+    int limit = 10,
+    int offset = 0,
+  }) async {
     try {
-      final response = await learningService.getWeakSkills();
+      final response = await learningService.getWeakSkills(
+        limit: limit,
+        offset: offset,
+      );
 
       final responseJson = response.data;
       if (responseJson == null) {

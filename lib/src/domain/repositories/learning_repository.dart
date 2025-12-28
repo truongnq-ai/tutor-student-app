@@ -4,6 +4,9 @@ import '../entities/weak_skill_entity.dart';
 
 abstract class LearningRepository {
   Future<ResponseObject<LearningPlanEntity>> getTodayLearningPlan();
-  Future<ResponseObject<List<WeakSkillEntity>>> getWeakSkills();
+  Future<ResponseObject<List<WeakSkillEntity>>> getWeakSkills({
+    int limit = 10,
+    int offset = 0,
+  });
 }
 
